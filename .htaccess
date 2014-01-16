@@ -1,0 +1,8 @@
+php_value magic_quotes_gpc off
+php_flag magic_quotes_gpc off
+
+RewriteEngine on
+
+RewriteCond %{REQUEST_URI} !frontendlibs
+RewriteCond %{REQUEST_URI} !index\.php
+RewriteRule ^(.*)$ /www/bpad/index.php?url=/$1 [NC,QSA,L]

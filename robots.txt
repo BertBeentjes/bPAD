@@ -1,0 +1,14 @@
+# Default exclusions
+User-agent: *
+Disallow: /helper
+Disallow: /scripts
+Disallow: /settings
+Disallow: /snippets
+Disallow: /updatescripts
+Disallow: /media
+Disallow: /images
+Disallow: /themes
+Disallow: /custom
+
+# For sitemaps.xml autodiscovery. Uncomment if you have one:
+# Sitemap: http://example.com/sitemap.xml

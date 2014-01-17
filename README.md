@@ -34,7 +34,8 @@ For the web frontend:
 - Bootstrap
 
 
-Status and developments:
+Status and developments
+=======================
 
 The first version of bPAD was created in 2010-2013. But as with most projects started from scratch, the code base was created with a slightly different focus than the final product. Creating some issues with the maintaince of the code and some quality issues. So when in 2013 I decided to go open source, a full code rebuild was necessary to get the code up to standards.
 
@@ -43,7 +44,8 @@ This code rebuild is currently underway and progressing according to plan. The c
 After this initial version, the aim is to create a beta version of the site that also supports content, content block and design sharing between sites. This makes it possible for users to share content blocks or the design of content blocks with other sites, without any installation. This beta release is planned for the end of 2014 or the beginning of 2015.
 
 
-Installation:
+Installation
+============
 
 The code base provided here has to be used in combination with a database. This database is not yet fully available. The way bPAD is set up, an empty database is not enough, it needs to be filled with content block templates. This part is under development and will be available along with the full alpha version. Before that, it can be requested by sending me an email.
 

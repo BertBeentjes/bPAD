@@ -24,15 +24,6 @@
 /**
  * General todo list:
  * 
- * Fix:
- * 
- * functional:
- * - add object from template in a specific position, create an add panel that contains adds for all positions. And when the position to add is known, open the added item also when it is in a referral, by creating the content.get command with the specified position number for the add, and the object name from the root object of the template (the default name for the new object)
- * - after creating a template based object in a referral, open the new object in edit mode, after cancelling, refresh the referral
- * - after creating a template based object that is searchable, open the addressable parent in edit mode, not the object itself
- * - add option to admin menu to remove searchable sub template objects
- * - move template based objects up/down/to position number/to parent
- * 
  * Prio:
  * 
  * - config styleparameters (if possible)
@@ -68,6 +59,10 @@
  * Big things:
  * 
  * - other admin functions: users, user groups, permissions, roles, password, file includes, snippets, settings
+ * 
+ * - events
+ * 
+ * - undo, redo, revert, preview site in edit mode
  * 
  * - creating masters structure for templates/lss updates
  * 

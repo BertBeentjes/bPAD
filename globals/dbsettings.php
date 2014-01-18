@@ -22,7 +22,7 @@
  */
 
 $database['host'] = "127.0.0.1";
-$database['name'] = "bpad_oo";
+$database['name'] = "bpad";
 $database['user'] = "bpad";
 $database['password'] = "password123";
 ?>

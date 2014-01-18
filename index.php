@@ -24,10 +24,6 @@
 /**
  * General todo list:
  * 
- * Prio:
- * 
- * - config styleparameters (if possible)
- * 
  * Later:
  * 
  * - refresh stylesheet after changing styles (use an event for this)

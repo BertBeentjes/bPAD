@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -233,9 +234,10 @@ Class ObjectVersion extends StoredEntity {
             if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_OBJECT) {
                 $object = $position->getPositionContent()->getObject();
                 // when an object is part of a template, or
-                // if the child object isn't based upon the default template, and it isn't a root object, it is part of the
-                // same template based structure as the current object, so it's a true child
-                if ($object->getIsTemplate() || ($object->getIsTemplateBased() && $object->getIsObjectTemplateRoot() == 0) || ($object->getIsTemplateBased() && $object->getIsObjectTemplateRoot() == 1 && $object->getTemplate()->getSearchable())) {
+                // when the child object isn't based upon the default template, and it isn't a root object, it is part of the
+                // same template based structure as the current object, so it's a true child, or
+                // when the child object is based upon a searchable template and is the object template root and is active
+                if ($object->getIsTemplate() || ($object->getIsTemplateBased() && $object->getIsObjectTemplateRoot() == 0) || ($object->getIsTemplateBased() && $object->getIsObjectTemplateRoot() == 1 && ($object->getActive() || $object->getNew()) && $object->getTemplate()->getSearchable())) {
                     $children[] = $object;
                 }
             }
@@ -773,6 +775,166 @@ Class ObjectVersion extends StoredEntity {
             $this->getPosition($number)->newPositionReferral();
         }
         return true;
+    }
+
+    /**
+     * Decide whether an object is moveable to a lower position
+     * 
+     * @return boolean true if moveable
+     */
+    public function isMoveableUp() {
+        // only if the parent has a pn-type layout, and the object is the template based root
+        if ($this->getObjectParent()->getVersion($this->getMode())->getLayout()->isPNType() && $this->getContainer()->getIsObjectTemplateRoot()) {
+            $positions = $this->getObjectParent()->getVersion($this->getMode())->getPositions();
+            $positionnr = $this->getPositionParent()->getNumber();
+            foreach ($positions as $position) {
+                if ($position->getNumber() < $positionnr) {
+                    switch ($position->getPositionContent()->getType()) {
+                        case PositionContent::POSITIONTYPE_CONTENTITEM:
+                        case PositionContent::POSITIONTYPE_INSTANCE:
+                        case PositionContent::POSITIONTYPE_REFERRAL:
+                            // moveable
+                            return true;
+                            break;
+                        case PositionContent::POSITIONTYPE_OBJECT:
+                            // if the object is active or new, it is moveable
+                            if ($position->getPositionContent()->getObject()->getActive() || $position->getPositionContent()->getObject()->getNew()) {
+                                return true;
+                            }
+                            // otherwise ignore the position
+                            break;
+                        case PositionContent::POSITIONTYPE_EMPTY:
+                        default:
+                            return false;
+                            break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Decide whether an object is moveable to a higher position
+     * 
+     * @return boolean true if moveable
+     */
+    public function isMoveableDown() {
+        // only if the parent has a pn-type layout, and the object is the template based root
+        if ($this->getObjectParent()->getVersion($this->getMode())->getLayout()->isPNType() && $this->getContainer()->getIsObjectTemplateRoot()) {
+            $positions = $this->getObjectParent()->getVersion($this->getMode())->getPositions();
+            $positionnr = $this->getPositionParent()->getNumber();
+            foreach ($positions as $position) {
+                if ($position->getNumber() > $positionnr) {
+                    switch ($position->getPositionContent()->getType()) {
+                        case PositionContent::POSITIONTYPE_CONTENTITEM:
+                        case PositionContent::POSITIONTYPE_INSTANCE:
+                        case PositionContent::POSITIONTYPE_REFERRAL:
+                            // moveable
+                            return true;
+                            break;
+                        case PositionContent::POSITIONTYPE_OBJECT:
+                            // if the object is active, it is moveable
+                            if ($position->getPositionContent()->getObject()->getActive() || $position->getPositionContent()->getObject()->getNew()) {
+                                return true;
+                            }
+                            // otherwise ignore the position
+                            break;
+                        case PositionContent::POSITIONTYPE_EMPTY:
+                        default:
+                            return false;
+                            break;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Return the position that can be switched with the one this object is in,
+     * to swap them
+     * 
+     * @return position
+     */
+    public function getMoveUpPosition() {
+        $found = false;
+        $returnposition = '';
+        // only if the parent has a pn-type layout, and the object is the template based root
+        if ($this->getObjectParent()->getVersion($this->getMode())->getLayout()->isPNType() && $this->getContainer()->getIsObjectTemplateRoot()) {
+            $positions = $this->getObjectParent()->getVersion($this->getMode())->getPositions();
+            $positionnr = $this->getPositionParent()->getNumber();
+            foreach ($positions as $position) {
+                if ($position->getNumber() < $positionnr) {
+                    switch ($position->getPositionContent()->getType()) {
+                        case PositionContent::POSITIONTYPE_CONTENTITEM:
+                        case PositionContent::POSITIONTYPE_INSTANCE:
+                        case PositionContent::POSITIONTYPE_REFERRAL:
+                            // a referral is moveable
+                            $found = true;
+                            $returnposition = $position;
+                            break;
+                        case PositionContent::POSITIONTYPE_OBJECT:
+                            // if the object is active, it is moveable
+                            if ($position->getPositionContent()->getObject()->getActive() || $position->getPositionContent()->getObject()->getNew()) {
+                                $found = true;
+                                $returnposition = $position;
+                            }
+                            // otherwise ignore the position
+                            break;
+                        case PositionContent::POSITIONTYPE_EMPTY:
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        if ($found) {
+            return $returnposition;
+        }
+    }
+
+    /**
+     * Return the position that can be switched with the one this object is in,
+     * to swap them
+     * 
+     * @return position
+     */
+    public function getMoveDownPosition() {
+        $found = false;
+        $returnposition = '';
+        // only if the parent has a pn-type layout, and the object is the template based root
+        if ($this->getObjectParent()->getVersion($this->getMode())->getLayout()->isPNType() && $this->getContainer()->getIsObjectTemplateRoot()) {
+            $positions = $this->getObjectParent()->getVersion($this->getMode())->getPositions();
+            $positionnr = $this->getPositionParent()->getNumber();
+            foreach ($positions as $position) {
+                if ($position->getNumber() > $positionnr && !$found) {
+                    switch ($position->getPositionContent()->getType()) {
+                        case PositionContent::POSITIONTYPE_CONTENTITEM:
+                        case PositionContent::POSITIONTYPE_INSTANCE:
+                        case PositionContent::POSITIONTYPE_REFERRAL:
+                            // a referral is moveable
+                            $found = true;
+                            $returnposition = $position;
+                            break;
+                        case PositionContent::POSITIONTYPE_OBJECT:
+                            // if the object is active, it is moveable
+                            if ($position->getPositionContent()->getObject()->getActive() || $position->getPositionContent()->getObject()->getNew()) {
+                                $found = true;
+                                $returnposition = $position;
+                            }
+                            // otherwise ignore the position
+                            break;
+                        case PositionContent::POSITIONTYPE_EMPTY:
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        if ($found) {
+            return $returnposition;
+        }
     }
 
 }

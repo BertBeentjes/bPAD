@@ -60,7 +60,7 @@ class PositionObject extends StoredEntity implements PositionContent {
     public function getObject() {
         // briefly, during creation, a position object can point towards the site root. To prevent infinite recursion,
         // the site root object is not returned. The root can't logically be in a position.
-        if ($this->object->getId() != SysCon::SITE_ROOT_OBJECT) {
+        if (!$this->object->isSiteRoot()) {
             return $this->object;
         }
     }

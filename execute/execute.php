@@ -133,6 +133,28 @@ class Execute {
                     // store the command success in the old value
                     Request::getCommand()->setOldValue($exec->keep());
                     break;
+                case 'moveobject':
+                    // create the executer
+                    $exec = new ExecuteObjectAction();
+                    // TODO: move the object
+                    
+                    // store the command success in the old value
+                    Request::getCommand()->setOldValue($exec->keep());
+                    break;
+                case 'moveobjectup':
+                    // create the executer
+                    $exec = new ExecuteObjectAction();
+                    $exec->moveObjectUp($object, Modes::getMode(Mode::EDITMODE));
+                    // store the command success in the old value
+                    Request::getCommand()->setOldValue($exec->keep());
+                    break;
+                case 'moveobjectdown':
+                    // create the executer
+                    $exec = new ExecuteObjectAction();
+                    $exec->moveObjectDown($object, Modes::getMode(Mode::EDITMODE));
+                    // store the command success in the old value
+                    Request::getCommand()->setOldValue($exec->keep());
+                    break;
                 default:
                     Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
                     break;

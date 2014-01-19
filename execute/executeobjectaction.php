@@ -143,6 +143,46 @@ class ExecuteObjectAction {
     }
 
     /**
+     * Move an object a position up in the parent
+     * 
+     * @param object $object the object to move up
+     * @return boolean true if success
+     */
+    public function moveObjectUp($object, $mode) {
+        if ($object->getVersion($mode)->isMoveableUp()) {
+            $sourceposition = $object->getVersion($mode)->getPositionParent();
+            $sourcepositionnr = $sourceposition->getNumber();
+            $targetposition = $object->getVersion($mode)->getMoveUpPosition();
+            if (isset($targetposition)) {
+                $targetpositionnr = $targetposition->getNumber();
+                $sourceposition->setNumber($targetpositionnr);
+                $targetposition->setNumber($sourcepositionnr);
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Move an object a position down in the parent
+     * 
+     * @param object $object the object to move up
+     * @return boolean true if success
+     */
+    public function moveObjectDown($object, $mode) {
+        if ($object->getVersion($mode)->isMoveableDown()) {
+            $sourceposition = $object->getVersion($mode)->getPositionParent();
+            $sourcepositionnr = $sourceposition->getNumber();
+            $targetposition = $object->getVersion($mode)->getMoveDownPosition();
+            if (isset($targetposition)) {
+                $targetpositionnr = $targetposition->getNumber();
+                $sourceposition->setNumber($targetpositionnr);
+                $targetposition->setNumber($sourcepositionnr);
+            }
+        }
+        return false;
+    }
+
+    /**
      * Copy an object (the attributes)
      * 
      * @param object $source
@@ -155,7 +195,7 @@ class ExecuteObjectAction {
         $this->getObject()->setSet($source->getSet());
         $this->getObject()->setTemplate($source->getTemplate());
     }
-
+    
     /**
      * Create a new Object Version in Edit mode, based upon the one in View mode
      */

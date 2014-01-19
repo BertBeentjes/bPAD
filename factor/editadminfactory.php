@@ -44,6 +44,8 @@ class EditAdminFactory extends AdminFactory {
         }
         if (isset($containerobject)) {
             $this->containerobject = $containerobject;
+        } else {
+            $this->containerobject = $object;
         }
         // always start editing at the root of the template based object structure
         $object = $object->getVersion($this->getMode())->getObjectTemplateRootObject();
@@ -118,7 +120,11 @@ class EditAdminFactory extends AdminFactory {
                 $section .= $this->factorButtons($baseid, $object);
                 $admin .= $this->factorSection($baseid, $section, $sectionheader);
             } else {
-                $admin .= $section;
+                // if this is a searchable subobject, add delete, move up, move down buttons
+                if ($object->getIsObjectTemplateRoot() && $object->getTemplate()->getSearchable()) {
+                    $section .= $this->factorSearchableButtons($baseid, $object);
+                }
+                $admin .= $this->factorSubItem($section);
             }
             // wrap the section
             // return the result
@@ -170,7 +176,9 @@ class EditAdminFactory extends AdminFactory {
         $section .= $this->factorButton($baseid . '_keep', CommandFactory::editObjectKeep($object), Helper::getLang(AdminLabels::ADMIN_BUTTON_KEEP));
         // add a cancel button
         $section .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
-
+        // 'recycle bin' button
+        $section .= $this->factorRecycleBinButton($baseid, $object);
+        
         // TODO: add a move button, to move items to other places in the site
         // the move button opens a section with the possible target locations.
         //$section .= $this->factorButton($baseid, CommandFactory::editObjectMove($object), Helper::getLang(AdminLabels::ADMIN_BUTTON_MOVE));
@@ -178,6 +186,51 @@ class EditAdminFactory extends AdminFactory {
         $section = $this->factorButtonGroup($section);
 
         return $section;
+    }
+    
+    /**
+     * Factor the buttons for a searchable subobject
+     * 
+     * @param string $baseid
+     * @param object $object
+     * @return string
+     */
+    private function factorSearchableButtons($baseid, $object) {
+        $section = '';
+        // move up button
+        if ($object->getVersion($this->getMode())->isMoveableUp()) {
+            $section .= $this->factorButton($baseid . '_moveup', CommandFactory::editObjectMoveUp($object, $this->getContainerObject(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_MOVE_UP));
+        }
+        // move down button
+        if ($object->getVersion($this->getMode())->isMoveableDown()) {
+            $section .= $this->factorButton($baseid . '_movedown', CommandFactory::editObjectMoveDown($object, $this->getContainerObject(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_MOVE_DOWN));
+        }
+        // 'recycle bin' button
+        $section .= $this->factorRecycleBinButton($baseid, $object);
+        $section = $this->factorButtonGroup($section);
+        return $section;
+    }
+    
+    /**
+     * Factor the recycle bin button, depending on the active status
+     * 
+     * @param string $baseid
+     * @param object $object
+     * @return string
+     */
+    private function factorRecycleBinButton ($baseid, $object) {
+        $button = '';
+        if ($object->getNew()) {
+            // add a cancel button
+            $button .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
+        } else {
+            if ($object->getActive()) {
+                $button .= $this->factorButton($baseid . '_recycle', CommandFactory::editObjectActive($object, $this->getContainerObject(), Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_TO_RECYCLE_BIN));
+            } else {
+                $button .= $this->factorButton($baseid . '_recycle', CommandFactory::editObjectActiveFromBin($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_FROM_RECYCLE_BIN));            
+            }
+        }
+        return $button;
     }
 
     /**
@@ -190,8 +243,6 @@ class EditAdminFactory extends AdminFactory {
     private function factorObjectHeader($object, $baseid) {
         $section = '';
         $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editObjectName($object), $object->getName(), Helper::getLang(AdminLabels::ADMIN_OBJECT_NAME));
-        // TODO: change into 'recycle bin' button (new structure?)
-        $section .= $this->factorCheckBox($baseid . '_active', CommandFactory::editObjectActive($object), $object->getActive(), Helper::getLang(AdminLabels::ADMIN_OBJECT_ACTIVE));
         return $section;
     }
 
@@ -445,8 +496,8 @@ class EditAdminFactory extends AdminFactory {
         $object = $positionobject->getObject();
         $section = '';
         // if this object is part of a template, or it is based upon the same template as the current one and isn't a new root
-        // or it it is based on a searchable template (which means it is treated as part of the parent)
-        if ($object->getIsTemplate() == 1 || ($object->getIsObjectTemplateRoot() == false && $object->getTemplate()->getId() == $positionobject->getContainer()->getContainer()->getContainer()->getTemplate()->getId()) || (!$object->getTemplate()->isDefault() && $object->getTemplate()->getSearchable())) {
+        // or if it is active and not new and based on a searchable template (which means it is treated as part of the parent)
+        if ($object->getIsTemplate() == 1 || ($object->getIsObjectTemplateRoot() == false && $object->getTemplate()->getId() == $positionobject->getContainer()->getContainer()->getContainer()->getTemplate()->getId()) || (!$object->getTemplate()->isDefault() && $object->getTemplate()->getSearchable() && ($object->getActive() || $object->getNew()))) {
             // recurse
             $section = $this->factorObject($object, false);
         }

@@ -32,6 +32,7 @@ var commandnumber = 0; // the number of the command
 var checkcommandnumber = 0; // the number of the last command to check against
 var showadminbuttons = false; // show the admin buttons or not, default not
 var settings = "#settings#"; // insert the relevant site settings here, "#settings#" is replaced server side by a json string, the quotes are there to prevent an annoying syntax error
+var processing = "#processing#"; // processing message, used in a modal dialog when processing something
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
         // store the current location of the container on the page

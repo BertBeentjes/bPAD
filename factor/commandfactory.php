@@ -107,10 +107,26 @@ class CommandFactory {
      * Compose the command to edit the object active value
      * 
      * @param object $object
+     * @param object $editobject
+     * @param mode $mode
+     * @param context $context
      * @return string
      */
-    public static function editObjectActive($object) {
-        return 'object,' . $object->getId() . ',change.objectactive';
+    public static function editObjectActive($object, $editobject, $mode, $context) {
+        return 'object,' . $object->getId() . ',change.objectactive' . '|' . self::getObject($editobject, $mode, $context) . '|' . self::editObject($editobject, $context);
+    }
+
+    /**
+     * Compose the command to edit the object active value from the recycle bin, 
+     * in this case chaining the edit command isn't necessary
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function editObjectActiveFromBin($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',change.objectactive' . '|' . self::getObject($object, $mode, $context);
     }
 
     /**
@@ -149,6 +165,36 @@ class CommandFactory {
         // TODO: chain getobject command for the old location
         // TODO: find a way to move to the new location
         return 'object,' . $object->getId() . ',change.moveobject';
+    }
+
+    /**
+     * Compose the command to move an object a position up in the parent
+     * 
+     * @param object $object
+     * @param object $editobject
+     * @param context $context
+     * @return string
+     */
+    public static function editObjectMoveUp($object, $editobject, $context) {
+        // TODO: chain the refresh command. 
+        // one for the view objects (refresh the object paren, refresh referrals)
+        // one for the edit objects in case of a searchable construction
+        return 'object,' . $object->getId() . ',change.moveobjectup' . '|' . self::editObject($editobject, $context);
+    }
+
+    /**
+     * Compose the command to move an object a position down in the parent
+     * 
+     * @param object $object
+     * @param object $editobject
+     * @param context $context
+     * @return string
+     */
+    public static function editObjectMoveDown($object, $editobject, $context) {
+        // TODO: chain the refresh command. 
+        // one for the view objects (refresh the object paren, refresh referrals)
+        // one for the edit objects in case of a searchable construction
+        return 'object,' . $object->getId() . ',change.moveobjectdown' . '|' . self::editObject($editobject, $context);
     }
 
     /**
@@ -454,14 +500,20 @@ class CommandFactory {
     /**
      * Compose the command to add a new object based upon a template
      * 
-     * @param object $object
-     * @param template $template
+     * @param object $object the object to add a new position to
+     * @param object $editobject the object to edit
+     * @param template $template the template to use
      * @param mode $mode
      * @param context $context
      * @return string
      */
-    public static function addObjectFromTemplate($object, $template, $mode, $context) {
+    public static function addObjectFromTemplate($object, $template, $mode, $context, $editobject = NULL) {
         // create an object from template and open it for editing
+        if (isset($editobject)) {
+            // open a parent object for editing (new searchable template based object)
+            return 'templateobject,' . $template->getId() . '.' . $object->getId() . ',change.add' . '|' . self::editObject($editobject, $context);
+        }            
+        // open the containing object (new template based object)
         return 'templateobject,' . $template->getId() . '.' . $object->getId() . ',change.add' . '|' . self::getObjectForEdit($object, $context);
     }
 

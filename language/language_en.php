@@ -294,4 +294,5 @@ $lang[AdminLabels::ADMIN_TEMPLATE_STRUCTURE] = 'Position layout when adding';
 $lang[AdminLabels::ADMIN_TEMPLATE_STYLE] = 'Style when adding';
 $lang[AdminLabels::ADMIN_CONFIG_SETS] = 'Sets';
 $lang[AdminLabels::ADMIN_SET_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_PROCESSING] = 'Processing...';
 ?>

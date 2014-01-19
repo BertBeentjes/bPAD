@@ -63,9 +63,13 @@ class ContentFactory extends Factory {
             if (strstr($this->getContent(), Terms::CONTENT_SITE_ROOT_FOLDER)) {
                 $this->replaceTerm(Terms::CONTENT_SITE_ROOT_FOLDER, Settings::getSetting(Setting::SITE_ROOTFOLDER)->getValue(), $this->getContent());
             }
-            // replace the styles term by the styles
+            // replace the settings term by the settings (used in frontend javascript)
             if (strstr($this->getContent(), Terms::CONTENT_SETTINGS)) {
                 $this->replaceTerm(Terms::CONTENT_SETTINGS, $this->factorSettings(), $this->getContent());
+            }
+            // replace the processing term by the processing language string (used in frontend javascript)
+            if (strstr($this->getContent(), Terms::ADMIN_PROCESSING)) {
+                $this->replaceTerm(Terms::ADMIN_PROCESSING, Helper::getLang(AdminLabels::ADMIN_PROCESSING), $this->getContent());
             }
             // replace the bpad version term by the bpad version
             if (strstr($this->getContent(), Terms::CONTENT_BPAD_VERSION)) {

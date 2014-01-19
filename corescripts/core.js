@@ -35,41 +35,53 @@ var settings = "#settings#"; // insert the relevant site settings here, "#settin
 var processing = "#processing#"; // processing message, used in a modal dialog when processing something
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
-        // store the current location of the container on the page
-        var contloc = $('#' + container).offset().top - $('body').scrollTop();
-        // show the result
-        if (replace) {
-            // check whether the container to replace is coupled to this content fetch (it may have changed client-side during the roundtrip)
-            if ($('#' + container).attr('data-bpad-command-number') + '-' + commandnr) {
-                $('#' + container).replaceWith(result);
-                // now add the events to the new html
-                addEvents(container);
-            }
-        } else {
-            // check the command number for new commands. If a new command is given, don't
-            // process the result of an earlier command. Used for fetching an instance, to 
-            // prevent the content from flickering when a search word is being typed, and 
-            // to prevent an earlier result to overwrite a later result (the later result may
-            // come faster because the result gets much smaller when a search word gets longer)
-            if (!checkcommandnr || commandnr == checkcommandnumber) {
-                $('#' + container).html(result);
-                // now add the events to the new html
-                addEvents(container);
-                // now change the url to match the content
-                refreshHash();
-            }
-        }
-        // correct the position of the page after loading new content, only correct
-        // if the page moved more than 5 pixels
-        var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
-        if (Math.abs(contloc - newcontloc) > 5) {
-            $('body').scrollTop($('#' + container).offset().top - contloc);
-        }
+        // if the message modal is visible, hide it
+        $('#message').modal('hide');
+        resultToHTML(container, replace, checkcommandnr, commandnr, result);
     }
 }
 var docommand = function(thiscommand, checkcommandnr, thisvalue) {
     return function(result) {
         doCommand(thiscommand, checkcommandnr, thisvalue);
+    }
+}
+var docommandandresulttohtml = function(thiscommand, checkcommandnr, thisvalue, container, replace, checkcommandnr, commandnr) {
+    return function(result) {
+        doCommand(thiscommand, checkcommandnr, thisvalue);
+        resultToHTML(container, replace, checkcommandnr, commandnr, result);
+    }
+}
+
+function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
+    // store the current location of the container on the page
+    var contloc = $('#' + container).offset().top - $('body').scrollTop();
+    // show the result
+    if (replace) {
+        // check whether the container to replace is coupled to this content fetch (it may have changed client-side during the roundtrip)
+        if ($('#' + container).attr('data-bpad-command-number') + '-' + commandnr) {
+            $('#' + container).replaceWith(result);
+            // now add the events to the new html
+            addEvents(container);
+        }
+    } else {
+        // check the command number for new commands. If a new command is given, don't
+        // process the result of an earlier command. Used for fetching an instance, to 
+        // prevent the content from flickering when a search word is being typed, and 
+        // to prevent an earlier result to overwrite a later result (the later result may
+        // come faster because the result gets much smaller when a search word gets longer)
+        if (!checkcommandnr || commandnr == checkcommandnumber) {
+            $('#' + container).html(result);
+            // now add the events to the new html
+            addEvents(container);
+            // now change the url to match the content
+            refreshHash();
+        }
+    }
+    // correct the position of the page after loading new content, only correct
+    // if the page moved more than 5 pixels
+    var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
+    if (Math.abs(contloc - newcontloc) > 5) {
+        $('body').scrollTop($('#' + container).offset().top - contloc);
     }
 }
 
@@ -95,6 +107,11 @@ function doBootStrapping() {
     lastcommandid = $("#bpad_content_root").attr("data-bpad-command-id");
     // add events to the html where requested
     addEvents();
+    // initialize the message dialog
+    this.$('#message').modal({
+        backdrop: 'static',
+        show: false
+    });
     // add lazy load events to the window
     $(window).on("resize", function() {
         lazyEvent();
@@ -440,20 +457,34 @@ function doCommand(thiscommand, checkcommandnr, thisvalue) {
             value: info.value
         };
         var param = $.param(params);
-        // first check for command chaining. If a command is chained, execute it on success
-        // chaining overrules resulttohtml, only the result of the last chained command will be
-        // spliced into the site
+        // first check for command chaining. 
         // by default:
         // a change command does nothing on return
         // other commands load something into a container
         if (info.successcommand > '') {
-            $.ajax({
-                type: 'POST',
-                url: settings.SETTING_SITE_ROOTFOLDER,
-                data: param,
-                success: docommand(info.successcommand, true, '')
-            });
+            // chained commands shoud be executed in sequence, so a modal dialog is shown while processing
+            $('#message').find('.modal-body').html(processing);
+            $('#message').modal('show');
+            // now do something with the chained command
+            if (info.parsedcommand.commandgroup == 'change') {
+                $.ajax({
+                    type: 'POST',
+                    url: settings.SETTING_SITE_ROOTFOLDER,
+                    data: param,
+                    success: docommand(info.successcommand, true, '')
+                });
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: settings.SETTING_SITE_ROOTFOLDER,
+                    data: param,
+                    success: docommandandresulttohtml(info.successcommand, true, '', info.container, info.replace, checkcommandnr, commandnr)
+                });
+            }
         } else if (info.parsedcommand.commandgroup == 'change') {
+            // if the message modal is visible, hide it, this is a final change and waiting on the result is not necessary
+            $('#message').modal('hide');
+            // do the change
             $.ajax({
                 type: 'POST',
                 url: settings.SETTING_SITE_ROOTFOLDER,

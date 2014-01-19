@@ -296,4 +296,5 @@ $lang[AdminLabels::ADMIN_TEMPLATE_STRUCTURE] = 'Positie-indeling bij invoegen';
 $lang[AdminLabels::ADMIN_TEMPLATE_STYLE] = 'Stijl bij invoegen';
 $lang[AdminLabels::ADMIN_CONFIG_SETS] = 'Sets';
 $lang[AdminLabels::ADMIN_SET_NAME] = 'Naam';
+$lang[AdminLabels::ADMIN_PROCESSING] = 'Verwerken...';
 ?>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -199,7 +200,7 @@ class ExecuteObjectAction {
         $this->getObject()->setSet($source->getSet());
         $this->getObject()->setTemplate($source->getTemplate());
     }
-    
+
     /**
      * Create a new Object Version in Edit mode, based upon the one in View mode
      */
@@ -208,18 +209,23 @@ class ExecuteObjectAction {
         $source = $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE));
         $target = $this->getObject()->newVersion(Modes::getMode(Mode::EDITMODE));
         $this->copyObjectVersion($source, $target);
-        // touch the view version, to update the cache and set the change date to
-        // a value more recent than the edit version
-        $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setChanged();
-        $this->recurseIntoChildren();
+        // only when the action is publish or cancel (function is only called in
+        // those cases, but just to be sure...)
+        if ($this->getAction() == self::EXECUTE_PUBLISH || $this->getAction() == self::EXECUTE_CANCEL) {
+            // touch the view version, to update the cache and set the change date to
+            // a value more recent than the edit version
+            $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setChanged();
+            $this->recurseIntoChildren();
+        }
     }
-    
+
     /**
      * recurse into the children of the object and execute the same action for 
      * these children.
      */
     private function recurseIntoChildren() {
         // recurse into child objects based upon the same template
+        $source = $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE));
         $children = $source->getEditChildren();
         $publisher = array();
         $counter = 0;

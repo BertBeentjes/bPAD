@@ -85,10 +85,10 @@ class File extends Respond {
         $height = 0;
         $width = 0;
         if (isset($_GET['height'])) {
-            $height = intval($_GET['height']);
+            $height = $this->restrictSize(intval($_GET['height']));
         }
         if (isset($_GET['width'])) {
-            $width = $_GET['width'];
+            $width = $this->restrictSize(intval($_GET['width']));
         }
         if ($height > 0 || $width > 0) {
             $source = Request::getURL()->getFullURL();

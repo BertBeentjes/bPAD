@@ -65,7 +65,7 @@ class Required {
             case 'FileIncludes': require ('data/fileincludes.php'); break; // loads file include
             case 'Layouts': require ('data/layouts.php'); break; // loads layout -> getVersion($mode, $context) -> ContextedVersion
             case 'Modes': require ('data/modes.php'); break; // loads mode
-            case 'Objects': require ('data/objects.php'); break; // loads object -> getVersion($mode) -> getPositions()/getPositionNumber($number) -> Position -> PositionObject/PositionInstance/PositionContentItem/(PositionReferral->ReferralParam->ReferralParamType)
+            case 'Objects': require ('data/objects.php'); break; // loads object -> getVersion($mode) -> getPositions()/getPositionNumber($number) -> Position -> PositionObject/PositionInstance/PositionContentItem/PositionReferral
             case 'Permissions': require ('data/permissions.php'); break; // loads permissions
             case 'Roles': require ('data/roles.php'); break; // loads role
             case 'Sessions': require ('data/sessions.php'); break; // loads session

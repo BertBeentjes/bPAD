@@ -61,12 +61,16 @@ class ExecuteObjectAction {
         $this->activate = $activate;
         // define the action
         $this->setAction(self::EXECUTE_PUBLISH);
-        // archive the current view version
-        $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setMode(Modes::getMode(Mode::ARCHIVEMODE));
-        // move the edit version to view mode
-        $this->getObject()->getVersion(Modes::getMode(Mode::EDITMODE))->setMode(Modes::getMode(Mode::VIEWMODE));
-        // now create a new edit mode version
-        $this->createObjectVersionEditModeFromViewMode();
+        if ($this->getObject()->hasChanged()) {
+            // archive the current view version
+            $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setMode(Modes::getMode(Mode::ARCHIVEMODE));
+            // move the edit version to view mode
+            $this->getObject()->getVersion(Modes::getMode(Mode::EDITMODE))->setMode(Modes::getMode(Mode::VIEWMODE));
+            // now create a new edit mode version
+            $this->createObjectVersionEditModeFromViewMode();
+        } else {
+            $this->recurseIntoChildren();
+        }
         // and activate the object
         if ($this->activate) {
             $this->getObject()->setActive(true);
@@ -204,6 +208,17 @@ class ExecuteObjectAction {
         $source = $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE));
         $target = $this->getObject()->newVersion(Modes::getMode(Mode::EDITMODE));
         $this->copyObjectVersion($source, $target);
+        // touch the view version, to update the cache and set the change date to
+        // a value more recent than the edit version
+        $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setChanged();
+        $this->recurseIntoChildren();
+    }
+    
+    /**
+     * recurse into the children of the object and execute the same action for 
+     * these children.
+     */
+    private function recurseIntoChildren() {
         // recurse into child objects based upon the same template
         $children = $source->getEditChildren();
         $publisher = array();

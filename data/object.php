@@ -745,6 +745,20 @@ class Object extends SettedEntity {
         }
         return false;
     }
+    
+    /**
+     * Check whether the edit version contains changes from the view version,
+     * to decide whether to create a new view version for this object when
+     * publishing, or not.
+     * 
+     * @return boolean true if the object has changed
+     */
+    public function hasChanged() {
+        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() < $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate()) {
+            return true;
+        }
+        return false;
+    }
 
 }
 

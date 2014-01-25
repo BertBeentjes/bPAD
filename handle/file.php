@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -36,6 +37,7 @@ class File extends Respond {
      * TODO: plug the hole where people can fill the disk and tax the cpu
      * by requesting more and more images with different sizes.  
      */
+
     public function __construct() {
         $urlparts = Request::getURL()->getURLParts();
         $object = Objects::getObject(substr($urlparts[3], 6));
@@ -83,7 +85,7 @@ class File extends Respond {
         $height = 0;
         $width = 0;
         if (isset($_GET['height'])) {
-            $height = $_GET['height'];
+            $height = intval($_GET['height']);
         }
         if (isset($_GET['width'])) {
             $width = $_GET['width'];
@@ -141,6 +143,29 @@ class File extends Respond {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Restrict the number of sizes, to prevent overloading from the server. 
+     * 
+     * Sizes are now: 80, 120, 160, 200, 300, 400, 600, 800, 1000, 1200
+     *  
+     * @param int $size
+     * @return int
+     */
+    private function restrictSize($size) {
+        if ($size > 1200) {
+            $size = 1200;
+        } elseif ($size < 80) {
+            $size = 80;
+        } elseif ($size > 400) {
+            $size = ceil($size / 100) * 100;
+        } elseif ($size > 160) {
+            $size = ceil($size / 100) * 100;
+        } elseif ($size > 80) {
+            $size = ceil($size / 40) * 40;
+        }
+        return $size;
     }
 
 }

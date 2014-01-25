@@ -1,8 +1,9 @@
 <?php
 /**
- * A referral type defines what selection will be done on the addressable objects
+ * A referral type defines what selection will be done on the adressable objects
  * with the specified argument
  *
+
  * @since 0.4.0
  */
 class ReferralType extends ValueListEntity {

@@ -122,11 +122,12 @@ abstract class StoredEntity {
      * If this stored entity has a containing entity, the container
      * is also changed
      *
+     * @param boolean $force optional, force setting the change date/user
      * @return boolean 
      * @throws exception when the store isn't accessible
      */
-    protected function setChanged() {
-        if (!$this->changed) {
+    protected function setChanged($force = false) {
+        if (!$this->changed || $force) {
             if (Store::setChanged($this->tablename, $this->id)) {
                 if ($row = Store::getChanged($this->tablename, $this->id)->fetchObject()) {
                     $this->changedate = $row->changedate;
@@ -145,7 +146,7 @@ abstract class StoredEntity {
         }
         return true;
     }
-
+    
 }
 
 ?>

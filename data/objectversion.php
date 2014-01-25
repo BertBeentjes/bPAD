@@ -110,20 +110,23 @@ Class ObjectVersion extends StoredEntity {
      * override for the default changed method, object versions must also
      * change the parent object if part of a template
      * 
+     * @param boolean $force optional, force setting the change date/user
      * @return boolean
      */
-    public function setChanged() {
-        $thischanged = parent::setChanged();
+    public function setChanged($force = false) {
+        $thischanged = parent::setChanged($force);
         $parentchanged = true;
-        if ($this->container->hasTemplateParent()) {
-            // set the change value for the version with the correct mode of the object parent
-            // check for looping...
-            if ($this->getObjectParent()->getId() != $this->getContainer()->getId()) {
-                $parentchanged = $this->objectparent->getVersion($this->getMode())->setChanged();
+        if (!$this->changed || $force) {
+            if ($this->container->hasTemplateParent()) {
+                // set the change value for the version with the correct mode of the object parent
+                // check for looping...
+                if ($this->getObjectParent()->getId() != $this->getContainer()->getId()) {
+                    $parentchanged = $this->objectparent->getVersion($this->getMode())->setChanged();
+                }
             }
+            // update the templateid and rootobjectid for contentitems of this object version
+            $this->recalculatePositionContentitems();
         }
-        // update the templateid and rootobjectid for contentitems of this object version
-        $this->recalculatePositionContentitems();
         // update the cache for the addressable parents of this object version
         // CacheObjectAddressableParentObjects::updateCache($this);
         return ($thischanged && $parentchanged);

@@ -144,6 +144,9 @@ class ExecuteObjectAction {
         $publisher = new ExecuteObjectAction();
         $publisher->setObject($this->getObject());
         $publisher->publish(false);
+        // touch the edit version, so the object can be published again without a change,
+        // but still resulting in updating the cache
+        $this->getObject()->getVersion(Modes::getMode(Mode::EDITMODE))->setChanged(true);
         return true;
     }
 
@@ -214,7 +217,7 @@ class ExecuteObjectAction {
         if ($this->getAction() == self::EXECUTE_PUBLISH || $this->getAction() == self::EXECUTE_CANCEL) {
             // touch the view version, to update the cache and set the change date to
             // a value more recent than the edit version
-            $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setChanged();
+            $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setChanged(true);
             $this->recurseIntoChildren();
         }
     }

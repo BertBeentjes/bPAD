@@ -282,6 +282,19 @@ Class ObjectVersion extends StoredEntity {
     }
 
     /**
+     * check whether a position for this mode exists
+     *  
+     * @return boolean true if it exists
+     */
+    public function hasPosition($number) {
+        $positions = $this->getPositions();
+        if (isset($positions[$number])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Create a new position at the bottom
      * 
      * @return position
@@ -305,25 +318,26 @@ Class ObjectVersion extends StoredEntity {
      * @param template $template the template to prepare the position object for
      * @return positionobject
      */
-    public function newTemplateObjectPosition($template) {
-        $number = $this->getPositionCount() + 1;
-        $this->setChanged();
-        // create the position
-        Store::insertPosition($this->getId(), $number);
-        // empty the cached positions
-        $this->positionsloaded = false;
-        $this->positions = array();
-        // get the position
-        $position = $this->getPosition($number);
-        // apply the structure/style settings from the template
-        $position->setStructure($template->getStructure());
-        $position->setStyle($template->getStyle());
-        $position->setInheritStructure(true);
-        $position->setInheritStyle(true);
-        // create a new empty position object
-        $positionobject = $position->newPositionObject(false);
-        // return the new position object
-        return $positionobject;
+    public function newTemplateObjectPosition($template, $number = 0) {
+        if ($number == 0) {
+            $position = $this->newPosition();
+        } else {
+            if ($this->newPositionNumber($number)) {
+                $position = $this->getPosition($number);
+            }
+        }
+        if (isset($position)) {
+            // apply the structure/style settings from the template
+            $position->setStructure($template->getStructure());
+            $position->setStyle($template->getStyle());
+            $position->setInheritStructure(true);
+            $position->setInheritStyle(true);
+            // create a new empty position object
+            $positionobject = $position->newPositionObject(false);
+            // return the new position object
+            return $positionobject;
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_POSITION_NUMBER_NOT_FOUND) . ': ' . $this->getId() . '-' . $number . ' @ ' . __METHOD__);
     }
 
     /**

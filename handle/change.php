@@ -60,7 +60,8 @@ class Change extends Respond {
                         $addressparts = Request::getCommand()->getItemAddressParts();
                         $template = Templates::getTemplate($addressparts[0]);
                         $object = Objects::getObject($addressparts[1]);
-                        Execute::addTemplateObject($template, $object);
+                        $number = $addressparts[2];
+                        Execute::addTemplateObject($template, $object, $number);
                         break;
                     case 'object':
                         $object = Objects::getObject(Request::getCommand()->getItemAddress());

@@ -507,14 +507,14 @@ class CommandFactory {
      * @param context $context
      * @return string
      */
-    public static function addObjectFromTemplate($object, $template, $mode, $context, $editobject = NULL) {
+    public static function addObjectFromTemplate($object, $template, $number, $mode, $context, $editobject = NULL) {
         // create an object from template and open it for editing
         if (isset($editobject)) {
             // open a parent object for editing (new searchable template based object)
-            return 'templateobject,' . $template->getId() . '.' . $object->getId() . ',change.add' . '|' . self::editObject($editobject, $context);
+            return 'templateobject,' . $template->getId() . '.' . $object->getId() . '.' . $number . ',change.add' . '|' . self::editObject($editobject, $context);
         }            
         // open the containing object (new template based object)
-        return 'templateobject,' . $template->getId() . '.' . $object->getId() . ',change.add' . '|' . self::getObjectForEdit($object, $context);
+        return 'templateobject,' . $template->getId() . '.' . $object->getId() . '.' . $number . ',change.add' . '|' . self::getObjectForEdit($object, $context);
     }
 
     /**

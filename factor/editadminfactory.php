@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -97,24 +98,24 @@ class EditAdminFactory extends AdminFactory {
             // factor the object version for the object 
             $section .= $this->factorObjectVersion($objectversion, $baseid);
             // factor positions
+            // TODO: create add buttons for each position, and create add buttons
+            // for missing positions in templates
             $positions = $objectversion->getPositions();
+            $curnumber = 1;
             foreach ($positions as $position) {
+                // insert add buttons for missing positions in templates
+                while ($position->getNumber() > $curnumber) {
+                    $section .= $this->factorPositionNumberAddButtons($object, $baseid, $curnumber);
+                    $curnumber = $curnumber + 1;
+                }
+                // create add button for this position
+                $section .= $this->factorPositionNumberAddButtons($object, $baseid, $curnumber);
+                $curnumber = $curnumber + 1;
+                // factor the position currently here
                 $section .= $this->factorPosition($position, $baseid . '_P' . $position->getId());
             }
-            // create position add buttons for templates
-            if ($object->getIsTemplate()) {
-                // for #pn# type layouts (unlimited positions)
-                if ($object->getVersion($this->getMode())->getLayout()->isPNType()) {
-                    $section .= $this->factorPositionAddButtons($baseid . '_posadd', $object);
-                } else {
-                    // for other layouts
-                    if ($positions = $object->getVersion($this->getMode())->getFreePositions()) {
-                        foreach ($positions as $position) {
-                            $section .= $this->factorPositionAddButtons($baseid . '_posadd' . $position, $object, $position);
-                        }
-                    }
-                }
-            }
+            // create add button for new positions after the last one
+            $section .= $this->factorPositionNumberAddButtons($object, $baseid, 0);
             // wrap the section for roots and add buttons
             if ($isroot) {
                 $section .= $this->factorButtons($baseid, $object);
@@ -132,6 +133,69 @@ class EditAdminFactory extends AdminFactory {
             Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
         }
         return $admin;
+    }
+
+    /**
+     * Decide what type of add buttons to show
+     * 
+     * @param object $object
+     * @param string $baseid
+     * @param int $curnumber
+     */
+    private function factorPositionNumberAddButtons($object, $baseid, $curnumber) {
+        $section = '';
+        $buttonadded = false;
+        if ($object->getIsTemplate()) {
+            // for #pn# type layouts (unlimited positions)
+            if ($object->getVersion($this->getMode())->getLayout()->isPNType()) {
+                $section .= $this->factorPositionAddButtons($baseid . '_posadd', $object, $curnumber);
+            } else {
+                // for other layouts
+                if ($object->getVersion($this->getMode())->hasPosition($curnumber)) {
+                    $section .= $this->factorPositionAddButtons($baseid . '_posadd' . $curnumber, $object, $curnumber);
+                }
+            }
+        } else {
+            // does this object allow adding 
+            if ($object->getVersion($this->getMode())->hasAvailablePositions()) {
+                // is the user authorized to do something with this object
+                if (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_ADD)) {
+                    // find the position
+                    if ($object->getVersion($this->getMode())->hasPosition($curnumber)) {
+                        $position = $object->getVersion($this->getMode())->getPosition($curnumber);
+                        if (isset($position)) {
+                            // is there an object in the position
+                            if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_OBJECT) {
+                                $childobject = $position->getPositionContent()->getObject();
+                                // is the object visible
+                                if ($childobject->isVisible($this->getMode(), $this->getContext())) {
+                                    // factor the template add buttons for a normal object
+                                    $section .= $this->factorButtonGroup($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'), Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                                    if (!$childobject->getIsTemplate() && !$childobject->getTemplate()->getSearchable()) {
+                                        $section .= $this->factorSubItem($childobject->getName());
+                                    }
+                                    $buttonadded = true;
+                                }
+                            }
+                        }
+                    } elseif ($curnumber == 0) {
+                        // factor the template add buttons
+                        $section .= $this->factorButtonGroup($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'), Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                        $buttonadded = true;
+                    }
+                }
+                if ($curnumber == 0 && !$buttonadded) {
+                    // add respond button
+                    if (Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_RESPOND)) {
+                        if ($object->getVersion($this->getMode())->getLayout()->isPNType()) {
+                            // TODO: factor the template respond button
+                            $section .= '<span style="color: black;">RESPOND BUTTON</span>';
+                        }
+                    }
+                }
+            }
+        }
+        return $section;
     }
 
     /**
@@ -178,7 +242,7 @@ class EditAdminFactory extends AdminFactory {
         $section .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
         // 'recycle bin' button
         $section .= $this->factorRecycleBinButton($baseid, $object);
-        
+
         // TODO: add a move button, to move items to other places in the site
         // the move button opens a section with the possible target locations.
         //$section .= $this->factorButton($baseid, CommandFactory::editObjectMove($object), Helper::getLang(AdminLabels::ADMIN_BUTTON_MOVE));
@@ -187,7 +251,7 @@ class EditAdminFactory extends AdminFactory {
 
         return $section;
     }
-    
+
     /**
      * Factor the buttons for a searchable subobject
      * 
@@ -210,7 +274,7 @@ class EditAdminFactory extends AdminFactory {
         $section = $this->factorButtonGroup($section);
         return $section;
     }
-    
+
     /**
      * Factor the recycle bin button, depending on the active status
      * 
@@ -218,7 +282,7 @@ class EditAdminFactory extends AdminFactory {
      * @param object $object
      * @return string
      */
-    private function factorRecycleBinButton ($baseid, $object) {
+    private function factorRecycleBinButton($baseid, $object) {
         $button = '';
         if ($object->getNew()) {
             // add a cancel button
@@ -227,7 +291,7 @@ class EditAdminFactory extends AdminFactory {
             if ($object->getActive()) {
                 $button .= $this->factorButton($baseid . '_recycle', CommandFactory::editObjectActive($object, $this->getContainerObject(), Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_TO_RECYCLE_BIN));
             } else {
-                $button .= $this->factorButton($baseid . '_recycle', CommandFactory::editObjectActiveFromBin($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_FROM_RECYCLE_BIN));            
+                $button .= $this->factorButton($baseid . '_recycle', CommandFactory::editObjectActiveFromBin($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_FROM_RECYCLE_BIN));
             }
         }
         return $button;

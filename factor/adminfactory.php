@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -27,7 +28,7 @@
  * @since 0.4.0
  */
 class AdminFactory extends Factory {
-    
+
     /**
      * 
      * @param string $id the id to use
@@ -203,12 +204,13 @@ class AdminFactory extends Factory {
      * factor an admin button group
      * 
      * @param string $value the start value of the input
+     * @param string $label optional label
      * @return string the complete input
      */
-    protected function factorButtonGroup($value) {
+    protected function factorButtonGroup($value, $label = '') {
         $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_BUTTON_GROUP)->getVersion($this->getMode(), $this->getContext())->getBody();
         // no command and no label for the button groups
-        $admin = $this->factorTerms($structure, '', '', $value, '');
+        $admin = $this->factorTerms($structure, '', '', $value, $label);
         return $admin;
     }
 
@@ -216,19 +218,19 @@ class AdminFactory extends Factory {
      * factor an alternative admin button group for situations where there is a larger number of buttons (e.g. in the add panel)
      * 
      * @param string $value the start value of the input
+     * @param string $label optional label
      * @return string the complete input
      */
-    protected function factorButtonGroupAlt($value) {
+    protected function factorButtonGroupAlt($value, $label = '') {
         $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_BUTTON_GROUP_ALT)->getVersion($this->getMode(), $this->getContext())->getBody();
         // no command and no label for the button groups
-        $admin = $this->factorTerms($structure, '', '', $value, '');
+        $admin = $this->factorTerms($structure, '', '', $value, $label);
         return $admin;
     }
 
     /**
      * factor an admin sub item
      * 
-     * @param string $id the id to use
      * @param string $value the start value of the input
      * @return string the complete input
      */
@@ -315,6 +317,44 @@ class AdminFactory extends Factory {
         $structure = str_replace(Terms::ADMIN_DISABLED, $disabled, $structure);
         $structure = str_replace(Terms::ADMIN_VALUE, $value, $structure);
         return $structure;
+    }
+
+    /**
+     * Create add buttons for an object
+     * 
+     * @param object $object
+     * @param int $number
+     * @param string $baseid
+     * @return string
+     */
+    protected function factorAddButtons($object, $number, $baseid) {
+        $buttons = '';
+        // get the templates 
+        $set = $object->getSet();
+        if ($set->isDefault()) {
+            $templates = Templates::getTemplates();
+        } else {
+            $templates = Templates::getTemplatesBySet($set);
+        }
+        if (isset($templates)) {
+            // create add buttons for each template
+            while ($row = $templates->fetchObject()) {
+                // TODO: find a better way to include the mode for the chained content.get command. Viewmode is now hardcoded.
+                $template = Templates::getTemplate($row->id);
+                if ($template->getSearchable()) {
+                    // if the template to add is searchable, open the parent for editing (recursively)
+                    $editobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject();
+                    while ($editobject->getTemplate()->getSearchable() && !$editobject->isSiteRoot()) {
+                        $editobject = $editobject->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectParent()->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject();
+                    }
+                    $buttons .= $this->factorButton($baseid . $row->id, CommandFactory::addObjectFromTemplate($object, $template, $number, Modes::getMode(Mode::VIEWMODE), $this->getContext(), $editobject), Helper::getLang($row->name));
+                } else {
+                    // if the template isn't searchable, refresh the parent for the new object
+                    $buttons .= $this->factorButton($baseid . $row->id, CommandFactory::addObjectFromTemplate($object, $template, $number, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang($row->name));
+                }
+            }
+        }
+        return $buttons;
     }
 
 }

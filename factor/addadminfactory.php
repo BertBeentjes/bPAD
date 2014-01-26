@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -33,6 +34,7 @@ class AddAdminFactory extends AdminFactory {
     /**
      * Factor the admin/add functions
      */
+
     public function factor() {
         $section = '';
         $admin = '';
@@ -41,38 +43,13 @@ class AddAdminFactory extends AdminFactory {
             // with general permission, show all templates or the ones in the requested set
             // check for available positions
             if ($objectversion->hasAvailablePositions()) {
-                // get the templates 
-                $set = $this->getObject()->getSet();
-                if ($set->isDefault()) {
-                    $templates = Templates::getTemplates();
-                } else {
-                    $templates = Templates::getTemplatesBySet($set);
-                }
-                if (isset($templates)) {
-                    // create add buttons for each template
-                    $baseid = 'A' . $this->getObject()->getId() . '_T';
-                    while ($row = $templates->fetchObject()) {
-                        // TODO: find a better way to include the mode for the chained content.get command. Viewmode is now hardcoded.
-                        $template = Templates::getTemplate($row->id);
-                        if ($template->getSearchable()) {
-                            // if the template to add is searchable, open the parent for editing (recursively)
-                            $editobject = $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject();
-                            while ($editobject->getTemplate()->getSearchable() && !$editobject->isSiteRoot()) {
-                                $editobject = $editobject->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectParent()->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject();
-                            }
-                            // TODO: find a better way to include the mode for the chained content.get command. Viewmode is now hardcoded.
-                            $section .= $this->factorButton($baseid . $row->id, CommandFactory::addObjectFromTemplate($this->getObject(), $template, Modes::getMode(Mode::VIEWMODE), $this->getContext(), $editobject), Helper::getLang($row->name));
-                        } else {
-                            // if the template isn't searchable, refresh the parent for the new object
-                            // TODO: find a better way to include the mode for the chained content.get command. Viewmode is now hardcoded.
-                            $section .= $this->factorButton($baseid . $row->id, CommandFactory::addObjectFromTemplate($this->getObject(), $template, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang($row->name));
-                        }
-                    }
-                    // add a cancel button
-                    $section .= $this->factorButton($baseid . '_cancel', CommandFactory::addObjectCancel($this->getObject()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
-                    $section = $this->factorButtonGroupAlt($section);
-                    $admin .= $this->factorSection($baseid . '_cancelbutton', $section);                
-                }
+                $baseid = 'A' . $this->getObject()->getId() . '_T';
+                // create the add buttons
+                $buttons = $this->factorButtonGroupAlt($this->factorAddButtons($this->getObject(), 0, $baseid));
+                // add a cancel button
+                $buttons .= $this->factorButton($baseid . '_cancel', CommandFactory::addObjectCancel($this->getObject()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
+                // create a section
+                $admin .= $this->factorSection($baseid . '_cancelbutton', $buttons);
             } else {
                 Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
             }
@@ -87,7 +64,7 @@ class AddAdminFactory extends AdminFactory {
                 Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
             }
         }
-        
+
         $this->setContent($admin);
     }
 

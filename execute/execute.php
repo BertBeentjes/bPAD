@@ -31,15 +31,16 @@ class Execute {
      * 
      * @param template $template the template to base the new content upon
      * @param object $object the parent object for the new content
+     * @param int $number the number of the new position to add the content in (0 = at the end)
      */
-    public static function addTemplateObject($template, $object) {
+    public static function addTemplateObject($template, $object, $number) {
         // check authorizations, full or respond only
         if (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_ADD)) {
             // check set 
             if ($object->getSet()->isDefault() || $object->getSet()->getId() == $template->getSet()->getId()) {
                 // create a new position and position object to put the copy of the template in
-                $positionobject = $object->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($template);
-                $viewpositionobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->newTemplateObjectPosition($template);
+                $positionobject = $object->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($template, $number);
+                $viewpositionobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->newTemplateObjectPosition($template, $number);
                 // get the template root object
                 $source = $template->getRootObject();
                 // copy the object
@@ -54,8 +55,8 @@ class Execute {
             // check default template 
             if ($object->getTemplate()->getId() == $template->getId()) {
                 // create a new position and position object to put the copy of the template in
-                $positionobject = $object->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($template);
-                $viewpositionobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->newTemplateObjectPosition($template);
+                $positionobject = $object->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($template, $number);
+                $viewpositionobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->newTemplateObjectPosition($template, $number);
                 // get the template root object
                 $source = $template->getRootObject();
                 // copy the object

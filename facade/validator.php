@@ -236,6 +236,15 @@ Class Validator {
     }
 
     /**
+     * Check whether it is a url safe name
+     * 
+     * @param string $str
+     */
+    public static function isURLSafeName($str) {
+        return preg_match('/^[a-zA-Z0-9\-]+$/', $str);
+    }
+
+    /**
      * Check whether a string consists purely of lower case letters
      * 
      * @param string $str

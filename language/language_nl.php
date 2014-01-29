@@ -235,6 +235,7 @@ $lang[AdminLabels::ADMIN_BUTTON_MOVE] = 'Verplaatsen';
 $lang[AdminLabels::ADMIN_BUTTON_MOVE_UP] = 'Omhoog verplaatsen';
 $lang[AdminLabels::ADMIN_BUTTON_MOVE_DOWN] = 'Omlaag verplaatsen';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH] = 'Wijzigingen publiceren';
+$lang[AdminLabels::ADMIN_BUTTON_PUBLISH_NEW] = 'Nieuw item publiceren';
 $lang[AdminLabels::ADMIN_BUTTON_UNDO] = 'Ongedaan maken';
 $lang[AdminLabels::ADMIN_BUTTON_KEEP] = 'Sluiten';
 $lang[AdminLabels::ADMIN_BUTTON_CANCEL] = 'Annuleren';

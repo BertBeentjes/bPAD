@@ -159,7 +159,7 @@ Class ObjectVersion extends StoredEntity {
                                 // get the object template root for the parent of this object
                                 $parent = $this->getObjectTemplateRootObject()->getVersion($this->getMode())->getObjectParent()->getVersion($this->getMode())->getObjectTemplateRootObject();
                                 // if the template of the parent is also searchable, go higher in the tree
-                                while ($parent->getTemplate()->getSearchable() && !$parent->isSiteRoot()) {
+                                while ($parent->getVersion($this->getMode())->hasObjectParent() && $parent->getTemplate()->getSearchable() && !$parent->isSiteRoot()) {
                                     // get a parent higher in the tree
                                     $parent = $parent->getVersion($this->getMode())->getObjectParent()->getVersion($this->getMode())->getObjectTemplateRootObject();
                                 }

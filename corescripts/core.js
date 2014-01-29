@@ -47,8 +47,8 @@ var docommand = function(thiscommand, checkcommandnr, thisvalue) {
 }
 var docommandandresulttohtml = function(thiscommand, checkcommandnr, thisvalue, container, replace, checkcommandnr, commandnr) {
     return function(result) {
-        doCommand(thiscommand, checkcommandnr, thisvalue);
         resultToHTML(container, replace, checkcommandnr, commandnr, result);
+        doCommand(thiscommand, checkcommandnr, thisvalue);
     }
 }
 

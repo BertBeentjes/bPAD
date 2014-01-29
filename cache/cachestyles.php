@@ -46,7 +46,7 @@ class CacheStyles {
                 if ($row = $result->fetchObject()) {
                     $cache = new StyleSheetCache($row->id);
                     // only return cached items that aren't outdated
-                    if ($cache->isOutdated()) {
+                    if ($cache->getOutdated()) {
                         // refresh the cache
                         $cache->setCache(self::factorStyles($mode, $context));
                     }

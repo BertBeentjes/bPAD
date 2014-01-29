@@ -234,6 +234,7 @@ $lang[AdminLabels::ADMIN_BUTTON_MOVE] = 'Move';
 $lang[AdminLabels::ADMIN_BUTTON_MOVE_UP] = 'Move up';
 $lang[AdminLabels::ADMIN_BUTTON_MOVE_DOWN] = 'Move down';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH] = 'Publish changes';
+$lang[AdminLabels::ADMIN_BUTTON_PUBLISH_NEW] = 'Publish new item';
 $lang[AdminLabels::ADMIN_BUTTON_UNDO] = 'Undo';
 $lang[AdminLabels::ADMIN_BUTTON_KEEP] = 'Close';
 $lang[AdminLabels::ADMIN_BUTTON_CANCEL] = 'Cancel';

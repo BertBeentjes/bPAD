@@ -166,19 +166,19 @@ class PositionFactory extends Factory {
                 $positioncontent .= $referralfactory->getContent();
             } else {
                 // if it is a new object, check this one in edit mode
-                if ($object->getNew()) {
+                if ($object->isNewAndEditable()) {
                     if ($object->isVisible(Modes::getMode(Mode::EDITMODE), $this->getContext())) {
                         // (re)initialize the factory
                         $referralfactory->setContent($referralstructure);
                         $referralfactory->setObject($object);
                         // show this one in edit mode
-                        $referralfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                        $referralfactory->setMode($this->getMode());
                         // factor
                         $referralfactory->factor();
                         // and get the factored content
                         $positioncontent .= $referralfactory->getContent();
                         // return the mode to normal 
-                        $referralfactory->setMode($this->getMode());
+                        // $referralfactory->setMode($this->getMode());
                     }
                 }
             }

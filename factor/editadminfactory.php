@@ -232,12 +232,18 @@ class EditAdminFactory extends AdminFactory {
         // add publish button -> add 
         // after publishing, a content.get command is chained (hence the viewmode)
         // TODO: find a better solution for the mode, hardcoding viewmode may haunt this code later on
-        $section .= $this->factorButton($baseid . '_publish', CommandFactory::editObjectPublish($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH));
+        if ($object->getNew()) {
+            $section .= $this->factorButton($baseid . '_publish', CommandFactory::editObjectPublish($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH_NEW));
+        } else {
+            $section .= $this->factorButton($baseid . '_publish', CommandFactory::editObjectPublish($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH));
+        }
 
         // TODO: add an undo button, that does an undo based upon the command log 
         // $section .= $this->factorButton($baseid, CommandFactory::editObjectUndo($object), Helper::getLang(AdminLabels::ADMIN_BUTTON_UNDO));
         // add a keep button, keep is the natural state, so it only needs to close the admin section
-        $section .= $this->factorButton($baseid . '_keep', CommandFactory::editObjectKeep($object), Helper::getLang(AdminLabels::ADMIN_BUTTON_KEEP));
+        if (!$object->getNew()) {
+            $section .= $this->factorButton($baseid . '_keep', CommandFactory::editObjectKeep($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_KEEP));
+        }
         // add a cancel button
         $section .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
         // 'recycle bin' button
@@ -284,10 +290,7 @@ class EditAdminFactory extends AdminFactory {
      */
     private function factorRecycleBinButton($baseid, $object) {
         $button = '';
-        if ($object->getNew()) {
-            // add a cancel button
-            $button .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
-        } else {
+        if (!$object->getNew()) {
             if ($object->getActive()) {
                 $button .= $this->factorButton($baseid . '_recycle', CommandFactory::editObjectActive($object, $this->getContainerObject(), Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_TO_RECYCLE_BIN));
             } else {

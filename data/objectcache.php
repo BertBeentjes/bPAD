@@ -81,7 +81,7 @@ class ObjectCache {
         $this->context =  Contexts::getContext($attr->contextid);
         $this->cachedate = $attr->cachedate;
         $this->cache = $attr->cache;
-        $this->outdated = $attr->outdated;
+        $this->outdated = (bool) $attr->outdated;
         $this->userid = $attr->userid;
         return true;
     }
@@ -195,15 +195,6 @@ class ObjectCache {
      */
     public function getOutdated() {
         return $this->outdated;
-    }
-    
-    /**
-     * is the cache item outdated?
-     * 
-     * @return boolean true if outdated
-     */
-    public function isOutdated() {
-        return ($this->getOutdated() == 1);
     }
     
     /**

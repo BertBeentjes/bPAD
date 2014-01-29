@@ -68,7 +68,7 @@ class StyleSheetCache {
     protected function initAttributes ($attr) {
         $this->cachedate = $attr->cachedate;
         $this->cache = $attr->cache;
-        $this->outdated = $attr->outdated;
+        $this->outdated = (bool) $attr->outdated;
         return true;
     }
 
@@ -131,15 +131,6 @@ class StyleSheetCache {
      */
     public function getOutdated() {
         return $this->outdated;
-    }
-    
-    /**
-     * is the cache item outdated?
-     * 
-     * @return boolean true if outdated
-     */
-    public function isOutdated() {
-        return ($this->getOutdated() == 1);
     }
     
     /**

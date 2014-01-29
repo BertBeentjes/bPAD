@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -47,12 +48,12 @@ class CacheObjects {
                 if ($row = $result->fetchObject()) {
                     $cache = new ObjectCache($row->id);
                     // only return cached items that aren't outdated
-                    if ($cache->isOutdated()) {
+                    if ($cache->getOutdated()) {
                         // refresh the cache
                         $cache->setCache(self::factorObject($object, $context, $mode));
                     }
                 }
-            } 
+            }
             if (!is_object($cache)) {
                 // create and store a new object for the cache
                 $content = self::factorObject($object, $context, $mode);
@@ -67,7 +68,7 @@ class CacheObjects {
         $content = self::getChildObjects($content, $mode);
         return $content;
     }
-    
+
     /**
      * Factor an object
      * 
@@ -124,7 +125,7 @@ class CacheObjects {
         }
         return $objectcontent;
     }
-    
+
     /**
      * outdate the cache for an object after it has been changed
      * 
@@ -133,7 +134,7 @@ class CacheObjects {
     public static function outdateObject($object) {
         Store::outdateCachedObject($object->getId());
     }
-    
+
     /**
      * outdate the cache for a layout after it has been changed
      * 
@@ -142,7 +143,7 @@ class CacheObjects {
     public static function outdateObjectsByLayout($layout) {
         Store::outdateCachedObjectsByLayout($layout->getId());
     }
-    
+
     /**
      * outdate the cache for a structure after it has been changed
      * 
@@ -151,7 +152,7 @@ class CacheObjects {
     public static function outdateObjectsByStructure($structure) {
         Store::outdateCachedObjectsByStructure($structure->getId());
     }
-    
+
     /**
      * outdate instances after an object that is possibly in an instance
      * has been changed 
@@ -160,7 +161,7 @@ class CacheObjects {
         // outdate all instances, any update can result in an item getting in- or out of any instance.
         Store::outdateInstances();
     }
-    
+
     /**
      * outdate the cache for referrals that refer to an object after the object has
      * changed
@@ -168,18 +169,35 @@ class CacheObjects {
      * @param object $object
      */
     public static function outdateReferrals($object) {
-        $argument = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->getArgument();
-        Store::outdateReferrals($argument->getId());
-        $argument = $object->getVersion(Modes::getMode(Mode::EDITMODE))->getArgument();
-        Store::outdateReferrals($argument->getId());
+        $viewmode = Modes::getMode(Mode::VIEWMODE);
+        $editmode = Modes::getMode(Mode::EDITMODE);
+        // If the object containing the argument changes (most likely change: a new child is added)
+        $argument = $object->getVersion($viewmode)->getArgument();
+        if (!$argument->isDefault()) {
+            Store::outdateReferrals($argument->getId());
+        }
+        $argument = $object->getVersion($editmode)->getArgument();
+        if (!$argument->isDefault()) {
+            Store::outdateReferrals($argument->getId());
+        }
+        // if the child object is changed (relevant change: change in object name)
+        $argument = $object->getVersion($viewmode)->getObjectParent()->getVersion($viewmode)->getArgument();
+        if (!$argument->isDefault()) {
+            Store::outdateReferrals($argument->getId());
+        }
+        $argument = $object->getVersion($editmode)->getObjectParent()->getVersion($editmode)->getArgument();
+        if (!$argument->isDefault()) {
+            Store::outdateReferrals($argument->getId());
+        }
     }
-    
+
     /**
      * outdate the cache for content items that contain internal links to objects
      */
     public static function outdateLinkedContentItems() {
         Store::outdateLinkedContentItems();
     }
+
 }
 
 ?>

@@ -180,7 +180,7 @@ class Request {
                         $count = count($itemaddressparts);
                         for ($i = 0; $i < $count; $i++) {
                             $part = explode('.', $itemaddressparts[$i]);
-                            if (Validator::isNumeric($part[2]) && Validator::isName($part[3])) {
+                            if (Validator::isNumeric($part[2]) && Validator::isURLSafeName($part[3])) {
                                 // store the position number and object name in the url,
                                 // this is done for the event that two objects have the same 
                                 // name. The url will not work correctly in that event, but 

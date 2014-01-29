@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -27,7 +28,7 @@
  *
  */
 class CommandFactory {
-    
+
     /**
      * Compose the command to get this object from the frontend, this command
      * is used to load the complete tree of content leading to this object. 
@@ -38,7 +39,26 @@ class CommandFactory {
      * @return string
      */
     public static function getObject($object, $mode, $context) {
-        return 'object,' . $object->getAddress($mode) . ',content.get.' . $mode->getId() . '.' . $context->getId();        
+        return 'object,' . $object->getAddress($mode) . ',content.get.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load a specific object, used for refreshing an object
+     * after changes have been made.
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function getSpecificObject($object, $mode, $context) {
+        $parentpositionid = 1;
+        $parentposition = $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject()->getVersion($mode)->getPositionParent();
+        // if the parent is the template root, there is no position, otherwise take the position id
+        if (isset($parentposition)) {
+            $parentpositionid = $parentposition->getId();
+        }
+        return 'object,' . $parentpositionid . '.' . $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject()->getId() . '.' . $object->getVersion($mode)->getPositionParent()->getId() . '.' . Helper::getURLSafeString($object->getName()) . ',content.get.' . $mode->getId() . '.' . $context->getId();
     }
 
     /**
@@ -46,11 +66,19 @@ class CommandFactory {
      * site is in view mode
      * 
      * @param object $object
+     * @param mode $mode
      * @param context $context
      * @return string
      */
-    public static function getObjectForEdit($object, $context) {
-        return 'object,' . $object->getAddress(Modes::getMode(Mode::EDITMODE)) . ',content.get.' . Mode::EDITMODE . '.' . $context->getId();        
+    public static function getObjectForEdit($object, $mode, $context) {
+        //$returnvalue =  'object,' . $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject()->getVersion($mode)->getPositionParent()->getId() . '.' . $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject()->getId() . '.' . $object->getVersion($mode)->getPositionParent()->getId() . '.' . Helper::getURLSafeString($object->getName()) . ',content.get.' . $mode->getId() . '.' . $context->getId();
+        if ($object->isAddressable($mode)) {
+            $returnvalue = self::getObject($object, $mode, $context);
+        } else {
+            $returnvalue = self::getSpecificObject($object, $mode, $context);
+        }
+        $returnvalue .= '|' . 'object,' . $object->getVersion($mode)->getPositionParent()->getId() . '.' . $object->getId() . '.' . $object->getVersion(Modes::getMode(Mode::EDITMODE))->getPositionParent()->getId() . '.' . Helper::getURLSafeString($object->getName()) . ',content.get.' . Mode::EDITMODE . '.' . $context->getId();
+        return $returnvalue;
     }
 
     /**
@@ -65,7 +93,7 @@ class CommandFactory {
      * @return string
      */
     public static function loadObject($object, $containerid, $mode, $context) {
-        return 'object,' . $containerid . '.' . $object->getId() . '.' . Helper::getURLSafeString($object->getVersion($mode)->getObjectTemplateRootObject()->getName()) . ',content.load' . '.' . $mode->getId() . '.' . $context->getId();        
+        return 'object,' . $containerid . '.' . $object->getId() . '.' . Helper::getURLSafeString($object->getVersion($mode)->getObjectTemplateRootObject()->getName()) . ',content.load' . '.' . $mode->getId() . '.' . $context->getId();
     }
 
     /**
@@ -113,7 +141,7 @@ class CommandFactory {
      * @return string
      */
     public static function editObjectActive($object, $editobject, $mode, $context) {
-        return 'object,' . $object->getId() . ',change.objectactive' . '|' . self::getObject($editobject, $mode, $context) . '|' . self::editObject($editobject, $context);
+        return 'object,' . $object->getId() . ',change.objectactive' . '|' . self::getSpecificObject($editobject, $mode, $context) . '|' . self::editObject($editobject, $context);
     }
 
     /**
@@ -126,7 +154,7 @@ class CommandFactory {
      * @return string
      */
     public static function editObjectActiveFromBin($object, $mode, $context) {
-        return 'object,' . $object->getId() . ',change.objectactive' . '|' . self::getObject($object, $mode, $context);
+        return 'object,' . $object->getId() . ',change.objectactive' . '|' . self::getSpecificObject($object, $mode, $context);
     }
 
     /**
@@ -152,7 +180,7 @@ class CommandFactory {
      * @return string
      */
     public static function editObjectPublish($object, $mode, $context) {
-        return 'object,' . $object->getId() . ',change.publishobject' . '|' . self::getObject($object, $mode, $context);
+        return 'object,' . $object->getId() . ',change.publishobject' . '|' . self::getSpecificObject($object, $mode, $context);
     }
 
     /**
@@ -206,7 +234,7 @@ class CommandFactory {
      * @return string
      */
     public static function editObjectCancel($object, $mode, $context) {
-        return 'object,' . $object->getId() . ',change.cancelobject' . '|' . self::getObject($object, $mode, $context);
+        return 'object,' . $object->getId() . ',change.cancelobject' . '|' . self::getSpecificObject($object, $mode, $context);
     }
 
     /**
@@ -215,8 +243,8 @@ class CommandFactory {
      * @param object $object
      * @return string
      */
-    public static function editObjectKeep($object) {
-        return 'object,' . $object->getId() . ',change.keepobject';
+    public static function editObjectKeep($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',change.keepobject' . '|' . self::getSpecificObject($object, $mode, $context);
     }
 
     /**
@@ -510,11 +538,11 @@ class CommandFactory {
     public static function addObjectFromTemplate($object, $template, $number, $mode, $context, $editobject = NULL) {
         // create an object from template and open it for editing
         if (isset($editobject)) {
-            // open a parent object for editing (new searchable template based object)
+            // open a parent object for editing (used for a new searchable template based object, searchable objects are edited in the context of their parents)
             return 'templateobject,' . $template->getId() . '.' . $object->getId() . '.' . $number . ',change.add' . '|' . self::editObject($editobject, $context);
-        }            
+        }
         // open the containing object (new template based object)
-        return 'templateobject,' . $template->getId() . '.' . $object->getId() . '.' . $number . ',change.add' . '|' . self::getObjectForEdit($object, $context);
+        return 'templateobject,' . $template->getId() . '.' . $object->getId() . '.' . $number . ',change.add' . '|' . self::getObjectForEdit($object, $mode, $context);
     }
 
     /**
@@ -726,7 +754,7 @@ class CommandFactory {
      * @return string
      */
     public static function removeLayoutVersion($object, $layout, $mode, $context, $showcontext) {
-        return 'layoutversion,' . $layout->getId() . ',change.layoutversionremove' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configLayout($object, $mode, $showcontext);
+        return 'layoutversion,' . $layout->getId() . ',change.layoutversionremove' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configLayout($object, $mode, $showcontext);
     }
 
     /**
@@ -740,7 +768,7 @@ class CommandFactory {
      * @return string
      */
     public static function publishLayoutVersion($object, $layout, $mode, $context, $showcontext) {
-        return 'layoutversion,' . $layout->getId() . ',change.layoutversionpublish' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configLayout($object, $mode, $showcontext);
+        return 'layoutversion,' . $layout->getId() . ',change.layoutversionpublish' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configLayout($object, $mode, $showcontext);
     }
 
     /**
@@ -754,7 +782,7 @@ class CommandFactory {
      * @return string
      */
     public static function cancelLayoutVersion($object, $layout, $mode, $context, $showcontext) {
-        return 'layoutversion,' . $layout->getId() . ',change.layoutversioncancel' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configLayout($object, $mode, $showcontext);
+        return 'layoutversion,' . $layout->getId() . ',change.layoutversioncancel' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configLayout($object, $mode, $showcontext);
     }
 
     /**
@@ -768,7 +796,7 @@ class CommandFactory {
      * @return string
      */
     public static function addLayoutVersion($object, $layout, $mode, $context, $showcontext) {
-        return 'layoutversion,' . $layout->getId() . ',change.layoutversionadd' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configLayout($object, $mode, $showcontext);
+        return 'layoutversion,' . $layout->getId() . ',change.layoutversionadd' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configLayout($object, $mode, $showcontext);
     }
 
     /**
@@ -839,7 +867,7 @@ class CommandFactory {
      * @return string
      */
     public static function removeStructureVersion($object, $structure, $mode, $context, $showcontext) {
-        return 'structureversion,' . $structure->getId() . ',change.structureversionremove' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configStructure($object, $mode, $showcontext);
+        return 'structureversion,' . $structure->getId() . ',change.structureversionremove' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStructure($object, $mode, $showcontext);
     }
 
     /**
@@ -853,7 +881,7 @@ class CommandFactory {
      * @return string
      */
     public static function publishStructureVersion($object, $structure, $mode, $context, $showcontext) {
-        return 'structureversion,' . $structure->getId() . ',change.structureversionpublish' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configStructure($object, $mode, $showcontext);
+        return 'structureversion,' . $structure->getId() . ',change.structureversionpublish' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStructure($object, $mode, $showcontext);
     }
 
     /**
@@ -867,7 +895,7 @@ class CommandFactory {
      * @return string
      */
     public static function cancelStructureVersion($object, $structure, $mode, $context, $showcontext) {
-        return 'structureversion,' . $structure->getId() . ',change.structureversioncancel' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configStructure($object, $mode, $showcontext);
+        return 'structureversion,' . $structure->getId() . ',change.structureversioncancel' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStructure($object, $mode, $showcontext);
     }
 
     /**
@@ -881,7 +909,7 @@ class CommandFactory {
      * @return string
      */
     public static function addStructureVersion($object, $structure, $mode, $context, $showcontext) {
-        return 'structureversion,' . $structure->getId() . ',change.structureversionadd' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configStructure($object, $mode, $showcontext);
+        return 'structureversion,' . $structure->getId() . ',change.structureversionadd' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStructure($object, $mode, $showcontext);
     }
 
     /**
@@ -972,7 +1000,7 @@ class CommandFactory {
      * @return string
      */
     public static function removeStyleVersion($object, $style, $mode, $context, $showcontext) {
-        return 'styleversion,' . $style->getId() . ',change.styleversionremove' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
+        return 'styleversion,' . $style->getId() . ',change.styleversionremove' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
     }
 
     /**
@@ -986,7 +1014,7 @@ class CommandFactory {
      * @return string
      */
     public static function publishStyleVersion($object, $style, $mode, $context, $showcontext) {
-        return 'styleversion,' . $style->getId() . ',change.styleversionpublish' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
+        return 'styleversion,' . $style->getId() . ',change.styleversionpublish' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
     }
 
     /**
@@ -1000,7 +1028,7 @@ class CommandFactory {
      * @return string
      */
     public static function cancelStyleVersion($object, $style, $mode, $context, $showcontext) {
-        return 'styleversion,' . $style->getId() . ',change.styleversioncancel' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
+        return 'styleversion,' . $style->getId() . ',change.styleversioncancel' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
     }
 
     /**
@@ -1014,7 +1042,7 @@ class CommandFactory {
      * @return string
      */
     public static function addStyleVersion($object, $style, $mode, $context, $showcontext) {
-        return 'styleversion,' . $style->getId() . ',change.styleversionadd' . '.' .  $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
+        return 'styleversion,' . $style->getId() . ',change.styleversionadd' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
     }
 
     /**
@@ -1063,7 +1091,7 @@ class CommandFactory {
     public static function addSet($object, $mode, $context) {
         return 'set,' . Set::DEFAULT_SET . ',change.setadd' . '|' . self::configSets($object, $mode, $context);
     }
-    
+
     /**
      * Compose the command to edit the template name
      * 
@@ -1158,7 +1186,7 @@ class CommandFactory {
     public static function addTemplate($object, $mode, $context) {
         return 'template,' . Template::DEFAULT_TEMPLATE . ',change.templateadd' . '|' . self::configTemplates($object, $mode, $context);
     }
-    
+
     /**
      * Compose the command to remove a position
      * 

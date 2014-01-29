@@ -746,6 +746,10 @@ class Object extends SettedEntity {
         return false;
     }
     
+    public function isNewAndEditable() {
+        return $this->getNew() && (Authorization::getObjectPermission($this, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($this, Authorization::OBJECT_MANAGE));
+    }
+    
     /**
      * Check whether the edit version contains changes from the view version,
      * to decide whether to create a new view version for this object when
@@ -754,9 +758,7 @@ class Object extends SettedEntity {
      * @return boolean true if the object has changed
      */
     public function hasChanged() {
-        // TODO: make this optimization work!!!
-        //return true;
-        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() < $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate()) {
+        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() <= $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate()) {
             return true;
         }
         return false;

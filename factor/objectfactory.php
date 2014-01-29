@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -66,6 +67,19 @@ class ObjectFactory extends Factory {
             // factor the positions for this object
             $this->factorPositions();
         } else {
+            if ($this->getObject()->isNewAndEditable()) {
+                // go to edit mode
+                $this->setMode(Modes::getMode(Mode::EDITMODE));
+                // check some more (but should be true)
+                if ($this->getObject()->isVisible($this->getMode(), $this->getContext())) {
+                    // initialize the content with the active layout for this object in this mode and context
+                    $this->setContent($this->getObject()->getVersion($this->getMode())->getLayout()->getVersion($this->getMode(), $this->getContext())->getBody());
+                    // factor the terms for this object
+                    $this->factorTerms();
+                    // factor the positions for this object
+                    $this->factorPositions();
+                }
+            }
             // this object can't be factored, but that can happen (visibility and object level authorization is checked here)
         }
         return true;
@@ -260,10 +274,34 @@ class ObjectFactory extends Factory {
                         $this->explodePN(); // show all (default_show_all is -2)
                         break;
                     case Argument::DEFAULT_SHOW_HIGHEST:
-                        $this->replacePN($this->getObject()->getVersion($this->getMode())->getPositionCount()); // show the highest position (default_show_highest is -1)
+                        $positionnr = 1;
+                        $positions = $this->getObject()->getVersion($this->getMode())->getPositions();
+                        foreach ($positions as $position) {
+                            // if the position contains an object
+                            if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_OBJECT) {
+                                $object = $position->getPositionContent()->getObject();
+                                if ($object->isVisible($this->getMode(), $this->getContext())) {
+                                    $positionnr = $position->getNumber();
+                                }
+                            }
+                        }
+                        $this->replacePN($positionnr); // show the highest position (default_show_highest is -1)
                         break;
                     case Argument::DEFAULT_SHOW_LOWEST:
-                        $this->replacePN(1); // show the first position (default_show_lowest is 0)
+                        $positionnr = 1;
+                        $positionfound = false;
+                        $positions = $this->getObject()->getVersion($this->getMode())->getPositions();
+                        foreach ($positions as $position) {
+                            // if the position contains an object
+                            if (!$positionfound && $position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_OBJECT) {
+                                $object = $position->getPositionContent()->getObject();
+                                if ($object->isVisible($this->getMode(), $this->getContext())) {
+                                    $positionnr = $position->getNumber();
+                                    $positionfound = true;
+                                }
+                            }
+                        }
+                        $this->replacePN($positionnr); // show the first position (default_show_lowest is 0)
                         break;
                     default:
                         $this->replacePN($showposition); // show the position found
@@ -492,5 +530,4 @@ class ObjectFactory extends Factory {
     }
 
 }
-
 ?>

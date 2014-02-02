@@ -73,8 +73,7 @@ class Required {
             case 'Settings': require ('data/settings.php'); break; // loads setting
             case 'Snippets': require ('data/snippets.php'); break; // loads snippet
             case 'Structures': require ('data/structures.php'); break; // loads structure -> getVersion($mode, $context) -> ContextedVersion
-            case 'StyleParams': require ('data/styleparams.php'); break; // loads styleparamtype
-            case 'StyleParamTypes': require ('data/styleparamtypes.php'); break; // loads styleparamtype
+            case 'StyleParams': require ('data/styleparams.php'); break; // load styleparam
             case 'Styles': require ('data/styles.php'); break; // loads style -> getVersion($mode, $context) -> ContextedVersion
             case 'StyleTypes': require ('data/styletypes.php'); break; // loads styletype
             case 'Templates': require ('data/templates.php'); break; // loads template
@@ -113,7 +112,6 @@ class Required {
             case 'Structure': require ('data/structure.php'); break;
             case 'Style': require ('data/style.php'); break;
             case 'StyleParam': require ('data/styleparam.php'); break;
-            case 'StyleParamType': require ('data/styleparamtype.php'); break;
             case 'StyleSheetCache': require ('data/stylesheetcache.php'); break;
             case 'StyleType': require ('data/styletype.php'); break;
             case 'Template': require ('data/template.php'); break;
@@ -132,6 +130,7 @@ class Required {
             case 'ConfigLayoutAdminFactory': require ('factor/configlayoutadminfactory.php'); break;
             case 'ConfigStructureAdminFactory': require ('factor/configstructureadminfactory.php'); break;
             case 'ConfigStyleAdminFactory': require ('factor/configstyleadminfactory.php'); break;
+            case 'ConfigStyleParamAdminFactory': require ('factor/configstyleparamadminfactory.php'); break;
             case 'ConfigSetAdminFactory': require ('factor/configsetadminfactory.php'); break;
             case 'ConfigTemplateAdminFactory': require ('factor/configtemplateadminfactory.php'); break;
             case 'ContentFactory': require ('factor/contentfactory.php'); break;

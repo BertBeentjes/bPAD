@@ -112,6 +112,16 @@ class Change extends Respond {
                         $context = Request::getCommand()->getContext();
                         Execute::changeStyleVersion($style, $mode, $context);
                         break;
+                    case 'styleparam':
+                        $styleparam = StyleParams::getStyleParam(Request::getCommand()->getItemAddress());
+                        Execute::changeStyleParam($styleparam);
+                        break;
+                    case 'styleparamversion':
+                        $styleparam = StyleParams::getStyleParam(Request::getCommand()->getItemAddress());
+                        $mode = Request::getCommand()->getMode();
+                        $context = Request::getCommand()->getContext();
+                        Execute::changeStyleParamVersion($styleparam, $mode, $context);
+                        break;
                     case 'set':
                         $set = Sets::getSet(Request::getCommand()->getItemAddress());
                         Execute::changeSet($set);

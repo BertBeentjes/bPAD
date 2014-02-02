@@ -87,6 +87,10 @@ class ConfigAdminFactory extends AdminFactory {
         if (Authorization::getPagePermission(Authorization::STYLE_MANAGE)) {
             $section .= $this->factorMenuItem(CommandFactory::configStyles($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_STYLES));
         }
+        // add style parameter button (check authorization)
+        if (Authorization::getPagePermission(Authorization::STYLE_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configStyleParams($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_STYLEPARAMS));
+        }
         // add set button (check authorization, administering sets is an integral part of the proper use of templates)
         if (Authorization::getPagePermission(Authorization::TEMPLATE_MANAGE)) {
             $section .= $this->factorMenuItem(CommandFactory::configSets($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_SETS));

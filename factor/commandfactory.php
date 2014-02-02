@@ -629,6 +629,18 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to load the style param configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configStyleParams($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configstyleparams' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
      * Compose the command to load the individual style configurator in the config detail panel
      * 
      * @param object $object
@@ -638,6 +650,18 @@ class CommandFactory {
      */
     public static function configStyle($object, $mode, $context) {
         return 'object,' . $object->getId() . ',admin.configstyle' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the individual style param configurator in the config detail panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configStyleParam($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configstyleparam' . '.' . $mode->getId() . '.' . $context->getId();
     }
 
     /**
@@ -935,6 +959,16 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to edit the style param name
+     * 
+     * @param styleparam $styleparam
+     * @return string
+     */
+    public static function editStyleParamName($styleparam) {
+        return 'styleparam,' . $styleparam->getId() . ',change.styleparamname';
+    }
+
+    /**
      * Compose the command to edit the style type
      * 
      * @param style $style
@@ -978,6 +1012,19 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to remove a style param
+     * 
+     * @param object $object
+     * @param styleparam $styleparam
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeStyleParam($object, $styleparam, $mode, $context) {
+        return 'styleparam,' . $styleparam->getId() . ',change.styleparamremove' . '|' . self::configStyleParams($object, $mode, $context);
+    }
+
+    /**
      * Compose the command to add a style 
      * 
      * @param object $object
@@ -987,6 +1034,19 @@ class CommandFactory {
      */
     public static function addStyle($object, $mode, $context) {
         return 'style,' . Style::DEFAULT_STYLE . ',change.styleadd' . '|' . self::configStyles($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add a style param
+     * 
+     * @param object $object
+     * @param styleparam $styleparam
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addStyleParam($object, $styleparam, $mode, $context) {
+        return 'styleparam,' . $styleparam->getId() . ',change.styleparamadd' . '|' . self::configStyleParams($object, $mode, $context);
     }
 
     /**
@@ -1004,6 +1064,20 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to remove a style param version
+     * 
+     * @param object $object
+     * @param styleparam $styleparam
+     * @param mode $mode
+     * @param context $context
+     * @param context $showcontext
+     * @return string
+     */
+    public static function removeStyleParamVersion($object, $styleparam, $mode, $context, $showcontext) {
+        return 'styleparamversion,' . $styleparam->getId() . ',change.styleparamversionremove' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyleParam($object, $mode, $showcontext);
+    }
+
+    /**
      * Compose the command to publish a style version
      * 
      * @param object $object
@@ -1015,6 +1089,20 @@ class CommandFactory {
      */
     public static function publishStyleVersion($object, $style, $mode, $context, $showcontext) {
         return 'styleversion,' . $style->getId() . ',change.styleversionpublish' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyle($object, $mode, $showcontext);
+    }
+
+    /**
+     * Compose the command to publish a style param version
+     * 
+     * @param object $object
+     * @param styleparam $styleparam
+     * @param mode $mode
+     * @param context $context
+     * @param context $showcontext
+     * @return string
+     */
+    public static function publishStyleParamVersion($object, $styleparam, $mode, $context, $showcontext) {
+        return 'styleparamversion,' . $styleparam->getId() . ',change.styleparamversionpublish' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyleParam($object, $mode, $showcontext);
     }
 
     /**
@@ -1032,6 +1120,20 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to cancel a style param version
+     * 
+     * @param object $object
+     * @param styleparam $styleparam
+     * @param mode $mode
+     * @param context $context
+     * @param context $showcontext
+     * @return string
+     */
+    public static function cancelStyleParamVersion($object, $styleparam, $mode, $context, $showcontext) {
+        return 'styleparamversion,' . $styleparam->getId() . ',change.styleparamversioncancel' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyleParam($object, $mode, $showcontext);
+    }
+
+    /**
      * Compose the command to add a style version
      * 
      * @param object $object
@@ -1046,6 +1148,20 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to add a style param version
+     * 
+     * @param object $object
+     * @param styleparam $styleparam
+     * @param mode $mode
+     * @param context $context
+     * @param context $showcontext
+     * @return string
+     */
+    public static function addStyleParamVersion($object, $styleparam, $mode, $context, $showcontext) {
+        return 'styleparamversion,' . $styleparam->getId() . ',change.styleparamversionadd' . '.' . $mode->getId() . '.' . $context->getId() . '|' . self::configStyleParam($object, $mode, $showcontext);
+    }
+
+    /**
      * Compose the command to edit the style version body
      * 
      * @param style $style
@@ -1055,6 +1171,18 @@ class CommandFactory {
      */
     public static function editStyleVersionBody($style, $mode, $context) {
         return 'styleversion,' . $style->getId() . ',change.styleversionbody' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to edit the style param version body
+     * 
+     * @param styleparam $styleparam
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function editStyleParamVersionBody($styleparam, $mode, $context) {
+        return 'styleparamversion,' . $styleparam->getId() . ',change.styleparamversionbody' . '.' . $mode->getId() . '.' . $context->getId();
     }
 
     /**

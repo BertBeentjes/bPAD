@@ -27,7 +27,6 @@
  * @since 0.4.0
  */
 class StyleParam extends NamedEntity {
-    private $styleparamtype; // the type of style param, defines the input box for the parameter
     private $styleparamversions = array(); // the array with the versions of this style parameter
     
     /**
@@ -39,6 +38,11 @@ class StyleParam extends NamedEntity {
         $this->id = $id;
         $this->tablename = Store::getTableStyleParams();
         $this->loadAttributes();
+    }
+    
+    protected function setChanged($force = false) {
+        CacheStyles::outdateStyleCache();
+        return parent::setChanged($force);
     }
     
     /**
@@ -64,7 +68,6 @@ class StyleParam extends NamedEntity {
      * @return boolean true if success
      */
     protected function initAttributes ($attr) {
-        $this->styleparamtype = StyleParamTypes::getStyleParamType($attr->styleparamtypeid);
         parent::initAttributes($attr);
         return true;
     }
@@ -86,28 +89,128 @@ class StyleParam extends NamedEntity {
     }
     
     /**
-     * The style param type
+     * Create a new version for a style for a specific context, versions are always added
+     * in edit mode, so they don't wreck the site. View mode versions are added when 
+     * publishing.
      * 
-     * @return styleparamtype
+     * @param context $context
+     * @return boolean true if success
      */
-    public function getStyleParamType() {
-        return $this->styleparamtype;
+    public function newVersion($context) {
+        // just a wrapper for newstyleversion, to prevent externals from using the $force argument
+        return $this->newStyleParamVersion($context);
+    }
+
+    /**
+     * Create a new version for a style param for a specific context, versions are always added
+     * in edit mode, so they don't wreck the site. View mode versions are added when 
+     * publishing.
+     * 
+     * @param boolean $force force the create, used when publishing and getVersion gives outdated info
+     * @param context $context
+     * @return boolean true if success
+     */
+    private function newStyleParamVersion($context, $force = false) {
+        // check that the style versions don't already exist
+        if (!$this->getVersion(Modes::getMode(Mode::EDITMODE), $context)->getOriginal() || $force) {
+            // create the new style versions
+            $editstyleversionid = Store::insertStyleParamVersion($this->getId(), Mode::EDITMODE, $context->getId());
+            // update the style version cache array
+            $this->styleparamversions[Mode::EDITMODE][$context->getId()] = new ContextedVersion($this, ContextedVersion::STYLEPARAM, Modes::getMode(Mode::EDITMODE), $context);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Publish a version for a style for a specific context
+     * 
+     * @param context $context
+     * @return boolean true if success
+     */
+    public function publishVersion($context) {
+        $editversion = $this->getVersion(Modes::getMode(Mode::EDITMODE), $context);
+        $viewversion = $this->getVersion(Modes::getMode(Mode::VIEWMODE), $context);
+        // check that the edit version to publish exists
+        if ($editversion->getOriginal()) {
+            // archive the view mode version (if a real one)
+            if ($viewversion->getOriginal()) {
+                $viewversion->setMode(Modes::getMode(Mode::ARCHIVEMODE));
+            }
+            // move the edit version to view
+            $editversion->setMode(Modes::getMode(Mode::VIEWMODE));
+            // create new edit version
+            $this->newStyleParamVersion($context, true);
+            // update the style version cache array
+            $this->styleparamversions[Mode::VIEWMODE][$context->getId()] = new ContextedVersion($this, ContextedVersion::STYLEPARAM, Modes::getMode(Mode::VIEWMODE), $context);
+            $this->styleparamversions[Mode::EDITMODE][$context->getId()] = new ContextedVersion($this, ContextedVersion::STYLEPARAM, Modes::getMode(Mode::EDITMODE), $context);
+            // copy the attributes from the view to the edit version (the body is the only attribute...)
+            $this->getVersion(Modes::getMode(Mode::EDITMODE), $context)->setBody($this->getVersion(Modes::getMode(Mode::VIEWMODE), $context)->getBody());
+            // changed
+            $this->setChanged();
+            return true;
+        }
+        return false;
     }
     
     /**
-     * set the style param type
+     * Cancel changes for a version for a style for a specific context
      * 
-     * @param styleparamtype the new style param type
+     * @param context $context
      * @return boolean true if success
-     * @throws Exception when the update fails
      */
-    public function setStyleParamType($newstyleparamtype) {
-        if (Store::setStyleParamStyleParamTypeId($this->getId(),  $newstyleparamtype->getId()) && $this->setChanged()) {
-            $this->styleparamtype = $newstyleparamtype;
+    public function cancelVersion($context) {
+        $editversion = $this->getVersion(Modes::getMode(Mode::EDITMODE), $context);
+        $viewversion = $this->getVersion(Modes::getMode(Mode::VIEWMODE), $context);
+        // check that the edit version to publish exists
+        if ($viewversion->getOriginal() && $editversion->getOriginal()) {
+            // move the view version to edit
+            $viewversion->setMode(Modes::getMode(Mode::EDITMODE));
+            // move the edit version to archive
+            $editversion->setMode(Modes::getMode(Mode::ARCHIVEMODE));
+            // update the style edit version cache array
+            $this->styleparamversions[Mode::EDITMODE][$context->getId()] = new ContextedVersion($this, ContextedVersion::STYLEPARAM, Modes::getMode(Mode::EDITMODE), $context);
+            // publish the edit version
+            $this->publishVersion($context);
+            // update the style view version cache array
+            $this->styleparamversions[Mode::VIEWMODE][$context->getId()] = new ContextedVersion($this, ContextedVersion::STYLEPARAM, Modes::getMode(Mode::VIEWMODE), $context);
+            // changed
+            $this->setChanged();
             return true;
-        } else {
-            throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
         }
+        return false;
+    }
+    
+    /**
+     * Remove a version for all modes, update the styleparamversions array 
+     * 
+     * @param context $context
+     * @return boolean true if success
+     */
+    public function removeVersion($context) {
+        // never remove the style versions for the default context group - default context (without this style version, there is no style)
+        if (!($context->isDefault() && $context->getContextGroup()->isDefault())) {
+            // check that the style version exists
+            if ($this->getVersion(Modes::getMode(Mode::EDITMODE), $context)->getOriginal()) {
+                // remove the style version
+                if (Store::deleteStyleParamVersion($this->getVersion(Modes::getMode(Mode::EDITMODE), $context)->getId())) {
+                    // update the style version cache array
+                    $this->styleparamversions[Mode::EDITMODE][$context->getId()] = new ContextedVersion($this, ContextedVersion::STYLEPARAM, Modes::getMode(Mode::EDITMODE), $context);
+                    $this->setChanged();
+                }
+            }
+            // check that the style version exists
+            if ($this->getVersion(Modes::getMode(Mode::VIEWMODE), $context)->getOriginal()) {
+                // remove the style version
+                if (Store::deleteStyleParamVersion($this->getVersion(Modes::getMode(Mode::VIEWMODE), $context)->getId())) {
+                    // update the style version cache array
+                    $this->styleparamversions[Mode::VIEWMODE][$context->getId()] = new ContextedVersion($this, ContextedVersion::STYLEPARAM, Modes::getMode(Mode::VIEWMODE), $context);
+                    $this->setChanged();
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
 }

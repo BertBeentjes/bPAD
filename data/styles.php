@@ -111,7 +111,7 @@ class Styles {
         $context = Contexts::getContextByGroupAndName(ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_DEFAULT), Context::CONTEXT_DEFAULT);
         Store::insertStyleVersion($styleid, Mode::VIEWMODE, $context->getId());
         Store::insertStyleVersion($styleid, Mode::EDITMODE, $context->getId());
-
+        CacheStyles::outdateStyleCache();
         return true;
     }
 
@@ -128,6 +128,7 @@ class Styles {
             unset(self::$styles[$style->getId()]);
             return true;
         }
+        CacheStyles::outdateStyleCache();
         return false;
     }
     

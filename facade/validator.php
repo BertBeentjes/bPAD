@@ -124,6 +124,22 @@ Class Validator {
     }
 
     /**
+     * validate the style parameter id
+     * 
+     * @param int styleparamid the id to validate
+     * @return boolean  if valid
+     * @throws exception when store not available
+     */
+    public static function validStyleParam($styleparamid) {
+        if (self::isNumeric($styleparamid)) {
+            if (Store::getStyleParam($styleparamid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
      * validate the layout id
      * 
      * @param int layoutid the id to validate
@@ -232,7 +248,7 @@ Class Validator {
      * @param string $str
      */
     public static function isName($str) {
-        return preg_match('/^[a-zA-Z0-9\ ]+$/', $str);
+        return preg_match('/^[a-zA-Z0-9\ \-]+$/', $str);
     }
 
     /**

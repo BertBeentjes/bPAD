@@ -323,15 +323,6 @@ class Store {
     }
 
     /**
-     * return the table name for style param types
-     * 
-     * @return string table name
-     */
-    public static function getTableStyleParamTypes() {
-        return 'styleparamtypes';
-    }
-
-    /**
      * return the table name for arguments
      * 
      * @return string table name
@@ -1010,7 +1001,7 @@ class Store {
      * @return resultset id
      */
     public static function getStyleParams() {
-        return self::selectQuery("SELECT id FROM styleparams");
+        return self::selectQuery("SELECT id, name FROM styleparams ORDER BY styleparams.name");
     }
 
     /**
@@ -1455,10 +1446,10 @@ class Store {
      * get the basic attributes for a style parameter
      * 
      * @param int the id of the row 
-     * @return resultset name, styleparamtypeid, createdate, createuserid, changedate, changeuserid
+     * @return resultset name, createdate, createuserid, changedate, changeuserid
      */
     public static function getStyleParam($id) {
-        return self::selectQuery("SELECT name, fk_styleparamtype_id styleparamtypeid, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid FROM styleparams WHERE id=" . $id);
+        return self::selectQuery("SELECT name, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid FROM styleparams WHERE id=" . $id);
     }
 
     /**
@@ -3872,6 +3863,35 @@ class Store {
     }
 
     /**
+     * insert a new styleparam into the Store
+     * 
+     * @return int the new id
+     */
+    public static function insertStyleParam() {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO styleparams (createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("ii", Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new style param version into the Store
+     * 
+     * @param int $styleparamid the style param id
+     * @param int $modeid the mode
+     * @param int $contextid the context
+     * @return int the new id
+     */
+    public static function insertStyleParamVersion($styleparamid, $modeid, $contextid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO styleparamversions (fk_styleparam_id, fk_mode_id, fk_context_id, createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (?, ?, ?, NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("iiiii", $styleparamid, $modeid, $contextid, Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
      * delete a style version from the Store
      * 
      * @param int $styleversionid the style version to remove
@@ -3881,6 +3901,20 @@ class Store {
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("DELETE FROM styleversions WHERE id=?")) {
             $stmt->bind_param("i", $styleversionid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * delete a style param version from the Store
+     * 
+     * @param int $styleparamversionid the style param version to remove
+     * @return boolean true if success
+     */
+    public static function deleteStyleParamVersion($styleparamversionid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM styleparamversions WHERE id=?")) {
+            $stmt->bind_param("i", $styleparamversionid);
             return self::actionQuery($stmt);
         }
     }
@@ -3909,6 +3943,34 @@ class Store {
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("DELETE FROM styleversions WHERE fk_style_id=?")) {
             $stmt->bind_param("i", $styleid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete a style param from the Store
+     * 
+     * @param int $styleparamid the style parameter to delete
+     * @return boolean true if success
+     */
+    public static function deleteStyleParam($styleparamid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM styleparams WHERE id=?")) {
+            $stmt->bind_param("i", $styleparamid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * delete all style param versions from the Store
+     * 
+     * @param int $styleparamid the style param to delete the versions from
+     * @return boolean true if success
+     */
+    public static function deleteStyleParamVersions($styleparamid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM styleparamversions WHERE fk_styleparam_id=?")) {
+            $stmt->bind_param("i", $styleparamid);
             return self::actionQuery($stmt);
         }
     }

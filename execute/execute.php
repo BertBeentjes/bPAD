@@ -925,6 +925,101 @@ class Execute {
     }
 
     /**
+     * Execute a change in a style parameter
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param styleparam $styleparam
+     */
+    public static function changeStyleParam($styleparam) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::STYLE_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'styleparamname':
+                    // validate
+                    if (Validator::isName(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($styleparam->getName());
+                        // set the new value
+                        $styleparam->setName(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'styleparamadd':
+                    // store the success value in the command
+                    // add a new style
+                    Request::getCommand()->setOldValue(StyleParams::newStyleParam());
+                    break;
+                case 'styleparamremove':
+                    // store the success value in the command
+                    // remove the specified style
+                    Request::getCommand()->setOldValue(StyleParams::removeStyleParam($styleparam));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
+     * Execute a change in an style parameter version
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param styleparam $styleparam
+     * @param mode $mode
+     * @param context $context
+     */
+    public static function changeStyleParamVersion($styleparam, $mode, $context) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::STYLE_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'styleparamversionbody':
+                    // get the style version, always edit in edit mode
+                    $styleparamversion = $styleparam->getVersion(Modes::getMode(Mode::EDITMODE), $context);
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($styleparamversion->getBody());
+                    // set the new value
+                    $styleparamversion->setBody(Request::getCommand()->getValue());
+                    break;
+                case 'styleparamversionadd':
+                    // store the success value in the command
+                    // add the specified version
+                    Request::getCommand()->setOldValue($styleparam->newVersion($context));
+                    break;
+                case 'styleparamversionremove':
+                    // store the success value in the command
+                    // remove the specified version
+                    Request::getCommand()->setOldValue($styleparam->removeVersion($context));
+                    break;
+                case 'styleparamversionpublish':
+                    // store the success value in the command
+                    // remove the specified version
+                    Request::getCommand()->setOldValue($styleparam->publishVersion($context));
+                    break;
+                case 'styleparamversioncancel':
+                    // store the success value in the command
+                    // remove the specified version
+                    Request::getCommand()->setOldValue($styleparam->cancelVersion($context));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
      * Execute a change in an set
      * Check for authorization
      * Validate the value if necessary

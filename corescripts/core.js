@@ -387,7 +387,7 @@ function checkCommand(thiscommand, thisvalue) {
         this.container = 'CP' + this.parsedcommand.itemaddress;
     }
     // if it's a admin.config... command, check where to load the config content
-    if (this.parsedcommand.commandgroup == 'admin' && (this.parsedcommand.commandmember == 'configlayouts' || this.parsedcommand.commandmember == 'configstructures' || this.parsedcommand.commandmember == 'configstyles' || this.parsedcommand.commandmember == 'configsets' || this.parsedcommand.commandmember == 'configtemplates')) {
+    if (this.parsedcommand.commandgroup == 'admin' && (this.parsedcommand.commandmember == 'configlayouts' || this.parsedcommand.commandmember == 'configstructures' || this.parsedcommand.commandmember == 'configstyles' || this.parsedcommand.commandmember == 'configstyleparams' || this.parsedcommand.commandmember == 'configsets' || this.parsedcommand.commandmember == 'configtemplates')) {
         this.container = 'CP' + this.parsedcommand.itemaddress;
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configlayout') {
@@ -401,6 +401,10 @@ function checkCommand(thiscommand, thisvalue) {
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configstyle') {
         this.container = 'CP' + this.parsedcommand.itemaddress;
         this.value = $('#' + this.container + '_stylelist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configstyleparam') {
+        this.container = 'CP' + this.parsedcommand.itemaddress;
+        this.value = $('#' + this.container + '_styleparamlist').val();
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configset') {
         this.container = 'CP' + this.parsedcommand.itemaddress;

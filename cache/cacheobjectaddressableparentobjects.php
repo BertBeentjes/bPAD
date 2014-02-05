@@ -66,6 +66,15 @@ class CacheObjectAddressableParentObjects {
     }
     
     /**
+     * Delete the object from the object addressable parent cache
+     * 
+     * @param object $object
+     */
+    public static function deleteObjectFromCache($object) {
+        Store::deleteObjectFromCache($object->getId());
+    }
+
+    /**
      * Get the addressable parents for an object from the cache
      * 
      * @param object $object

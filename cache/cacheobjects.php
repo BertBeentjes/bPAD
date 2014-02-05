@@ -190,6 +190,15 @@ class CacheObjects {
             Store::outdateReferrals($argument->getId());
         }
     }
+    
+    /**
+     * Delete the object from the object cache
+     * 
+     * @param object $object
+     */
+    public static function deleteObjectFromCache($object) {
+        Store::deleteObjectFromCache($object->getId());
+    }
 
     /**
      * outdate the cache for content items that contain internal links to objects

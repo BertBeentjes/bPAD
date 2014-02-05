@@ -51,6 +51,14 @@ class ContentFactory extends Factory {
             if (strstr($this->getContent(), Terms::CONTENT_ROOT)) {
                 $this->replaceTerm(Terms::CONTENT_ROOT, $this->getRootContent(), $this->getContent());
             }
+            // replace the error message term by the error message container
+            if (strstr($this->getContent(), Terms::CONTENT_ERROR_MESSAGE)) {
+                $this->replaceTerm(Terms::CONTENT_ERROR_MESSAGE, $this->getErrorMessageContainer(), $this->getContent());
+            }
+            // replace the modal term by the modal container
+            if (strstr($this->getContent(), Terms::CONTENT_MODAL)) {
+                $this->replaceTerm(Terms::CONTENT_MODAL, $this->getModalContainer(), $this->getContent());
+            }
             // replace the styles term by the styles
             if (strstr($this->getContent(), Terms::CONTENT_STYLES)) {
                 $this->replaceTerm(Terms::CONTENT_STYLES, CacheStyles::getCacheStyles($this->getMode(), $this->getContext()), $this->getContent());
@@ -94,6 +102,26 @@ class ContentFactory extends Factory {
         $rootobject = Objects::getObject(syscon::SITE_ROOT_OBJECT);
         $rootcontent = CacheObjects::getCacheObject($rootobject, $this->getContext(), $this->getMode());
         return $rootcontent;
+    }
+    
+    /**
+     * Get the error message container
+     * 
+     * @return string
+     */
+    protected function getErrorMessageContainer() {
+        // get the container
+        return Structures::getStructureByName(LSSNames::STRUCTURE_ERROR_MESSAGE)->getVersion($this->getMode(), $this->getContext())->getBody();
+    }
+    
+    /**
+     * Get the modal message container
+     * 
+     * @return string
+     */
+    protected function getModalContainer() {
+        // get the container
+        return Structures::getStructureByName(LSSNames::STRUCTURE_MODAL)->getVersion($this->getMode(), $this->getContext())->getBody();
     }
     
     /**

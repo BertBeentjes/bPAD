@@ -1124,6 +1124,15 @@ class Store {
     }
 
     /**
+     * get orphaned objects (not a template and no parent)
+     * 
+     * @return resultset id
+     */
+    public static function getOrphanedObjects() {
+        return self::selectQuery("SELECT objects.id FROM objects LEFT JOIN positionobjects ON objects.id=positionobjects.fk_object_id WHERE positionobjects.id IS NULL AND objects.istemplate = 0");
+    }
+
+    /**
      * get the position instance cache by position instance id
      * 
      * @param int the position instance id
@@ -4098,7 +4107,35 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-
+    
+    /**
+     * delete an object from the object cache
+     * 
+     * @param int $objectid the item to delete
+     * @return boolean true if success
+     */
+    public static function deleteObjectFromCache($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM objectcache WHERE fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete an object from the object addressable parent cache
+     * 
+     * @param int $objectid the item to delete
+     * @return boolean true if success
+     */
+    public static function deleteObjectFromAddressableParentCache($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM objectaddressableparentcache WHERE fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
 }
 
 ?>

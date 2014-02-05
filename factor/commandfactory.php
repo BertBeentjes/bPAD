@@ -53,12 +53,22 @@ class CommandFactory {
      */
     public static function getSpecificObject($object, $mode, $context) {
         $parentpositionid = 1;
+        $parentrootid = 1;
+        $parentid = 1;
         $parentposition = $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject()->getVersion($mode)->getPositionParent();
+        $parentroot = $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject();
+        $parent = $object->getVersion($mode)->getPositionParent();
         // if the parent is the template root, there is no position, otherwise take the position id
         if (isset($parentposition)) {
             $parentpositionid = $parentposition->getId();
         }
-        return 'object,' . $parentpositionid . '.' . $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject()->getId() . '.' . $object->getVersion($mode)->getPositionParent()->getId() . '.' . Helper::getURLSafeString($object->getName()) . ',content.get.' . $mode->getId() . '.' . $context->getId();
+        if (isset($parentposition)) {
+            $parentrootid = $parentroot->getId();
+        }
+        if (isset($parent)) {
+            $parentid = $parent->getId();
+        }
+        return 'object,' . $parentpositionid . '.' . $parentrootid . '.' . $parentid . '.' . Helper::getURLSafeString($object->getName()) . ',content.get.' . $mode->getId() . '.' . $context->getId();
     }
 
     /**

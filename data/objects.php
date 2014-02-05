@@ -35,7 +35,6 @@ class Objects {
         }
     }
 
-
     /**
      * Get the objects that can be selected by a certain argument and mode, used to create referrals
      * 
@@ -79,7 +78,7 @@ class Objects {
         }
         return $objects;
     }
-    
+
     /**
      * Create a new object
      * 
@@ -96,5 +95,33 @@ class Objects {
         return $object;
     }
 
+    /**
+     * Delete objects that are orphaned (they aren't templates and there is no
+     * containing position). Objects are orphaned by deleting the positions
+     * they are in, or by deleting archived versions.
+     */
+    public static function deleteOrphanedObjects() {
+        // get the orphaned objects 
+        while ($objects = Store::getOrphanedObjects()) {
+            while ($row = $objects->fetchObject()) {
+                $object = Objects::getObject($row->id);
+                // delete the caches for the object (addressable parent, object cache)
+                CacheObjects::deleteObjectFromCache($object);
+                CacheObjectAddressableParentObjects::deleteObjectFromCache($object);
+                // delete the object user group roles
+                
+                // delete the position content
+                
+                // delete the positions
+                
+                // delete the object versions
+                
+                // delete the object
+                
+            }
+        }
+    }
+
 }
+
 ?>

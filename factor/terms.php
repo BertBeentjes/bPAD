@@ -30,6 +30,8 @@ class Terms {
     const CONTENT_BPAD_VERSION = '#bpadversion#'; // insert the bPAD version number here
     const CONTENT_BPAD_LANGUAGE = '#bpadlanguage#'; // insert the bPAD language here
     const CONTENT_ROOT = '#root#'; // insert content starting with the site root here in a snippet 
+    const CONTENT_ERROR_MESSAGE = '#errormessage#'; // insert a container for showing error messages
+    const CONTENT_MODAL = '#modal#'; // insert a modal container for showing a message while something is processing
     const CONTENT_STYLES = '#styles#'; // insert styles 
     const CONTENT_SITE_ROOT = '#siteroot#'; // insert site root 
     const CONTENT_SITE_ROOT_FOLDER = '#siterootfolder#'; // insert site root folder (sub folder)

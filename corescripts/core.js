@@ -36,12 +36,13 @@ var processing = "#processing#"; // processing message, used in a modal dialog w
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
         // if the message modal is visible, hide it
-        $('#message').modal('hide');
+        $('#modalcontainer').modal('hide');
         resultToHTML(container, replace, checkcommandnr, commandnr, result);
     }
 }
 var docommand = function(thiscommand, checkcommandnr, thisvalue) {
     return function(result) {
+        showError(result);
         doCommand(thiscommand, checkcommandnr, thisvalue);
     }
 }
@@ -49,6 +50,13 @@ var docommandandresulttohtml = function(thiscommand, checkcommandnr, thisvalue, 
     return function(result) {
         resultToHTML(container, replace, checkcommandnr, commandnr, result);
         doCommand(thiscommand, checkcommandnr, thisvalue);
+    }
+}
+
+function showError(result) {
+    if (result > '') {
+        $('#errormessage').html(result);
+        $('#errorcontainer').show();
     }
 }
 
@@ -108,10 +116,12 @@ function doBootStrapping() {
     // add events to the html where requested
     addEvents();
     // initialize the message dialog
-    this.$('#message').modal({
+    this.$('#modalcontainer').modal({
         backdrop: 'static',
         show: false
     });
+    // initialize the error message box
+    this.$('#errorcontainer').hide();
     // add lazy load events to the window
     $(window).on("resize", function() {
         lazyEvent();
@@ -150,24 +160,32 @@ function addEvents(divid) {
     $(selector + '[data-bpad-onclick]').each(function() {
         // get the command
         var command = $(this).attr('data-bpad-onclick');
-        if (command == 'buttontoggle') {
-            // initialize the admin buttons
-            showAdminButtons();
-            // and attach an update function to the toggle button
-            $(this).on("click", function() {
-                showadminbuttons = !showadminbuttons;
+        switch (command) {
+            case 'buttontoggle':
+                // initialize the admin buttons
                 showAdminButtons();
-            });
-        } else {
-            // attach the event and pass the command info
-            $(this).on('click', {
-                cmd: command
-            }, function(event) {
-                doCommand(event.data.cmd, false);
-                // prevent a href from firing
-                return false;
-            }
-            );
+                // and attach an update function to the toggle button
+                $(this).on("click", function() {
+                    showadminbuttons = !showadminbuttons;
+                    showAdminButtons();
+                });
+                break;
+            case 'clearerror':
+                $(this).on("click", function() {
+                    $('#errorcontainer').hide();
+                    $('#errormessage').html('');
+                });
+                break;
+            default:
+                // attach the event and pass the command info
+                $(this).on('click', {
+                    cmd: command
+                }, function(event) {
+                    doCommand(event.data.cmd, false);
+                    // prevent a href from firing
+                    return false;
+                }
+                );
         }
         // remove the attribute, so the event isn't attached again
         $(this).removeAttr('data-bpad-onclick');
@@ -467,8 +485,8 @@ function doCommand(thiscommand, checkcommandnr, thisvalue) {
         // other commands load something into a container
         if (info.successcommand > '') {
             // chained commands shoud be executed in sequence, so a modal dialog is shown while processing
-            $('#message').find('.modal-body').html(processing);
-            $('#message').modal('show');
+            $('#modalmessage').html(processing);
+            $('#modalcontainer').modal('show');
             // now do something with the chained command
             if (info.parsedcommand.commandgroup == 'change') {
                 $.ajax({
@@ -487,7 +505,7 @@ function doCommand(thiscommand, checkcommandnr, thisvalue) {
             }
         } else if (info.parsedcommand.commandgroup == 'change') {
             // if the message modal is visible, hide it, this is a final change and waiting on the result is not necessary
-            $('#message').modal('hide');
+            $('#modalcontainer').modal('hide');
             // do the change
             $.ajax({
                 type: 'POST',

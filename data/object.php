@@ -764,6 +764,29 @@ class Object extends SettedEntity {
         return false;
     }
 
+    /**
+     * Delete the object from the parent in edit/view mode. This should only
+     * be used for objects in the recycle bin or objects that are new.
+     * 
+     * This function only deletes the parent position, the Objects::deleteOrphanedObjects()
+     * function will delete this object (if no references from archived versions are left)
+     */
+    public function deleteFromParent () {
+        // delete this object from his parent (delete the positionobject, delete the position, renumber positions)
+        $this->deleteParentPositionMode(Modes::getMode(Mode::EDITMODE));
+        $this->deleteParentPositionMode(Modes::getMode(Mode::VIEWMODE));
+    }
+    
+    /**
+     * Delete the parent position
+     * 
+     * @param mode $mode
+     */
+    private function deleteParentPositionMode($mode) {
+        $parent = $this->getVersion($mode)->getObjectParent();
+        $positionnumber = $this->getVersion($mode)->getPositionParent()->getNumber();
+        $parent->getVersion($mode)->removePosition($positionnumber);
+    }
 }
 
 ?>

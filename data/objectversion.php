@@ -720,7 +720,6 @@ Class ObjectVersion extends StoredEntity {
             if ($this->getLayout()->isPNType()) {
                 $counter = $number + 1;
                 while (isset($positions[$counter])) {
-                    // TODO: also move files belonging to this position to the correct folder
                     $positions[$counter]->setNumber($counter - 1);
                     $counter = $counter + 1;
                 }

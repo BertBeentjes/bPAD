@@ -70,8 +70,8 @@ class CacheObjectAddressableParentObjects {
      * 
      * @param object $object
      */
-    public static function deleteObjectFromCache($object) {
-        Store::deleteObjectFromCache($object->getId());
+    public static function removeObjectFromCache($object) {
+        Store::deleteObjectFromAddressableParentCache($object->getId());
     }
 
     /**

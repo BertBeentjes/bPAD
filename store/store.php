@@ -3425,6 +3425,123 @@ class Store {
     }
     
     /**
+     * delete the object user group roles for an object from the Store
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectUserGroupRoles($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM objectusergrouprole WHERE fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete the position objects for an object
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectPositionObjects($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE positionobjects FROM positionobjects INNER JOIN positions ON positionobjects.fk_position_id=positions.id INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete the position instances for an object
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectPositionInstances($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE positioninstances FROM positioninstances INNER JOIN positions ON positioninstances.fk_position_id=positions.id INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete the position referrals for an object
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectPositionReferrals($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE positionreferrals FROM positionreferrals INNER JOIN positions ON positionreferrals.fk_position_id=positions.id INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete the position referrals for an object
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectPositionReferrals($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE positionreferrals FROM positionreferrals INNER JOIN positions ON positionreferrals.fk_position_id=positions.id INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete the positions for an object
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectPositions($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE positions FROM positions INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete the object versions for an object
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectVersions($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM objectversions WHERE objectversions.fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete the object 
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObject($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM objects WHERE objects.id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete the object sessions
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectSessions($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM sessions WHERE sessions.fk_object_id=?")) {
+            $stmt->bind_param("i", $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
      * insert a new object version into the Store
      * 
      * @param int $objectid

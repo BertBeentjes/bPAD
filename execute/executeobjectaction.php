@@ -90,6 +90,12 @@ class ExecuteObjectAction {
         if ($this->getObject()->getNew()) {
             // remove the item to the trash can
             $this->getObject()->setNewRecursive(false);
+            // and do a full delete, this object has never been published so should not be kept
+            // first remove the object fromt the parent (deleting the position it was in)
+            $this->getObject()->removeFromParent();
+            // then call the general function to fully delete objects that aren't in a position,
+            // this will loop until no objects to delete are left
+            Objects::removeOrphanedObjects();
         } else {
             // define the action
             $this->setAction(self::EXECUTE_CANCEL);

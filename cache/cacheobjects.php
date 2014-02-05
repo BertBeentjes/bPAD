@@ -196,7 +196,7 @@ class CacheObjects {
      * 
      * @param object $object
      */
-    public static function deleteObjectFromCache($object) {
+    public static function removeObjectFromCache($object) {
         Store::deleteObjectFromCache($object->getId());
     }
 

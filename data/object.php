@@ -227,7 +227,7 @@ class Object extends SettedEntity {
     }
     
     /**
-     * Remove a new object user group role from an object
+     * Remove an object user group role from an object
      * 
      * @param objectusergrouprole $ougr
      */
@@ -768,13 +768,13 @@ class Object extends SettedEntity {
      * Delete the object from the parent in edit/view mode. This should only
      * be used for objects in the recycle bin or objects that are new.
      * 
-     * This function only deletes the parent position, the Objects::deleteOrphanedObjects()
+     * This function only deletes the parent position, the Objects::removeOrphanedObjects()
      * function will delete this object (if no references from archived versions are left)
      */
-    public function deleteFromParent () {
+    public function removeFromParent () {
         // delete this object from his parent (delete the positionobject, delete the position, renumber positions)
-        $this->deleteParentPositionMode(Modes::getMode(Mode::EDITMODE));
-        $this->deleteParentPositionMode(Modes::getMode(Mode::VIEWMODE));
+        $this->removeParentPositionMode(Modes::getMode(Mode::EDITMODE));
+        $this->removeParentPositionMode(Modes::getMode(Mode::VIEWMODE));
     }
     
     /**
@@ -782,7 +782,7 @@ class Object extends SettedEntity {
      * 
      * @param mode $mode
      */
-    private function deleteParentPositionMode($mode) {
+    private function removeParentPositionMode($mode) {
         $parent = $this->getVersion($mode)->getObjectParent();
         $positionnumber = $this->getVersion($mode)->getPositionParent()->getNumber();
         $parent->getVersion($mode)->removePosition($positionnumber);

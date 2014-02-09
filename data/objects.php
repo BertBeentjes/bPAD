@@ -99,25 +99,32 @@ class Objects {
      * Delete objects that are orphaned (they aren't templates and there is no
      * containing position). Objects are orphaned by deleting the positions
      * they are in, or by deleting archived versions.
+     * 
+     * For speed: using one query per table, bypassing the normal object structure.
      */
-    public static function deleteOrphanedObjects() {
+    public static function removeOrphanedObjects() {
         // get the orphaned objects 
         while ($objects = Store::getOrphanedObjects()) {
             while ($row = $objects->fetchObject()) {
                 $object = Objects::getObject($row->id);
+                // delete sessions relating to the object
+                Store::deleteObjectSessions($object->getId());
                 // delete the caches for the object (addressable parent, object cache)
-                CacheObjects::deleteObjectFromCache($object);
-                CacheObjectAddressableParentObjects::deleteObjectFromCache($object);
+                CacheObjects::removeObjectFromCache($object);
+                CacheObjectAddressableParentObjects::removeObjectFromCache($object);
                 // delete the object user group roles
-                
+                Store::deleteObjectUserGroupRoles($object->getId());
                 // delete the position content
-                
+                Store::deleteObjectPositionContentItems($object->getId());
+                Store::deleteObjectPositionInstances($object->getId());
+                Store::deleteObjectPositionObjects($object->getId());
+                Store::deleteObjectPositionReferrals($object->getId());                
                 // delete the positions
-                
+                Store::deleteObjectPositions($object->getId());
                 // delete the object versions
-                
+                Store::deleteObjectVersions($object->getId());
                 // delete the object
-                
+                Store::deleteObject($object->getId());
             }
         }
     }

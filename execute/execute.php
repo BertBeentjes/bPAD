@@ -137,24 +137,30 @@ class Execute {
                 case 'moveobject':
                     // create the executer
                     $exec = new ExecuteObjectAction();
-                    // TODO: move the object
-                    
-                    // store the command success in the old value
-                    Request::getCommand()->setOldValue($exec->keep());
+                    $exec->setObject($object);                    
+                    $target = Objects::getObject(Request::getCommand()->getValue());
+                    // check move conditions (permissions, right type of object, right set)
+                    $mode = Modes::getMode(Mode::EDITMODE);
+                    if ($object->getTemplate()->getSet()->getId()==$target->getSet()->getId() && $target->getId()!=$object->getVersion($mode)->getObjectParent()->getId() && !$target->getIsTemplate() && $target->getActive() && $target->getVersion($mode)->getLayout()->isPNType() && (Authorization::getObjectPermission($target, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($target, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($target, Authorization::OBJECT_FRONTEND_EDIT))) {
+                        // store the command success in the old value
+                        Request::getCommand()->setOldValue($exec->moveObject($target, $mode));
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
                     break;
                 case 'moveobjectup':
                     // create the executer
                     $exec = new ExecuteObjectAction();
-                    $exec->moveObjectUp($object, Modes::getMode(Mode::EDITMODE));
+                    $exec->setObject($object);
                     // store the command success in the old value
-                    Request::getCommand()->setOldValue($exec->keep());
+                    Request::getCommand()->setOldValue($exec->moveObjectUp(Modes::getMode(Mode::EDITMODE)));
                     break;
                 case 'moveobjectdown':
                     // create the executer
                     $exec = new ExecuteObjectAction();
-                    $exec->moveObjectDown($object, Modes::getMode(Mode::EDITMODE));
+                    $exec->setObject($object);
                     // store the command success in the old value
-                    Request::getCommand()->setOldValue($exec->keep());
+                    Request::getCommand()->setOldValue($exec->moveObjectDown(Modes::getMode(Mode::EDITMODE)));
                     break;
                 default:
                     Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
@@ -501,7 +507,7 @@ class Execute {
                                 // store the old value in the command
                                 Request::getCommand()->setOldValue($instance->getParent()->getId());
                                 // set the new value
-                                $instance->setObjectParent($object);
+                                $instance->setParent($object);
                             }
                         }
                     } else {

@@ -134,14 +134,15 @@ class Required {
             case 'ConfigSetAdminFactory': require ('factor/configsetadminfactory.php'); break;
             case 'ConfigTemplateAdminFactory': require ('factor/configtemplateadminfactory.php'); break;
             case 'ContentFactory': require ('factor/contentfactory.php'); break;
-            case 'UploadFactory': require ('factor/uploadfactory.php'); break;
             case 'ContentItemFactory': require ('factor/contentitemfactory.php'); break;
             case 'CommandFactory': require ('factor/commandfactory.php'); break;
+            case 'MoveAdminFactory': require ('factor/moveadminfactory.php'); break;
             case 'ObjectFactory': require ('factor/objectfactory.php'); break;
             case 'PositionFactory': require ('factor/positionfactory.php'); break;
             case 'ReferralFactory': require ('factor/referralfactory.php'); break;
             case 'StyleFactory': require ('factor/stylefactory.php'); break;
             case 'Terms': require ('factor/terms.php'); break;
+            case 'UploadFactory': require ('factor/uploadfactory.php'); break;
             
             // cache classes, the caches contain factored content; used by factory classes
             case 'CacheObjects': require ('cache/cacheobjects.php'); break;

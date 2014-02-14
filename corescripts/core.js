@@ -42,8 +42,9 @@ var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
 }
 var docommand = function(thiscommand, checkcommandnr, thisvalue) {
     return function(result) {
-        showError(result);
-        doCommand(thiscommand, checkcommandnr, thisvalue);
+        if (!showError(result)) {
+            doCommand(thiscommand, checkcommandnr, thisvalue);
+        }
     }
 }
 var docommandandresulttohtml = function(thiscommand, checkcommandnr, thisvalue, container, replace, checkcommandnr, commandnr) {
@@ -55,9 +56,14 @@ var docommandandresulttohtml = function(thiscommand, checkcommandnr, thisvalue, 
 
 function showError(result) {
     if (result > '') {
+        // if the message modal is visible, hide it, this is a final change and waiting on the result is not necessary
+        $('#modalcontainer').modal('hide');
+        // show the error message
         $('#errormessage').html(result);
         $('#errorcontainer').show();
+        return true;
     }
+    return false;
 }
 
 function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
@@ -400,6 +406,13 @@ function checkCommand(thiscommand, thisvalue) {
         this.container = 'AP' + partparts[0];
         this.value = partparts[1];
     }
+    // if it's a admin.move command, check where to load the add content
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'move') {
+        var partparts = this.parsedcommand.itemaddress.split('.');
+        // the container can be the container
+        this.container = 'MP' + partparts[0];
+        this.value = partparts[1];
+    }
     // if it's a admin.config command, check where to load the config content
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'config') {
         this.container = 'CP' + this.parsedcommand.itemaddress;
@@ -440,7 +453,11 @@ function checkCommand(thiscommand, thisvalue) {
     if (this.parsedcommand.commandgroup == 'change' && (this.parsedcommand.commandmember == 'cancelobject' || this.parsedcommand.commandmember == 'publishobject' || this.parsedcommand.commandmember == 'keepobject')) {
         $('#EP' + this.parsedcommand.itemaddress).html('');
     }
-    // if it's an add or cancel command, close the add panel
+    // if it's a move cancel command, close the move panel
+    if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'cancelmove') {
+        $('#MP' + this.parsedcommand.itemaddress).html('');
+    }
+    // if it's an add cancel command, close the add panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'canceladd') {
         $('#AP' + this.parsedcommand.itemaddress).html('');
     }
@@ -448,10 +465,18 @@ function checkCommand(thiscommand, thisvalue) {
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'cancelconfig') {
         $('#CP' + this.parsedcommand.itemaddress).html('');
     }
-    // if it's an add or cancel command, close the add panel
+    // if it's an add command, close the admin panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'add') {
         var parts = this.parsedcommand.itemaddress.split('.');
         $('#AP' + parts[1]).html('');
+    }
+    // if it's a move command, set the value and item address, close the move panel
+    if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'moveobject') {
+        var parts = this.parsedcommand.itemaddress.split('.');
+        $('#MP' + parts[0]).html('');
+        // rebuild the command
+        this.newcommand = this.parsedcommand.item + ',' + parts[0] + ',' + this.parsedcommand.command;
+        this.value = parts[1];
     }
 }
 

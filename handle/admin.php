@@ -46,6 +46,7 @@ class Admin extends Respond {
                     // initialize the admin factory
                     $editadminfactory->setContext(Request::getCommand()->getContext());
                     $editadminfactory->setMode(Request::getCommand()->getMode());
+                    $editadminfactory->setObject($object);
                     // factor the content
                     $editadminfactory->factor();
                     // get the factored item
@@ -53,7 +54,24 @@ class Admin extends Respond {
                 } else {
                     Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
                 }
-
+                break;
+            // create the content for the move panel
+            case 'move':
+                $addressparts = Request::getCommand()->getItemAddressParts();
+                $object = Objects::getObject($addressparts[1]);
+                if (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_EDIT) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_CREATOR_EDIT)) {
+                    $moveadminfactory = new MoveAdminFactory();
+                    // initialize the admin factory
+                    $moveadminfactory->setContext(Request::getCommand()->getContext());
+                    $moveadminfactory->setMode(Request::getCommand()->getMode());
+                    $moveadminfactory->setObject($object);
+                    // factor the content
+                    $moveadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($moveadminfactory->getContent());
+                } else {
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+                }
                 break;
             // create the content for the add panel with templates to add based upon the set
             case 'add':

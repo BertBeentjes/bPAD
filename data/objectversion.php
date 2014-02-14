@@ -415,11 +415,12 @@ Class ObjectVersion extends StoredEntity {
     /**
      * set the parent for this object in this mode (only to be used when moving the object through the site)
      * 
-     * @param object $newparentobject the new parent
+     * @param position $newparentposition the position the object is in, in th e new parent
      * @return boolean true
      */
-    public function setObjectParent($newparentobject) {
-        $this->objectparent = $newparentobject;
+    public function setObjectParent($newparentposition) {
+        $this->objectparent = $newparentposition->getContainer()->getContainer();
+        $this->positionparent = $newparentposition;
         return true;
     }
 
@@ -715,6 +716,8 @@ Class ObjectVersion extends StoredEntity {
             $positions[$number]->removePositionContent();
             // remove the position
             Store::deletePosition($positions[$number]->getId());
+            // this item changed
+            $this->setChanged();
 
             // renumber the positions
             if ($this->getLayout()->isPNType()) {

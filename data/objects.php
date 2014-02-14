@@ -129,6 +129,18 @@ class Objects {
         }
     }
 
+    /**
+     * Get target objects to move an object to, based upon the set of the object
+     * to move
+     * 
+     * @param set $set
+     * @return resultset
+     */
+    public static function getTargetObjectBySet($set) {
+        $targets = Store::getTargetObjectsBySet($set->getId());
+        return $targets;
+    }
+
 }
 
 ?>

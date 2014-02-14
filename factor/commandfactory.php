@@ -120,6 +120,19 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to load the move panel with the move functions for this object
+     * 
+     * @param object $object
+     * @param context $context
+     * @return string
+     */
+    public static function moveObject($object, $context) {
+        // moving is done in edit mode
+        $mode = Modes::getMode(Mode::EDITMODE);
+        return 'object,' . $object->getId() . '.' . $object->getVersion($mode)->getObjectTemplateRootObject()->getId() . '.' . Helper::getURLSafeString($object->getVersion($mode)->getObjectTemplateRootObject()->getName()) . ',admin.move' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
      * Compose the command to load the position instance with a user search parameter
      * 
      * @param position $position
@@ -556,6 +569,20 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to move an object to another object
+     * 
+     * @param object $object the object to move
+     * @param object $target the object to move the object to
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function moveObjectToObject($object, $target, $mode, $context) {
+        // move the object and refresh
+        return 'object,' . $object->getId() . '.' . $target->getId() . ',change.moveobject' . '|' . self::getObject($target, $mode, $context);
+    }
+
+    /**
      * Compose the command to cancel an add
      * 
      * @param object $object
@@ -563,6 +590,16 @@ class CommandFactory {
      */
     public static function addObjectCancel($object) {
         return 'object,' . $object->getId() . ',change.canceladd';
+    }
+
+    /**
+     * Compose the command to cancel a move
+     * 
+     * @param object $object
+     * @return string
+     */
+    public static function moveObjectCancel($object) {
+        return 'object,' . $object->getId() . ',change.cancelmove';
     }
 
     /**

@@ -46,6 +46,8 @@ class Terms {
     const OBJECT_EDIT_PANEL = '#editpanel#'; // edit panel
     const OBJECT_ADD_BUTTON = '#add#'; // add button(s)
     const OBJECT_ADD_PANEL = '#addpanel#'; // add panel
+    const OBJECT_MOVE_BUTTON = '#move#'; // move button(s)
+    const OBJECT_MOVE_PANEL = '#movepanel#'; // move panel
     const OBJECT_CONFIG_BUTTON = '#config#'; // config button(s)
     const OBJECT_CONFIG_PANEL = '#configpanel#'; // config panel
     const OBJECT_BREADCRUMBS = '#breadcrumbs#'; // insert bread crumbs, using the predefined structures bread crumb and bread crumb separator

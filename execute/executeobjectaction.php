@@ -108,7 +108,7 @@ class ExecuteObjectAction {
     }
 
     /**
-     * Keep the changes to the object in concept mode, recurse into the child objects based upon the same template
+     * Keep the changes to the object in edit mode
      * 
      * @return boolean true
      */
@@ -157,21 +157,45 @@ class ExecuteObjectAction {
     }
 
     /**
+     * Move an object to another parent
+     * 
+     * @param object $target the object to move up
+     * @return boolean true if success
+     */
+    public function moveObject($target, $mode) {
+        $active = $this->getObject()->getActive();
+        // remove object from current parent
+        $this->getObject()->removeFromParent();
+        // attach object to new parent in edit mode
+        $newposition = $target->getVersion(Modes::getMode(Mode::EDITMODE))->newPosition();
+        $newpositionobject = $newposition->newPositionObject(false);
+        $newpositionobject->setObject($this->getObject());
+        // attach object to new parent in view mode
+        $newposition = $target->getVersion(Modes::getMode(Mode::VIEWMODE))->newPosition();
+        $newpositionobject = $newposition->newPositionObject(false);
+        $newpositionobject->setObject($this->getObject());
+        // now reactivate the object (if it was active)
+        $this->getObject()->setActiveRecursive($active);
+        return true;
+    }
+
+    /**
      * Move an object a position up in the parent
      * 
      * @param object $object the object to move up
      * @return boolean true if success
      */
-    public function moveObjectUp($object, $mode) {
-        if ($object->getVersion($mode)->isMoveableUp()) {
-            $sourceposition = $object->getVersion($mode)->getPositionParent();
+    public function moveObjectUp($mode) {
+        if ($this->getObject()->getVersion($mode)->isMoveableUp()) {
+            $sourceposition = $this->getObject()->getVersion($mode)->getPositionParent();
             $sourcepositionnr = $sourceposition->getNumber();
-            $targetposition = $object->getVersion($mode)->getMoveUpPosition();
+            $targetposition = $this->getObject()->getVersion($mode)->getMoveUpPosition();
             if (isset($targetposition)) {
                 $targetpositionnr = $targetposition->getNumber();
                 $sourceposition->setNumber($targetpositionnr);
                 $targetposition->setNumber($sourcepositionnr);
             }
+            return true;
         }
         return false;
     }
@@ -182,16 +206,17 @@ class ExecuteObjectAction {
      * @param object $object the object to move up
      * @return boolean true if success
      */
-    public function moveObjectDown($object, $mode) {
-        if ($object->getVersion($mode)->isMoveableDown()) {
-            $sourceposition = $object->getVersion($mode)->getPositionParent();
+    public function moveObjectDown($mode) {
+        if ($this->getObject()->getVersion($mode)->isMoveableDown()) {
+            $sourceposition = $this->getObject()->getVersion($mode)->getPositionParent();
             $sourcepositionnr = $sourceposition->getNumber();
-            $targetposition = $object->getVersion($mode)->getMoveDownPosition();
+            $targetposition = $this->getObject()->getVersion($mode)->getMoveDownPosition();
             if (isset($targetposition)) {
                 $targetpositionnr = $targetposition->getNumber();
                 $sourceposition->setNumber($targetpositionnr);
                 $targetposition->setNumber($sourcepositionnr);
             }
+            return true;
         }
         return false;
     }

@@ -592,6 +592,24 @@ class EditAdminFactory extends AdminFactory {
         return $section;
     }
 
+    /**
+     * Set the object string to factor
+     * 
+     * @param object $newobject
+     */
+    public function setObject($newobject) {
+        $this->object = $newobject;
+    }
+
+    /**
+     * Get the object from the factory
+     * 
+     * @return object
+     */
+    public function getObject() {
+        return $this->object;
+    }
+
 }
 
 ?>

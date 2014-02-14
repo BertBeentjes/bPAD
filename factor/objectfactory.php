@@ -141,6 +141,14 @@ class ObjectFactory extends Factory {
         }
         $this->clearTerm(Terms::OBJECT_EDIT_BUTTON);
         $this->clearTerm(Terms::OBJECT_EDIT_PANEL);
+        if ($this->hasTerm(Terms::OBJECT_MOVE_BUTTON) || $this->hasTerm(Terms::OBJECT_MOVE_PANEL)) {
+            if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_EDIT)) {
+                $this->replaceTerm(Terms::OBJECT_MOVE_BUTTON, $this->factorMoveButton());
+                $this->replaceTerm(Terms::OBJECT_MOVE_PANEL, $this->factorMovePanel());
+            }
+        }
+        $this->clearTerm(Terms::OBJECT_MOVE_BUTTON);
+        $this->clearTerm(Terms::OBJECT_MOVE_PANEL);
         if ($this->hasTerm(Terms::OBJECT_ADD_BUTTON) || $this->hasTerm(Terms::OBJECT_ADD_PANEL)) {
             if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_ADD)) {
                 // only when there are available positions, show the add button
@@ -415,11 +423,15 @@ class ObjectFactory extends Factory {
             $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_EDIT_BUTTON), $menuitem);
             $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::editObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $edit);
         }
+        if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_EDIT)) {
+            $move = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_MOVE_BUTTON), $menuitem);
+            $move = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::moveObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $move);
+        }
         if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_ADD)) {
             $add = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON), $menuitem);
             $add = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::addContent($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getMode(), $this->getContext()), $add);
         }
-        $menu = str_replace(Terms::OBJECT_ITEM_CONTENT, $edit . $add, $menu);
+        $menu = str_replace(Terms::OBJECT_ITEM_CONTENT, $edit . $move . $add, $menu);
         return $menu;
     }
 
@@ -432,6 +444,18 @@ class ObjectFactory extends Factory {
         $edit = Structures::getStructureByName(LSSNames::STRUCTURE_EDIT_BUTTON)->getVersion($this->getMode(), $this->getContext())->getBody();
         $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_EDIT_BUTTON), $edit);
         $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::editObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $edit);
+        return $edit;
+    }
+
+    /**
+     * Create the move button for this object
+     * 
+     * @return string
+     */
+    private function factorMoveButton() {
+        $edit = Structures::getStructureByName(LSSNames::STRUCTURE_MOVE_BUTTON)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_MOVE_BUTTON), $edit);
+        $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::moveObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $edit);
         return $edit;
     }
 
@@ -467,6 +491,17 @@ class ObjectFactory extends Factory {
         }
         $edit = str_replace(Terms::ADMIN_CONTENT, '', $edit);
         return $edit;
+    }
+
+    /**
+     * Create the move panel for this object
+     * 
+     * @return string
+     */
+    private function factorMovePanel() {
+        $move = Structures::getStructureByName(LSSNames::STRUCTURE_MOVE_PANEL)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $move = str_replace(Terms::OBJECT_ITEM_ID, 'MP' . $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getId(), $move);
+        return $move;
     }
 
     /**

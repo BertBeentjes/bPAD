@@ -3477,13 +3477,13 @@ class Store {
     }
     
     /**
-     * delete the position referrals for an object
+     * delete the position content items for an object
      * 
      * @param int $objectid the object id
      */
-    public static function deleteObjectPositionReferrals($objectid) {
+    public static function deleteObjectPositionContentItems($objectid) {
         $stmt = self::$connection->stmt_init();
-        if ($stmt->prepare("DELETE positionreferrals FROM positionreferrals INNER JOIN positions ON positionreferrals.fk_position_id=positions.id INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_object_id=?")) {
+        if ($stmt->prepare("DELETE positioncontentitems FROM positioncontentitems INNER JOIN positions ON positioncontentitems.fk_position_id=positions.id INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_object_id=?")) {
             $stmt->bind_param("i", $objectid);
             return self::actionQuery($stmt);
         }
@@ -4251,6 +4251,16 @@ class Store {
             $stmt->bind_param("i", $objectid);
             return self::actionQuery($stmt);
         }
+    }
+
+    /**
+     * Get target objects to move another object to by set id
+     * 
+     * @param int $setid
+     * @return resultset id
+     */
+    public static function getTargetObjectsBySet($setid) {
+        return self::selectQuery("SELECT id FROM objects WHERE fk_set_id=" . $setid);
     }
     
 }

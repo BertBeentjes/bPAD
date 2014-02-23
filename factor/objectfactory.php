@@ -501,6 +501,7 @@ class ObjectFactory extends Factory {
     private function factorMovePanel() {
         $move = Structures::getStructureByName(LSSNames::STRUCTURE_MOVE_PANEL)->getVersion($this->getMode(), $this->getContext())->getBody();
         $move = str_replace(Terms::OBJECT_ITEM_ID, 'MP' . $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getId(), $move);
+        $move = str_replace(Terms::ADMIN_CONTENT, '', $move);
         return $move;
     }
 
@@ -524,6 +525,7 @@ class ObjectFactory extends Factory {
     private function factorAddPanel() {
         $add = Structures::getStructureByName(LSSNames::STRUCTURE_ADD_PANEL)->getVersion($this->getMode(), $this->getContext())->getBody();
         $add = str_replace(Terms::OBJECT_ITEM_ID, 'AP' . $this->getObject()->getId(), $add);
+        $add = str_replace(Terms::ADMIN_CONTENT, '', $add);
         return $add;
     }
 

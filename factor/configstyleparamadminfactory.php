@@ -50,7 +50,7 @@ class ConfigStyleParamAdminFactory extends ConfigAdminFactory {
         $section = '';
         // factor the style params
         $styleparams = StyleParams::getStyleParamList();
-        $section .= $this->factorListBox($baseid . '_styleparamlist', CommandFactory::configStyleParams($this->getObject(), $this->getMode(), $this->getContext()), $styleparams, $styleparam->getId(), Helper::getLang(AdminLabels::ADMIN_CONFIG_STYLE_PARAMS));
+        $section .= $this->factorListBox($baseid . '_styleparamlist', CommandFactory::configStyleParam($this->getObject(), $this->getMode(), $this->getContext()), $styleparams, $styleparam->getId(), Helper::getLang(AdminLabels::ADMIN_CONFIG_STYLE_PARAMS));
         // add button
         $section .= $this->factorButtonGroup($this->factorButton($baseid . '_add', CommandFactory::addStyleParam($this->getObject(), $styleparam, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_ADD_STYLE_PARAM)) . $this->factorCloseButton($baseid));
         $admin .= $this->factorSection($baseid . 'header', $section, Helper::getLang(AdminLabels::ADMIN_CONFIG_STYLE_PARAMS));

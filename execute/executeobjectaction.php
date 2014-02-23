@@ -400,7 +400,7 @@ class ExecuteObjectAction {
                 // clean the target folder if there's anything in it
                 $files = glob($targetfolder . '/*'); // get all file names
                 if (isset($files)) {
-                    if (count($files) > 0) {
+                    if (is_array($files)) {
                         foreach ($files as $file) { // iterate files
                             if (is_file($file)) {
                                 unlink($file); // delete file

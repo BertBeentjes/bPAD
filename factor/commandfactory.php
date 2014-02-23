@@ -81,7 +81,6 @@ class CommandFactory {
      * @return string
      */
     public static function getObjectForEdit($object, $mode, $context) {
-        //$returnvalue =  'object,' . $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject()->getVersion($mode)->getPositionParent()->getId() . '.' . $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject()->getId() . '.' . $object->getVersion($mode)->getPositionParent()->getId() . '.' . Helper::getURLSafeString($object->getName()) . ',content.get.' . $mode->getId() . '.' . $context->getId();
         if ($object->isAddressable($mode)) {
             $returnvalue = self::getObject($object, $mode, $context);
         } else {

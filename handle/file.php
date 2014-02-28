@@ -125,7 +125,7 @@ class File extends Respond {
                         $image->save($this->file);
                         break;
                     case 'box':
-                        $image->maxarea($width, $height);
+                        $image->cutFromCenter($width, $height);
                         $image->save($this->file);
                         break;
                 }
@@ -154,7 +154,9 @@ class File extends Respond {
      * @return int
      */
     private function restrictSize($size) {
-        if ($size > 1200) {
+        if ($size > 1600) {
+            $size = 1600;
+        } elseif ($size > 1200) {
             $size = 1200;
         } elseif ($size < 80) {
             $size = 80;

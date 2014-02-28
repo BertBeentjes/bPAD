@@ -175,10 +175,24 @@ class SimpleImage {
 
     function cutFromCenter($width, $height) {
 
-        if ($width < $this->getWidth() && $width > $height) {
+        /*
+         * Original code: 
+         * 
+         *   if ($width < $this->getWidth() && $width > $height) {
+         *       $this->resizeToWidth($width);
+         *   }
+         *   if ($height < $this->getHeight() && $width < $height) {
+         *       $this->resizeToHeight($height);
+         *   }
+         * 
+         */
+
+        $widthratio = $this->getWidth() / $width;
+        $heightratio = $this->getHeight() / $height;
+        
+        if ($widthratio <= $heightratio) {
             $this->resizeToWidth($width);
-        }
-        if ($height < $this->getHeight() && $width < $height) {
+        } else {
             $this->resizeToHeight($height);
         }
 

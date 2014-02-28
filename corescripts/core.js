@@ -68,7 +68,10 @@ function showError(result) {
 
 function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
     // store the current location of the container on the page
-    var contloc = $('#' + container).offset().top - $('body').scrollTop();
+    var contloc = 0;
+    if ($('#' + container).length) {
+        contloc = $('#' + container).offset().top - $('body').scrollTop();
+    }
     // show the result
     if (replace) {
         // check whether the container to replace is coupled to this content fetch (it may have changed client-side during the roundtrip)

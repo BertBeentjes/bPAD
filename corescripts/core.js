@@ -36,7 +36,9 @@ var processing = "#processing#"; // processing message, used in a modal dialog w
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
         // if the message modal is visible, hide it
-        $('#modalcontainer').modal('hide');
+        if (container != 'modalmessage') {
+            $('#modalcontainer').modal('hide');
+        }
         resultToHTML(container, replace, checkcommandnr, commandnr, result);
     }
 }
@@ -321,6 +323,42 @@ function parseCommand(thiscommand) {
 }
 
 /**
+ * check whether the admin container exists, otherwise use the modal dialog,
+ * otherwise use the site root
+ * 
+ * @param string admincontainer
+ * @returns string
+ */
+function checkAdminContainer(admincontainer) {
+    if ($('#' + admincontainer).length) {
+        return admincontainer;
+    } else {
+        if ($('#modalmessage').length && $('#modalcontainer').length) {
+            $('#modalcontainer').modal('show');
+            return ('modalmessage');
+        } else {
+            return 'bpad_content_root';
+        }
+    }
+}
+
+/**
+ * empty or hide the admin container
+ * 
+ * @param string admincontainer
+ */
+function hideAdminContainer(admincontainer) {
+    if ($('#' + admincontainer).length) {
+        $('#' + admincontainer).html('');
+    } else {
+        if ($('#modalmessage').length && $('#modalcontainer').length) {
+            $('#modalcontainer').modal('hide');
+            $('#modalmessage').html(processing);
+        }
+    }
+}
+
+/**
  * Check a command, and do some preliminary work to be able to execute the command,
  * for example find the container to put something in, read the value of a user input,
  * or check what is already loaded
@@ -399,54 +437,54 @@ function checkCommand(thiscommand, thisvalue) {
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'edit') {
         var partparts = this.parsedcommand.itemaddress.split('.');
         // the container can be the container
-        this.container = 'EP' + partparts[0];
+        this.container = checkAdminContainer('EP' + partparts[0]);
         this.value = partparts[1];
     }
     // if it's a admin.add command, check where to load the add content
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'add') {
         var partparts = this.parsedcommand.itemaddress.split('.');
         // the container can be the container
-        this.container = 'AP' + partparts[0];
+        this.container = checkAdminContainer('AP' + partparts[0]);
         this.value = partparts[1];
     }
     // if it's a admin.move command, check where to load the add content
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'move') {
         var partparts = this.parsedcommand.itemaddress.split('.');
         // the container can be the container
-        this.container = 'MP' + partparts[0];
+        this.container = checkAdminContainer('MP' + partparts[0]);
         this.value = partparts[1];
     }
     // if it's a admin.config command, check where to load the config content
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'config') {
-        this.container = 'CP' + this.parsedcommand.itemaddress;
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
     }
     // if it's a admin.config... command, check where to load the config content
     if (this.parsedcommand.commandgroup == 'admin' && (this.parsedcommand.commandmember == 'configlayouts' || this.parsedcommand.commandmember == 'configstructures' || this.parsedcommand.commandmember == 'configstyles' || this.parsedcommand.commandmember == 'configstyleparams' || this.parsedcommand.commandmember == 'configsets' || this.parsedcommand.commandmember == 'configtemplates')) {
-        this.container = 'CP' + this.parsedcommand.itemaddress;
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configlayout') {
-        this.container = 'CP' + this.parsedcommand.itemaddress;
-        this.value = $('#' + this.container + '_layoutlist').val();
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_layoutlist').val();
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configstructure') {
-        this.container = 'CP' + this.parsedcommand.itemaddress;
-        this.value = $('#' + this.container + '_structurelist').val();
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_structurelist').val();
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configstyle') {
-        this.container = 'CP' + this.parsedcommand.itemaddress;
-        this.value = $('#' + this.container + '_stylelist').val();
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_stylelist').val();
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configstyleparam') {
-        this.container = 'CP' + this.parsedcommand.itemaddress;
-        this.value = $('#' + this.container + '_styleparamlist').val();
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_styleparamlist').val();
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configset') {
-        this.container = 'CP' + this.parsedcommand.itemaddress;
-        this.value = $('#' + this.container + '_setlist').val();
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_setlist').val();
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configtemplate') {
-        this.container = 'CP' + this.parsedcommand.itemaddress;
-        this.value = $('#' + this.container + '_templatelist').val();
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_templatelist').val();
     }
     // if it's a admin.edit command, check where to load the edit content
     if (this.parsedcommand.commandgroup == 'change') {
@@ -454,29 +492,30 @@ function checkCommand(thiscommand, thisvalue) {
     }
     // if it's a change admin.cancelobject or admin.keepobject command, close the edit panel
     if (this.parsedcommand.commandgroup == 'change' && (this.parsedcommand.commandmember == 'cancelobject' || this.parsedcommand.commandmember == 'publishobject' || this.parsedcommand.commandmember == 'keepobject')) {
-        $('#EP' + this.parsedcommand.itemaddress).html('');
+        hideAdminContainer('EP' + this.parsedcommand.itemaddress);
     }
     // if it's a move cancel command, close the move panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'cancelmove') {
-        $('#MP' + this.parsedcommand.itemaddress).html('');
+        hideAdminContainer('MP' + this.parsedcommand.itemaddress);
     }
     // if it's an add cancel command, close the add panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'canceladd') {
-        $('#AP' + this.parsedcommand.itemaddress).html('');
+        hideAdminContainer('AP' + this.parsedcommand.itemaddress);
     }
     // if it's a cancel config command, close the config panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'cancelconfig') {
-        $('#CP' + this.parsedcommand.itemaddress).html('');
+        hideAdminContainer('CP' + this.parsedcommand.itemaddress);
     }
     // if it's an add command, close the admin panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'add') {
         var parts = this.parsedcommand.itemaddress.split('.');
+        hideAdminContainer('AP' + parts[1]);
         $('#AP' + parts[1]).html('');
     }
     // if it's a move command, set the value and item address, close the move panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'moveobject') {
         var parts = this.parsedcommand.itemaddress.split('.');
-        $('#MP' + parts[0]).html('');
+        hideAdminContainer('MP' + parts[0]);
         // rebuild the command
         this.newcommand = this.parsedcommand.item + ',' + parts[0] + ',' + this.parsedcommand.command;
         this.value = parts[1];
@@ -512,8 +551,7 @@ function doCommand(thiscommand, checkcommandnr, thisvalue) {
         // a change command does nothing on return
         // other commands load something into a container
         if (info.successcommand > '') {
-            // chained commands shoud be executed in sequence, so a modal dialog is shown while processing
-            $('#modalmessage').html(processing);
+            // chained commands should be executed in sequence, so a modal dialog is shown while processing
             $('#modalcontainer').modal('show');
             // now do something with the chained command
             if (info.parsedcommand.commandgroup == 'change') {
@@ -533,7 +571,9 @@ function doCommand(thiscommand, checkcommandnr, thisvalue) {
             }
         } else if (info.parsedcommand.commandgroup == 'change') {
             // if the message modal is visible, hide it, this is a final change and waiting on the result is not necessary
-            $('#modalcontainer').modal('hide');
+            if ($('#modalmessage').html() == processing) {
+                $('#modalcontainer').modal('hide');
+            }
             // do the change
             $.ajax({
                 type: 'POST',

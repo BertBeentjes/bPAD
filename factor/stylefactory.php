@@ -54,24 +54,28 @@ class StyleFactory extends Factory {
         if (is_string($this->getContent()) && is_object($this->getMode())) {
             // get all styles from the database and put them in the content string
             $styleversions = Styles::getStyleVersions($this->getMode());
+            $styleparams = StyleParams::getStyleParams();
             foreach ($styleversions as $styleversion) {
                 // show the style name
                 $this->setContent($this->getContent() . '/* ' . $styleversion->getContainer()->getName() . ' */' . PHP_EOL . PHP_EOL);
                 // get the style versions
                 // first replace the class suffix (has to be done now, because each style version has it's own context)
                 $styleversionbody =  $this->replaceTermInString($styleversion->getBody(), Terms::CLASS_SUFFIX, $styleversion->getContainer()->getClassSuffix() . "_" . $styleversion->getContext()->getContextGroup()->getShortName() . '_' . $styleversion->getContext()->getShortName());
+                // replace the style parameters by their values for the specific context of the style version
+                foreach ($styleparams as $styleparam) {
+                    $styleversionbody = str_replace(Terms::styleparam_placeholder($styleparam), $styleparam->getVersion($this->getMode(), $styleversion->getContext())->getBody(), $styleversionbody);
+                }
+                $showstyleparams .= '*/' . PHP_EOL . PHP_EOL;
                 // add the styleversionbody to the content
                 $this->setContent($this->getContent() . $styleversionbody . PHP_EOL . PHP_EOL);
             }
-            // now replace the style parameters by their values
-            $styleparams = StyleParams::getStyleParams();
-            $showstyleparams = '/*' . PHP_EOL;
-            foreach ($styleparams as $styleparam) {
-                $showstyleparams .= $styleparam->getName() . ' = ' . $styleparam->getVersion($this->getMode(), $this->getContext())->getBody() . PHP_EOL;
-                $this->setContent(str_replace(Terms::styleparam_placeholder($styleparam), $styleparam->getVersion($this->getMode(), $this->getContext())->getBody(), $this->getContent()));
-            }
-            $showstyleparams .= '*/' . PHP_EOL . PHP_EOL;
             if ($this->getMode()->getId() === Mode::EDITMODE) {
+                // now show the style parameters in edit mode
+                $showstyleparams = '/*' . PHP_EOL;
+                foreach ($styleparams as $styleparam) {
+                    $showstyleparams .= $styleparam->getName() . ' = ' . $styleparam->getVersion($this->getMode(), $this->getContext())->getBody() . PHP_EOL;
+                }
+                $showstyleparams .= '*/' . PHP_EOL . PHP_EOL;
                 // add the style param values to the css file in edit mode for convenience
                 $this->setContent($showstyleparams . $this->getContent());
             }

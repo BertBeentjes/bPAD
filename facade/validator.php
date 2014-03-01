@@ -243,6 +243,15 @@ Class Validator {
     }
 
     /**
+     * Check whether it is a valid object name
+     * 
+     * @param string $str
+     */
+    public static function isObjectName($str) {
+        return preg_match('/^[a-zA-Z0-9\ \-\&]+$/', $str);
+    }
+
+    /**
      * Check whether it is a valid name
      * 
      * @param string $str

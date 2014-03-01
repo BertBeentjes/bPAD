@@ -310,7 +310,8 @@ class ContentItemFactory extends Factory {
      * @return string
      */
     private function getStructureBodyByName ($name) {
-        return Structures::getStructureByName($name)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $structurebody = Structures::getStructureByName($name)->getVersion($this->getMode(), $this->getContext())->getBody();
+        return $structurebody;
     }
     
     /**

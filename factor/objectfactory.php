@@ -419,18 +419,21 @@ class ObjectFactory extends Factory {
         // add the menu items
         $edit = '';
         $add = '';
+        // edit option
         if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_EDIT)) {
             $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_EDIT_BUTTON), $menuitem);
             $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::editObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $edit);
         }
+        // move option
         if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_EDIT)) {
             $move = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_MOVE_BUTTON), $menuitem);
             $move = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::moveObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $move);
         }
-        if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_ADD)) {
-            $add = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON), $menuitem);
-            $add = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::addContent($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getMode(), $this->getContext()), $add);
-        }
+        // add option
+//        if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_ADD)) {
+//            $add = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON), $menuitem);
+//            $add = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::addContent($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getMode(), $this->getContext()), $add);
+//        }
         $menu = str_replace(Terms::OBJECT_ITEM_CONTENT, $edit . $move . $add, $menu);
         return $menu;
     }

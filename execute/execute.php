@@ -84,7 +84,7 @@ class Execute {
             switch (Request::getCommand()->getCommandMember()) {
                 case 'objectname':
                     // validate
-                    if (Validator::isName(Request::getCommand()->getValue())) {
+                    if (Validator::isObjectName(Request::getCommand()->getValue())) {
                         // store the old value in the command
                         Request::getCommand()->setOldValue($object->getName());
                         // set the new value

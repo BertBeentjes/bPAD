@@ -133,6 +133,7 @@ class PositionFactory extends Factory {
         $this->replaceTerm(Terms::POSITION_CONTENT, $positioncontent);
         $this->replaceTerm(Terms::POSITION_CONTENT_SHORT, $positionshortcontent);
         $this->replaceTerm(Terms::POSITION_CONTENT_PLAIN, strip_tags($positioncontent));
+        $this->factorClassSuffix($positioncontent);
         // ready!
         return true;
     }
@@ -297,6 +298,12 @@ class PositionFactory extends Factory {
         while ($this->hasTerm(Terms::POSITION_UID)) {
             $this->replaceTerm(Terms::POSITION_UID, 'UP' . $this->getPosition()->getId() . '_' . $number);
         }
+    }
+
+    /**
+     * Factor the class suffix
+     */
+    private function factorClassSuffix() {
         // insert the class suffices
         $style = $this->getPosition()->getStyle();
         $this->replaceTerm(Terms::CLASS_SUFFIX, $style->getClassSuffix() . "_" . $style->getVersion($this->getMode(), $this->getContext())->getContext()->getContextGroup()->getShortName() . '_' . $style->getVersion($this->getMode(), $this->getContext())->getContext()->getShortName());

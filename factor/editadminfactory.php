@@ -84,10 +84,12 @@ class EditAdminFactory extends AdminFactory {
             $sectionheader = '';
             $baseid = 'A' . $object->getId();
             if ($isroot) {
-                // object 
-                $sectionheader = $this->factorSectionHeader($baseid . '_objhead', $object->getName());
+                $headercontent = '';
                 // factor the header for the object 
-                $section .= $this->factorObjectHeader($object, $baseid);
+                $headercontent .= $this->factorObjectHeader($object, $baseid);
+                // factor the buttons for this object
+                $headercontent .= $this->factorButtons($baseid . '_head', $object);
+                $sectionheader = $this->factorSectionHeader($baseid . '_objhead', $headercontent);
             }
             // factor an additional header for the object if it is in a template
             if ($object->getIsTemplate()) {
@@ -118,12 +120,12 @@ class EditAdminFactory extends AdminFactory {
             $section .= $this->factorPositionNumberAddButtons($object, $baseid, 0);
             // wrap the section for roots and add buttons
             if ($isroot) {
-                $section .= $this->factorButtons($baseid, $object);
+                $section .= $this->factorButtons($baseid . '_foot', $object);
                 $admin .= $this->factorSection($baseid, $section, $sectionheader);
             } else {
                 // if this is a searchable subobject, add delete, move up, move down buttons
                 if ($object->getIsObjectTemplateRoot() && $object->getTemplate()->getSearchable()) {
-                    $section .= $this->factorSearchableButtons($baseid, $object);
+                    $section .= $this->factorSubItemButtons($baseid, $object);
                 }
                 $admin .= $this->factorSubItem($section);
             }
@@ -172,7 +174,13 @@ class EditAdminFactory extends AdminFactory {
                                     // factor the template add buttons for a normal object
                                     $section .= $this->factorButtonGroup($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'), Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
                                     if (!$childobject->getIsTemplate() && !$childobject->getTemplate()->getSearchable()) {
-                                        $section .= $this->factorSubItem($childobject->getName());
+                                        $subitem = '';
+                                        $subitem = $childobject->getName();
+                                        $subitem .= $this->factorSubItemButtons($baseid . 'CO' . $childobject->getId(), $childobject);
+                                        // TODO: add cancel button for new items
+                                        // ################# ADD CANCEL HERE #####################
+                                        
+                                        $section .= $this->factorSubItem($subitem);
                                     }
                                     $buttonadded = true;
                                 }
@@ -259,13 +267,13 @@ class EditAdminFactory extends AdminFactory {
     }
 
     /**
-     * Factor the buttons for a searchable subobject
+     * Factor the buttons for a subobject
      * 
      * @param string $baseid
      * @param object $object
      * @return string
      */
-    private function factorSearchableButtons($baseid, $object) {
+    private function factorSubItemButtons($baseid, $object) {
         $section = '';
         // move up button
         if ($object->getVersion($this->getMode())->isMoveableUp()) {
@@ -274,6 +282,10 @@ class EditAdminFactory extends AdminFactory {
         // move down button
         if ($object->getVersion($this->getMode())->isMoveableDown()) {
             $section .= $this->factorButton($baseid . '_movedown', CommandFactory::editObjectMoveDown($object, $this->getContainerObject(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_MOVE_DOWN));
+        }
+        // if the object isn't searchable, add an edit button
+        if (!$object->getTemplate()->getSearchable()) {
+            $section .= $this->factorEditButton($object);
         }
         // 'recycle bin' button
         $section .= $this->factorRecycleBinButton($baseid, $object);
@@ -298,6 +310,19 @@ class EditAdminFactory extends AdminFactory {
             }
         }
         return $button;
+    }
+
+    /**
+     * Create the edit button for this object
+     * 
+     * @param object $object
+     * @return string
+     */
+    private function factorEditButton($object) {
+        $edit = Structures::getStructureByName(LSSNames::STRUCTURE_EDIT_BUTTON)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_EDIT_BUTTON), $edit);
+        $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::editObject($object->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $edit);
+        return $edit;
     }
 
     /**

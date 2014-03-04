@@ -199,6 +199,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_GROUP] = 'Beheer - knoppengroep';
 $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_GROUP_ALT] = 'Beheer - knoppengroep alternatief';
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Naam';
+$lang[AdminLabels::ADMIN_OBJECT_INTERNAL_LINK] = 'Link naar dit item';
 $lang[AdminLabels::ADMIN_OBJECT_ACTIVE] = 'Actief';
 $lang[AdminLabels::ADMIN_OBJECT_SET] = 'Set';
 $lang[AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT] = 'Indeling';

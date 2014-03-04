@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -72,6 +73,7 @@ class MoveAdminFactory extends AdminFactory {
         $set = $this->getObject()->getTemplate()->getSet();
         if (!$set->isDefault()) {
             $targets = Objects::getTargetObjectBySet($set);
+            $objects = array();
             while ($row = $targets->fetchObject()) {
                 $object = Objects::getObject($row->id);
                 // check whether this is a viable target:
@@ -80,11 +82,15 @@ class MoveAdminFactory extends AdminFactory {
                 // 3. the object must not be a template
                 // 4. the object must have a pn type layout
                 // 5. the user must have the permission to edit the object
-                if ($object->getId()!=$this->getObject()->getVersion($this->getMode())->getObjectParent()->getId() && !$object->getIsTemplate() && $object->getActive() && $object->getVersion($this->getMode())->getLayout()->isPNType() && (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_EDIT))) {
-                    $objectname = Objects::getObject($row->id)->getVersion($this->getMode())->getObjectTemplateRootObject()->getName();
-                    // TODO: create the move buttons
-                    $buttons .= $this->factorButton($baseid . '_O' . $object->getId(), CommandFactory::moveObjectToObject($this->getObject(), $object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang($objectname));
+                if ($object->getId() != $this->getObject()->getVersion($this->getMode())->getObjectParent()->getId() && !$object->getIsTemplate() && $object->getActive() && $object->getVersion($this->getMode())->getLayout()->isPNType() && (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_EDIT))) {
+                    $objectname = Objects::getObject($row->id)->getVersion($this->getMode())->getObjectTemplateRootObject()->getNameForMove($this->getMode());
+                    $objects[$objectname] = $object;
                 }
+            }
+            ksort($objects);
+            foreach ($objects as $objectname => $object) {
+                // create the move buttons
+                $buttons .= $this->factorButton($baseid . '_O' . $object->getId(), CommandFactory::moveObjectToObject($this->getObject(), $object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), $objectname);
             }
         }
         return $buttons;
@@ -109,7 +115,5 @@ class MoveAdminFactory extends AdminFactory {
     }
 
 }
-
-
 
 ?>

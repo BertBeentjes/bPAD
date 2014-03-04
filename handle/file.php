@@ -113,20 +113,22 @@ class File extends Respond {
                 // the version of the file has been created before
                 return true;
             } else {
+                $image_info = getimagesize($source);
+                $image_type = $image_info[2];
                 $image = new SimpleImage();
                 $image->load($source);
                 switch ($resize) {
                     case 'width':
                         $image->resizeToWidth($width);
-                        $image->save($this->file);
+                        $image->save($this->file, $image_type);
                         break;
                     case 'height':
                         $image->resizeToHeight($height);
-                        $image->save($this->file);
+                        $image->save($this->file, $image_type);
                         break;
                     case 'box':
                         $image->cutFromCenter($width, $height);
-                        $image->save($this->file);
+                        $image->save($this->file, $image_type);
                         break;
                 }
             }

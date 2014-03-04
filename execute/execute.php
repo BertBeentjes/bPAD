@@ -98,9 +98,9 @@ class Execute {
                     Request::getCommand()->setOldValue($object->getActive());
                     // set the new value
                     if ($object->getActive() == true) {
-                        $object->setActive(false);
+                        $object->setActiveRecursive(false);
                     } else {
-                        $object->setActive(true);
+                        $object->setActiveRecursiveTemplateBasedChildren(true);
                     }
                     break;
                 case 'objectset':
@@ -126,6 +126,10 @@ class Execute {
                     $exec->setObject($object);
                     // store the command success in the old value
                     Request::getCommand()->setOldValue($exec->cancel());
+                    break;
+                case 'cancelconfig':
+                    // store the command success in the old value
+                    Request::getCommand()->setOldValue(true);
                     break;
                 case 'keepobject':
                     // create the executer

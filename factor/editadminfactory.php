@@ -243,7 +243,9 @@ class EditAdminFactory extends AdminFactory {
         if ($object->getNew()) {
             $section .= $this->factorButton($baseid . '_publish', CommandFactory::editObjectPublish($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH_NEW));
         } else {
-            $section .= $this->factorButton($baseid . '_publish', CommandFactory::editObjectPublish($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH));
+            if ($object->getActive()) {
+                $section .= $this->factorButton($baseid . '_publish', CommandFactory::editObjectPublish($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH));
+            }
         }
 
         // TODO: add an undo button, that does an undo based upon the command log 
@@ -252,8 +254,10 @@ class EditAdminFactory extends AdminFactory {
         if (!$object->getNew()) {
             $section .= $this->factorButton($baseid . '_keep', CommandFactory::editObjectKeep($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_KEEP));
         }
-        // add a cancel button
-        $section .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
+        if ($object->getActive() || $object->getNew()) {
+            // add a cancel button
+            $section .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
+        }
         // 'recycle bin' button
         $section .= $this->factorRecycleBinButton($baseid, $object);
 
@@ -286,6 +290,11 @@ class EditAdminFactory extends AdminFactory {
         // if the object isn't searchable, add an edit button
         if (!$object->getTemplate()->getSearchable()) {
             $section .= $this->factorEditButton($object);
+        }
+        // if the object is new and searchable, add a cancel button
+        if ($object->getTemplate()->getSearchable() && $object->getNew()) {
+            // add a cancel button
+            $section .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
         }
         // 'recycle bin' button
         $section .= $this->factorRecycleBinButton($baseid, $object);
@@ -335,6 +344,9 @@ class EditAdminFactory extends AdminFactory {
     private function factorObjectHeader($object, $baseid) {
         $section = '';
         $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editObjectName($object), $object->getName(), Helper::getLang(AdminLabels::ADMIN_OBJECT_NAME));
+        if ($object->isAddressable($this->getMode())) {
+            $section .= $this->factorTextInput($baseid . '_link', '', Terms::object_internal_link($object), Helper::getLang(AdminLabels::ADMIN_OBJECT_INTERNAL_LINK), 'disabled');
+        }
         return $section;
     }
 

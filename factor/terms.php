@@ -133,6 +133,16 @@ class Terms {
         return '#' . $styleparam->getName() . '#';
     }
     
+    /**
+     * An object internal link, for use in the frontend
+     * 
+     * @param object $object
+     * @return string
+     */
+    static public function object_internal_link($object) {
+        return '[' . $object->getId() . '|' . $object->getName() . ']';
+    }
+
 }
 
 ?>

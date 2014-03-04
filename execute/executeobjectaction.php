@@ -113,7 +113,7 @@ class ExecuteObjectAction {
      * @return boolean true
      */
     public function keep() {
-        // TODO: maybe set the new bit for the object to false, but not sure yet...
+        // do nothing.
         return true;
     }
 

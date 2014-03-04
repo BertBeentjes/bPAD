@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -124,7 +125,7 @@ class Object extends SettedEntity {
             return $this->objectversions[$mode->getId()];
         }
     }
-    
+
     /**
      * outdate the version cache after changing the mode of a version, called
      * from the objectversion, so not need to do this explicitly anywhere else
@@ -191,7 +192,7 @@ class Object extends SettedEntity {
             throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ': ' . $this->id . ' @ ' . __METHOD__);
         }
     }
-    
+
     /**
      * Create new versions for both edit and view mode
      */
@@ -206,7 +207,7 @@ class Object extends SettedEntity {
         Store::insertObjectVersion($this->getId(), Mode::EDITMODE);
         $this->setChanged();
     }
-    
+
     /**
      * Add a new object user group role to an object
      * 
@@ -225,7 +226,7 @@ class Object extends SettedEntity {
         // return whatever
         return $newid;
     }
-    
+
     /**
      * Remove an object user group role from an object
      * 
@@ -237,7 +238,7 @@ class Object extends SettedEntity {
         $this->objectusergrouproles = array();
         $this->getObjectUserGroupRoles();
     }
-    
+
     /**
      * set changedate, changeuser for this object
      * use this function when changes impact on production mode
@@ -334,6 +335,36 @@ class Object extends SettedEntity {
             $children = $this->getVersion(Modes::getMode(mode::EDITMODE))->getChildren();
             foreach ($children as $child) {
                 $child->setActiveRecursive($bool);
+            }
+            return true;
+        } else {
+            throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
+    }
+
+    /**
+     * set the object active bool of the children
+     * 
+     * @param bool active or not
+     * @return boolean  if success
+     * @throws exception if the update in the store fails
+     */
+    public function setActiveRecursiveTemplateBasedChildren($bool) {
+        if (Store::setObjectActive($this->id, $bool) && $this->setChanged()) {
+            $this->active = $bool;
+            // set active in viewmode
+            $children = $this->getVersion(Modes::getMode(mode::VIEWMODE))->getChildren();
+            foreach ($children as $child) {
+                if (!$child->isobjecttemplateroot && !$child->getTemplate()->isDefault()) {
+                    $child->setActiveRecursive($bool);
+                }
+            }
+            // and in edit mode
+            $children = $this->getVersion(Modes::getMode(mode::EDITMODE))->getChildren();
+            foreach ($children as $child) {
+                if (!$child->isobjecttemplateroot && !$child->getTemplate()->isDefault()) {
+                    $child->setActiveRecursive($bool);
+                }
             }
             return true;
         } else {
@@ -625,7 +656,7 @@ class Object extends SettedEntity {
         }
         return $address;
     }
-    
+
     /**
      * Get the object address, the address specifies which objects must be selected
      * in a referral to get to the currect object. It is effectively equal to the
@@ -657,7 +688,7 @@ class Object extends SettedEntity {
         }
         return $this->address[$mode->getId()];
     }
-    
+
     /**
      * Create the base seo url for this object (name/name/name)
      * 
@@ -745,11 +776,11 @@ class Object extends SettedEntity {
         }
         return false;
     }
-    
+
     public function isNewAndEditable() {
         return $this->getNew() && (Authorization::getObjectPermission($this, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($this, Authorization::OBJECT_MANAGE));
     }
-    
+
     /**
      * Check whether the edit version contains changes from the view version,
      * to decide whether to create a new view version for this object when
@@ -771,12 +802,12 @@ class Object extends SettedEntity {
      * This function only deletes the parent position, the Objects::removeOrphanedObjects()
      * function will delete this object (if no references from archived versions are left)
      */
-    public function removeFromParent () {
+    public function removeFromParent() {
         // delete this object from his parent (delete the positionobject, delete the position, renumber positions)
         $this->removeParentPositionMode(Modes::getMode(Mode::EDITMODE));
         $this->removeParentPositionMode(Modes::getMode(Mode::VIEWMODE));
     }
-    
+
     /**
      * Delete the parent position
      * 
@@ -787,6 +818,31 @@ class Object extends SettedEntity {
         $positionnumber = $this->getVersion($mode)->getPositionParent()->getNumber();
         $parent->getVersion($mode)->removePosition($positionnumber);
     }
+
+    /**
+     * Get the name for this object, for moves to this object, recurse into 
+     * parent template roots
+     * 
+     * @param mode $mode
+     * @return string 
+     */
+    public function getNameForMove($mode) {
+        $name = $this->getName() . ' (' . $this->getVersion($mode)->getPositionParent()->getNumber() . ')';
+        $object = $this->getVersion($mode)->getObjectTemplateRootObject();
+        // don't recurse when the parent object is a template or the parent object is the site root
+        if ($object->getIsTemplate() || $object->isSiteRoot()) {
+            return $name;
+        }
+        // get the parent for this object
+        $parentobject = $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject();
+        // if the parent isn't a real parent, return the name for this parent
+        if ($object->getId() == $parentobject->getId() || $parentobject->isSiteRoot()) {
+            return $name;
+        }
+        // recurse
+        return $parentobject->getNameForMove($mode) . ' - ' . $name;
+    }
+
 }
 
 ?>

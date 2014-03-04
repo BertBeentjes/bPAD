@@ -55,6 +55,11 @@ var docommandandresulttohtml = function(thiscommand, checkcommandnr, thisvalue, 
         doCommand(thiscommand, checkcommandnr, thisvalue);
     }
 }
+var showerror = function() {
+    return function(result) {
+        showError(result);
+    }
+}
 
 function showError(result) {
     if (result > '') {
@@ -490,21 +495,29 @@ function checkCommand(thiscommand, thisvalue) {
     if (this.parsedcommand.commandgroup == 'change') {
         this.value = thisvalue;
     }
-    // if it's a change admin.cancelobject or admin.keepobject command, close the edit panel
-    if (this.parsedcommand.commandgroup == 'change' && (this.parsedcommand.commandmember == 'cancelobject' || this.parsedcommand.commandmember == 'publishobject' || this.parsedcommand.commandmember == 'keepobject')) {
+    // if it's a change admin.publishobject or admin.cancelobject command, close the edit panel
+    if (this.parsedcommand.commandgroup == 'change' && (this.parsedcommand.commandmember == 'publishobject' || this.parsedcommand.commandmember == 'cancelobject')) {
         hideAdminContainer('EP' + this.parsedcommand.itemaddress);
+    }
+    // if it's a change admin.cancelobject, close the edit panel
+    if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'keepobject') {
+        hideAdminContainer('EP' + this.parsedcommand.itemaddress);
+        this.value = this.parsedcommand.itemaddress;
     }
     // if it's a move cancel command, close the move panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'cancelmove') {
         hideAdminContainer('MP' + this.parsedcommand.itemaddress);
+        this.value = this.parsedcommand.itemaddress;
     }
     // if it's an add cancel command, close the add panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'canceladd') {
         hideAdminContainer('AP' + this.parsedcommand.itemaddress);
+        this.value = this.parsedcommand.itemaddress;
     }
     // if it's a cancel config command, close the config panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'cancelconfig') {
         hideAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = this.parsedcommand.itemaddress;
     }
     // if it's an add command, close the admin panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'add') {
@@ -578,7 +591,8 @@ function doCommand(thiscommand, checkcommandnr, thisvalue) {
             $.ajax({
                 type: 'POST',
                 url: settings.SETTING_SITE_ROOTFOLDER,
-                data: param
+                data: param,
+                success: showerror()
             });
         } else
         {

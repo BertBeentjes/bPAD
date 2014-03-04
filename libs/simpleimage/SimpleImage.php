@@ -70,6 +70,8 @@ class SimpleImage {
         } elseif ($image_type == IMAGETYPE_GIF) {
             imagegif($this->image, $filename);
         } elseif ($image_type == IMAGETYPE_PNG) {
+            imagealphablending($this->image, false);
+            imagesavealpha($this->image, true);
             imagepng($this->image, $filename);
         }
 
@@ -117,16 +119,30 @@ class SimpleImage {
         if ($this->getWidth() > $this->getHeight()) {
             $this->resizeToHeight($size);
 
-            imagecolortransparent($new_image, imagecolorallocate($new_image, 0, 0, 0));
-            imagealphablending($new_image, false);
-            imagesavealpha($new_image, true);
+            /* Check if this image is PNG or GIF, then set if Transparent */
+            if (($this->image_type == IMAGETYPE_GIF) || ($this->image_type == IMAGETYPE_PNG)) {
+                imagecolortransparent($new_image, imagecolorallocate($new_image, 0, 0, 0));
+                imagealphablending($new_image, false);
+                imagesavealpha($new_image, true);
+
+                $transparent = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
+                imagefilledrectangle($new_image, 0, 0, $size, $size, $transparent);
+            }
+
             imagecopy($new_image, $this->image, 0, 0, ($this->getWidth() - $size) / 2, 0, $size, $size);
         } else {
             $this->resizeToWidth($size);
 
-            imagecolortransparent($new_image, imagecolorallocate($new_image, 0, 0, 0));
-            imagealphablending($new_image, false);
-            imagesavealpha($new_image, true);
+            /* Check if this image is PNG or GIF, then set if Transparent */
+            if (($this->image_type == IMAGETYPE_GIF) || ($this->image_type == IMAGETYPE_PNG)) {
+                imagecolortransparent($new_image, imagecolorallocate($new_image, 0, 0, 0));
+                imagealphablending($new_image, false);
+                imagesavealpha($new_image, true);
+
+                $transparent = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
+                imagefilledrectangle($new_image, 0, 0, $size, $size, $transparent);
+            }
+
             imagecopy($new_image, $this->image, 0, 0, 0, ($this->getHeight() - $size) / 2, $size, $size);
         }
 
@@ -142,9 +158,15 @@ class SimpleImage {
     function resize($width, $height) {
         $new_image = imagecreatetruecolor($width, $height);
 
-        imagecolortransparent($new_image, imagecolorallocate($new_image, 0, 0, 0));
-        imagealphablending($new_image, false);
-        imagesavealpha($new_image, true);
+        /* Check if this image is PNG or GIF, then set if Transparent */
+        if (($this->image_type == IMAGETYPE_GIF) || ($this->image_type == IMAGETYPE_PNG)) {
+            imagecolortransparent($new_image, imagecolorallocate($new_image, 0, 0, 0));
+            imagealphablending($new_image, false);
+            imagesavealpha($new_image, true);
+
+            $transparent = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
+            imagefilledrectangle($new_image, 0, 0, $width, $height, $transparent);
+        }
 
         imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, $this->getWidth(), $this->getHeight());
         $this->image = $new_image;
@@ -153,9 +175,15 @@ class SimpleImage {
     function cut($x, $y, $width, $height) {
         $new_image = imagecreatetruecolor($width, $height);
 
-        imagecolortransparent($new_image, imagecolorallocate($new_image, 0, 0, 0));
-        imagealphablending($new_image, false);
-        imagesavealpha($new_image, true);
+        /* Check if this image is PNG or GIF, then set if Transparent */
+        if (($this->image_type == IMAGETYPE_GIF) || ($this->image_type == IMAGETYPE_PNG)) {
+            imagecolortransparent($new_image, imagecolorallocate($new_image, 0, 0, 0));
+            imagealphablending($new_image, false);
+            imagesavealpha($new_image, true);
+
+            $transparent = imagecolorallocatealpha($new_image, 255, 255, 255, 127);
+            imagefilledrectangle($new_image, 0, 0, $width, $height, $transparent);
+        }
 
         imagecopy($new_image, $this->image, 0, 0, $x, $y, $width, $height);
 
@@ -189,7 +217,7 @@ class SimpleImage {
 
         $widthratio = $this->getWidth() / $width;
         $heightratio = $this->getHeight() / $height;
-        
+
         if ($widthratio <= $heightratio) {
             $this->resizeToWidth($width);
         } else {

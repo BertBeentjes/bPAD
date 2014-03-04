@@ -200,6 +200,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_GROUP] = 'Administrator - button group';
 $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_GROUP_ALT] = 'Administrator - button group alternative';
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_OBJECT_INTERNAL_LINK] = 'Link to this item';
 $lang[AdminLabels::ADMIN_OBJECT_ACTIVE] = 'Active';
 $lang[AdminLabels::ADMIN_OBJECT_SET] = 'Set';
 $lang[AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT] = 'Layout';

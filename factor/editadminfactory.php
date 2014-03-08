@@ -110,14 +110,14 @@ class EditAdminFactory extends AdminFactory {
                     $section .= $this->factorPositionNumberAddButtons($object, $baseid, $curnumber);
                     $curnumber = $curnumber + 1;
                 }
-                // create add button for this position
+                // factor the add buttons between the last position and this one
                 $section .= $this->factorPositionNumberAddButtons($object, $baseid, $curnumber);
-                $curnumber = $curnumber + 1;
                 // factor the position currently here
                 $section .= $this->factorPosition($position, $baseid . '_P' . $position->getId());
+                $curnumber = $curnumber + 1;
             }
             // create add button for new positions after the last one
-            $section .= $this->factorPositionNumberAddButtons($object, $baseid, 0);
+            $section .= $this->factorPositionNumberAddButtons($object, $baseid, $curnumber, true);
             // wrap the section for roots and add buttons
             if ($isroot) {
                 $section .= $this->factorButtons($baseid . '_foot', $object);
@@ -144,7 +144,7 @@ class EditAdminFactory extends AdminFactory {
      * @param string $baseid
      * @param int $curnumber
      */
-    private function factorPositionNumberAddButtons($object, $baseid, $curnumber) {
+    private function factorPositionNumberAddButtons($object, $baseid, $curnumber, $createlast = false) {
         $section = '';
         $buttonadded = false;
         if ($object->getIsTemplate()) {
@@ -152,9 +152,16 @@ class EditAdminFactory extends AdminFactory {
             if ($object->getVersion($this->getMode())->getLayout()->isPNType()) {
                 $section .= $this->factorPositionAddButtons($baseid . '_posadd', $object, $curnumber);
             } else {
-                // for other layouts
-                if ($object->getVersion($this->getMode())->hasPosition($curnumber)) {
-                    $section .= $this->factorPositionAddButtons($baseid . '_posadd' . $curnumber, $object, $curnumber);
+                // for p# layouts
+                $positions = $object->getVersion($this->getMode())->getLayout()->getAllPositions($this->getMode());
+                foreach ($positions as $position) {
+                    // if this is the requested position, or we are adding at the end ($curnumber == 0)
+                    if ($position == $curnumber || ($position >= $curnumber && $createlast)) {
+                        // if this position doesn't exist
+                        if (!$object->getVersion($this->getMode())->hasPosition($curnumber)) {
+                            $section .= $this->factorPositionAddButtons($baseid . '_posadd' . $position, $object, $position);
+                        }
+                    }
                 }
             }
         } else {
@@ -173,26 +180,23 @@ class EditAdminFactory extends AdminFactory {
                                 if ($childobject->isVisible($this->getMode(), $this->getContext())) {
                                     // factor the template add buttons for a normal object
                                     $section .= $this->factorButtonGroup($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'), Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
-                                    if (!$childobject->getIsTemplate() && !$childobject->getTemplate()->getSearchable()) {
+                                    if ($childobject->getIsObjectTemplateRoot() && !$childobject->getIsTemplate() && !$childobject->getTemplate()->getSearchable()) {
                                         $subitem = '';
                                         $subitem = $childobject->getName();
                                         $subitem .= $this->factorSubItemButtons($baseid . 'CO' . $childobject->getId(), $childobject);
-                                        // TODO: add cancel button for new items
-                                        // ################# ADD CANCEL HERE #####################
-                                        
                                         $section .= $this->factorSubItem($subitem);
                                     }
                                     $buttonadded = true;
                                 }
                             }
                         }
-                    } elseif ($curnumber == 0) {
+                    } elseif ($createlast) {
                         // factor the template add buttons
                         $section .= $this->factorButtonGroup($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'), Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
                         $buttonadded = true;
                     }
                 }
-                if ($curnumber == 0 && !$buttonadded) {
+                if ($createlast && !$buttonadded) {
                     // add respond button
                     if (Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_RESPOND)) {
                         if ($object->getVersion($this->getMode())->getLayout()->isPNType()) {

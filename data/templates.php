@@ -119,7 +119,10 @@ class Templates {
      * @return type
      */
     public static function newTemplate() {
-        $template = Templates::getTemplate(Store::insertTemplate());
+        $template = Templates::getTemplate(Store::insertTemplate());        
+        // by default, a new template is inactive
+        $template->setDeleted(true);
+        
         // initialize the template
         $template->setStyle(Styles::getStyle(Style::DEFAULT_POSITION_STYLE));
         // create the root object for the template
@@ -128,6 +131,12 @@ class Templates {
         $object->setIsTemplateRoot(true);
         $object->setIsTemplate(true);
         $object->setTemplate($template);
+        
+        // publish the object
+        $exec = new ExecuteObjectAction;
+        $exec->setObject($object);
+        $exec->publish();
+        
         // add default permissions to the object, copy the permissions from the root object of the default template
         $source = Templates::getTemplate(Template::DEFAULT_TEMPLATE)->getRootObject();
         $newroles = $source->getObjectUserGroupRoles();

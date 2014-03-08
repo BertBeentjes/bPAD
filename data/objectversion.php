@@ -701,16 +701,19 @@ Class ObjectVersion extends StoredEntity {
      * Remove a position, if the layout is of the pn-type, renumber positions.
      * 
      * @param int $number
+     * @param boolean $deactivatechild default true, deactivate the child object after removing the position (deactivating is done when the child is deleted, not when it is moved to a new location)
      * @return mixed the old value for the position content
      */
-    public function removePosition($number) {
+    public function removePosition($number, $deactivatechild = true) {
         $positions = $this->getPositions();
         if (isset($positions[$number])) {
             $returnvalue = $positions[$number]->getPositionContent()->getType();
             // if the position contains an object, set the object to deleted
             if ($positions[$number]->getPositionContent()->getType() == PositionContent::POSITIONTYPE_OBJECT) {
                 $childobject = $positions[$number]->getPositionContent()->getObject();
-                $childobject->setActiveRecursive(false);
+                if ($deactivatechild) {
+                    $childobject->setActiveRecursive(false);
+                }
             }
             // remove the content from the position
             $positions[$number]->removePositionContent();

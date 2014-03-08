@@ -92,6 +92,7 @@ class Objects {
         // initially, an object is inactive (Store does this too, but just to be sure :))
         $object->setActive(false);
         // the object is empty, but can now be used without problems
+        $object->setName('Object' . $object->getId());
         return $object;
     }
 

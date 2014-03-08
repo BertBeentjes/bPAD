@@ -801,22 +801,25 @@ class Object extends SettedEntity {
      * 
      * This function only deletes the parent position, the Objects::removeOrphanedObjects()
      * function will delete this object (if no references from archived versions are left)
+     * 
+     * @param boolean $deactivatechild default true, deactivate the child object after removing the position
      */
-    public function removeFromParent() {
+    public function removeFromParent($deactivatechild = true) {
         // delete this object from his parent (delete the positionobject, delete the position, renumber positions)
-        $this->removeParentPositionMode(Modes::getMode(Mode::EDITMODE));
-        $this->removeParentPositionMode(Modes::getMode(Mode::VIEWMODE));
+        $this->removeParentPositionMode(Modes::getMode(Mode::EDITMODE), $deactivatechild);
+        $this->removeParentPositionMode(Modes::getMode(Mode::VIEWMODE), $deactivatechild);
     }
 
     /**
      * Delete the parent position
      * 
      * @param mode $mode
+     * @param boolean $deactivatechild default true, deactivate the child object after removing the position
      */
-    private function removeParentPositionMode($mode) {
+    private function removeParentPositionMode($mode, $deactivatechild = true) {
         $parent = $this->getVersion($mode)->getObjectParent();
         $positionnumber = $this->getVersion($mode)->getPositionParent()->getNumber();
-        $parent->getVersion($mode)->removePosition($positionnumber);
+        $parent->getVersion($mode)->removePosition($positionnumber, $deactivatechild);
     }
 
     /**

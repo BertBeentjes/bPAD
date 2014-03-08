@@ -39,6 +39,14 @@ class Content extends Respond {
         $this->getResponse()->setType('text/plain');
         // create the response
         switch (Request::getCommand()->getCommandMember()) {
+            case 'fetch':
+                // get the context group to use. A page always uses default context group settings using mobiledetect.
+                $this->setContextGroup(Page::chooseContextGroup());
+                // set the mode, pages always start in view mode
+                $this->setMode(Modes::getMode(Mode::VIEWMODE));
+                // create the content
+                $this->getResponse()->setContent(CacheObjects::getCacheObject(Objects::getObject(SysCon::SITE_ROOT_OBJECT), Contexts::getContextByGroupAndName($this->getContextGroup(), Context::CONTEXT_DEFAULT), $this->getMode()));
+                break;
             case 'get':
             case 'load': 
                 $this->getResponse()->setContent(CacheObjects::getCacheObject(Objects::getObject(Request::getCommand()->getValue()), Request::getCommand()->getContext(), Request::getCommand()->getMode()));

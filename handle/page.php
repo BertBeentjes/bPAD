@@ -48,7 +48,7 @@ class Page extends Respond {
         // anonymous access to the site or the user is authenticated
         if (Authorization::getPagePermission(Authorization::PAGE_VIEW)) {
             // get the context group to use. A page always uses default context group settings using mobiledetect.
-            $this->setContextGroup($this->chooseContextGroup());
+            $this->setContextGroup(self::chooseContextGroup());
             // set the mode, pages always start in view mode
             $this->setMode(Modes::getMode(Mode::VIEWMODE));
             // start the response with the snippet for this context group
@@ -70,7 +70,7 @@ class Page extends Respond {
      * Set the context group to use when formatting the content
      * 
      */
-    protected function chooseContextGroup() {
+    public static function chooseContextGroup() {
         $mobiledetect = new Mobile_Detect();
         if ($mobiledetect->isMobile()) {
             return ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_MOBILE);

@@ -146,6 +146,9 @@ class Request {
          * command syntax content.get (used by menus and internal links to load content):
          *   item,parentpositionid.objectid.positionid.name/parentpositionid.objectid.positionid.name/...,commandgroup.command.mode.context,sessionid.lastcommandid.commandnumber
          * 
+         * command syntax content.fetch (used to get content based on the hash):
+         *   item,hash,command.commandgroup,sessionid.lastcommandid.commandnumber
+         * 
          * command syntax content.load (used by instances to lazy load content):
          *   item,targetcontainerid.objectid.name,commandgroup.command.mode.context,sessionid.lastcommandid.commandnumber
          * 
@@ -190,7 +193,15 @@ class Request {
                                 // work
                                 $itemaddressparts[$i] = $part[2] . '_' . $part[3];
                             } else {
-                                throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_1');
+                                if (self::$command->getCommandMember() == 'fetch') {
+                                    if (Validator::isURLSafeName($itemaddressparts[$i])) {
+                                        // ok
+                                    } else {
+                                        throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_5');
+                                    }
+                                } else {
+                                    throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_4');
+                                }
                             }
                         }
                         // store the item address in the request url, for use in the factory
@@ -222,7 +233,7 @@ class Request {
             }
         } else {
             // incorrect number of command parts or invalid characters in command
-            throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_2');
+            throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_2-' . count($commandparts) . Validator::isLCaseChars($commandparts[0]) . Validator::isAddress($commandparts[1]) . Validator::isCommand($commandparts[2]) . Validator::isCommandNumber($commandparts[3]));
         }
     }
 

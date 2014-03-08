@@ -78,11 +78,11 @@ class MoveAdminFactory extends AdminFactory {
                 $object = Objects::getObject($row->id);
                 // check whether this is a viable target:
                 // 1. the object must be active
-                // 2. the object must not be the current parent (can't move to the same place)
+                // 2. the object must not be the current parent (can't move to the same place) or the parent of the target object (that will create a loop)
                 // 3. the object must not be a template
                 // 4. the object must have a pn type layout
                 // 5. the user must have the permission to edit the object
-                if ($object->getId() != $this->getObject()->getVersion($this->getMode())->getObjectParent()->getId() && !$object->getIsTemplate() && $object->getActive() && $object->getVersion($this->getMode())->getLayout()->isPNType() && (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_EDIT))) {
+                if (self::checkTargetObject($object, $this->getObject(), $this->getMode()) && !$object->getIsTemplate() && $object->getActive() && $object->getVersion($this->getMode())->getLayout()->isPNType() && (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_EDIT))) {
                     $objectname = Objects::getObject($row->id)->getVersion($this->getMode())->getObjectTemplateRootObject()->getNameForMove($this->getMode());
                     $objects[$objectname] = $object;
                 }
@@ -112,6 +112,28 @@ class MoveAdminFactory extends AdminFactory {
      */
     public function getObject() {
         return $this->object;
+    }
+    
+    /**
+     * Check whether this is a viable target object, check the parent and check for loops
+     * 
+     * @param object $target
+     * @param object $object
+     * @param mode $mode
+     * @return boolean true if viable target
+     */
+    public static function checkTargetObject($target, $object, $mode) {
+        if ($target->getId() == $object->getVersion($mode)->getObjectParent()->getId()) {
+            return false;
+        }
+        $parent = $target->getVersion($mode)->getObjectParent();
+        while (!$parent->isSiteRoot()) {
+            if ($parent->getIsTemplate() || $parent->getId() == $object->getId() || $parent->getId() == $parent->getVersion($mode)->getObjectParent()->getId()) {
+                return false;
+            }
+            $parent = $parent->getVersion($mode)->getObjectParent();
+        }
+        return true;
     }
 
 }

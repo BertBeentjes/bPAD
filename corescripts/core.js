@@ -33,6 +33,8 @@ var checkcommandnumber = 0; // the number of the last command to check against
 var showadminbuttons = false; // show the admin buttons or not, default not
 var settings = "#settings#"; // insert the relevant site settings here, "#settings#" is replaced server side by a json string, the quotes are there to prevent an annoying syntax error
 var processing = "#processing#"; // processing message, used in a modal dialog when processing something
+var refreshinghash = false; // set to true when refreshing the hash from the code
+
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
         // if the message modal is visible, hide it
@@ -113,20 +115,33 @@ function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
  * refresh the hash after loading content
  */
 function refreshHash() {
-    window.location.hash = '';
+    var newhash = '';
     $('[data-bpad-url-name!=""][data-bpad-url-name]').each(function() {
-        window.location.hash = window.location.hash + '/';
-        window.location.hash = window.location.hash + this.getAttribute('data-bpad-url-name');
+        newhash = newhash + '/';
+        newhash = newhash + this.getAttribute('data-bpad-url-name');
     });
-    if (window.location.hash > '') {
-        window.location.hash = window.location.hash + '.html';
+    if (newhash > '') {
+        newhash = newhash + '.html';
     }
+    if (window.location.hash != '#' + newhash) {
+        refreshinghash = true;
+        window.location.hash = newhash;
+    }
+}
+
+function fetchContent() {    
+    var hash = '';
+    if (window.location.hash.length > 6) {
+        hash = window.location.hash.substring(2, window.location.hash.length - 5);;
+    }
+    doCommand('object,' + hash + ',content.fetch', false, '');
 }
 
 /**
  * Initialize the page after the first load
  */
 function doBootStrapping() {
+    // initialize the session
     sessionidentifier = $("#bpad_content_root").attr("data-bpad-session-id");
     lastcommandid = $("#bpad_content_root").attr("data-bpad-command-id");
     // add events to the html where requested
@@ -144,6 +159,20 @@ function doBootStrapping() {
     });
     $(window).on("scroll", function() {
         lazyEvent();
+    });
+    if (window.location.hash != '') {
+        // fetch new content 
+        fetchContent();
+    }
+    // monitor the hash
+    $(window).on("hashchange", function () {
+        if (refreshinghash) {
+            // hash is changed from the code, ignore
+            refreshinghash = false;
+        } else {
+            // get new content
+            fetchContent();
+        }
     });
 }
 

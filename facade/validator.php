@@ -316,9 +316,9 @@ Class Validator {
 
     /**
      * Check whether a string contains an address, consisting of numbers and
-     * dots:
+     * dots and slashes:
      * 
-     * 123.32.2.1.17
+     * 123.32.2.1.abc/432.23.255.def
      * 
      * @param string $str
      */

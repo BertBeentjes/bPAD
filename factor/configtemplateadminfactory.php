@@ -73,11 +73,12 @@ class ConfigTemplateAdminFactory extends ConfigAdminFactory {
         $section = '';
         $admin = '';
         // template name
+        $sectionheader = '';
         if ($template->isDefault()) {
-            $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editTemplateName($template), $template->getName(), Helper::getLang(AdminLabels::ADMIN_TEMPLATE_NAME), 'disabled');
+            $sectionheader .= $this->factorTextInput($baseid . '_name', CommandFactory::editTemplateName($template), $template->getName(), Helper::getLang(AdminLabels::ADMIN_TEMPLATE_NAME), 'disabled');
         } else {
-            $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editTemplateName($template), $template->getName(), Helper::getLang(AdminLabels::ADMIN_TEMPLATE_NAME));
-        }
+            $sectionheader .= $this->factorTextInput($baseid . '_name', CommandFactory::editTemplateName($template), $template->getName(), Helper::getLang(AdminLabels::ADMIN_TEMPLATE_NAME));
+        }        
         // deleted
         $section .= $this->factorCheckBox($baseid . '_deleted', CommandFactory::editTemplateDeleted($template), $template->getDeleted(), Helper::getLang(AdminLabels::ADMIN_TEMPLATE_DELETED));
         // instanceallowed
@@ -99,7 +100,7 @@ class ConfigTemplateAdminFactory extends ConfigAdminFactory {
         }
         
         // put this in a section and start a new section
-        $admin .= $this->factorSection($baseid . '_header', $section);
+        $admin .= $this->factorSection($baseid . '_header', $section, $sectionheader);
         $section = '';
         
         // objects belonging to the template
@@ -121,7 +122,7 @@ class ConfigTemplateAdminFactory extends ConfigAdminFactory {
             $section .= $objectfactory->getContent();
         }
         
-        $admin .= $this->factorSection($baseid . '_body', $section);
+        $admin .= $section;
         
         return $admin;
     }

@@ -163,19 +163,26 @@ class ExecuteObjectAction {
      * @return boolean true if success
      */
     public function moveObject($target, $mode) {
-        $active = $this->getObject()->getActive();
         // remove object from current parent
-        $this->getObject()->removeFromParent();
+        $this->getObject()->removeFromParent(false);
         // attach object to new parent in edit mode
-        $newposition = $target->getVersion(Modes::getMode(Mode::EDITMODE))->newPosition();
-        $newpositionobject = $newposition->newPositionObject(false);
+        if ($this->getObject()->getIsObjectTemplateRoot()) {
+            $newpositionobject = $target->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($this->getObject()->getTemplate());
+            $newposition = $newpositionobject->getContainer();
+        } else {
+            $newposition = $target->getVersion(Modes::getMode(Mode::EDITMODE))->newPosition();
+            $newpositionobject = $newposition->newPositionObject(false);
+        }
         $newpositionobject->setObject($this->getObject());
         // attach object to new parent in view mode
-        $newposition = $target->getVersion(Modes::getMode(Mode::VIEWMODE))->newPosition();
-        $newpositionobject = $newposition->newPositionObject(false);
+        if ($this->getObject()->getIsObjectTemplateRoot()) {
+            $newpositionobject = $target->getVersion(Modes::getMode(Mode::VIEWMODE))->newTemplateObjectPosition($this->getObject()->getTemplate());
+            $newposition = $newpositionobject->getContainer();
+        } else {
+            $newposition = $target->getVersion(Modes::getMode(Mode::VIEWMODE))->newPosition();
+            $newpositionobject = $newposition->newPositionObject(false);
+        }
         $newpositionobject->setObject($this->getObject());
-        // now reactivate the object (if it was active)
-        $this->getObject()->setActiveRecursive($active);
         return true;
     }
 

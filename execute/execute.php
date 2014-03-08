@@ -131,6 +131,10 @@ class Execute {
                     // store the command success in the old value
                     Request::getCommand()->setOldValue(true);
                     break;
+                case 'cancelmove':
+                    // store the command success in the old value
+                    Request::getCommand()->setOldValue(true);
+                    break;
                 case 'keepobject':
                     // create the executer
                     $exec = new ExecuteObjectAction();
@@ -145,7 +149,7 @@ class Execute {
                     $target = Objects::getObject(Request::getCommand()->getValue());
                     // check move conditions (permissions, right type of object, right set)
                     $mode = Modes::getMode(Mode::EDITMODE);
-                    if ($object->getTemplate()->getSet()->getId()==$target->getSet()->getId() && $target->getId()!=$object->getVersion($mode)->getObjectParent()->getId() && !$target->getIsTemplate() && $target->getActive() && $target->getVersion($mode)->getLayout()->isPNType() && (Authorization::getObjectPermission($target, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($target, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($target, Authorization::OBJECT_FRONTEND_EDIT))) {
+                    if (MoveAdminFactory::checkTargetObject($target, $object, $mode) && $object->getTemplate()->getSet()->getId()==$target->getSet()->getId() && !$object->getIsTemplate() && $object->getActive() && $object->getVersion($mode)->getLayout()->isPNType() && (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_EDIT))) {
                         // store the command success in the old value
                         Request::getCommand()->setOldValue($exec->moveObject($target, $mode));
                     } else {

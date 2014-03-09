@@ -365,9 +365,22 @@ class ObjectFactory extends Factory {
                 $this->cacheable = false;
             }
             if ($this->hasTerm(Terms::object_p($position->getNumber()))) {
-                $positionfactory = new PositionFactory($position, $this->getContext(), $this->getMode());
-                $positionfactory->factor();
-                $this->replaceTerm(Terms::object_p($position->getNumber()), $positionfactory->getContent());
+                // if the position contains an object, check visibility for this object
+                $showposition = true;
+                if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_OBJECT) {
+                    $object = $position->getPositionContent()->getObject();
+                    if (!$object->isVisible($this->getMode(), $this->getContext())) {
+                        $showposition = false;
+                    }
+                }
+                // show the position
+                if ($showposition) {
+                    $positionfactory = new PositionFactory($position, $this->getContext(), $this->getMode());
+                    $positionfactory->factor();
+                    $this->replaceTerm(Terms::object_p($position->getNumber()), $positionfactory->getContent());
+                } else {
+                    $this->replaceTerm(Terms::object_p($position->getNumber()), '');
+                }
             } else {
                 // no place found in the layout for this position, can be intentional (e.g. some content
                 // isn't shown in mobile contexts)

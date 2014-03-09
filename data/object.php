@@ -257,8 +257,11 @@ class Object extends SettedEntity {
         // $this->changed is set and kept in the storedentity superclass
         // so do this before the superclass is called (parent::setChanged())
         if (!$this->changed) {
-            // outdate the object cache
+            // outdate the caches for this object, for the parent of this object (because of potential changes in visibility
+            // may affect showing or hiding certain positions), for instances, referrals and linked content items
             CacheObjects::outdateObject($this);
+            CacheObjects::outdateObject($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectParent());
+            CacheObjects::outdateObject($this->getVersion(Modes::getMode(Mode::EDITMODE))->getObjectParent());
             CacheObjects::outdateInstances($this);
             CacheObjects::outdateReferrals($this);
             CacheObjects::outdateLinkedContentItems();

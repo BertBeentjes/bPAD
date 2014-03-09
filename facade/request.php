@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -183,15 +184,19 @@ class Request {
                         $count = count($itemaddressparts);
                         for ($i = 0; $i < $count; $i++) {
                             $part = explode('.', $itemaddressparts[$i]);
-                            if (Validator::isNumeric($part[2]) && Validator::isURLSafeName($part[3])) {
-                                // store the position number and object name in the url,
-                                // this is done for the event that two objects have the same 
-                                // name. The url will not work correctly in that event, but 
-                                // the ajax calls will. Normally two objects in the same
-                                // part of the tree shouldn't have the same name, but this may
-                                // happen when building the site and is annoying when it doesn't
-                                // work
-                                $itemaddressparts[$i] = $part[2] . '_' . $part[3];
+                            if (count($part) == 4) {
+                                if (Validator::isNumeric($part[2]) && Validator::isURLSafeName($part[3])) {
+                                    // store the position number and object name in the url,
+                                    // this is done for the event that two objects have the same 
+                                    // name. The url will not work correctly in that event, but 
+                                    // the ajax calls will. Normally two objects in the same
+                                    // part of the tree shouldn't have the same name, but this may
+                                    // happen when building the site and is annoying when it doesn't
+                                    // work
+                                    $itemaddressparts[$i] = $part[2] . '_' . $part[3];
+                                } else {
+                                    throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_6');
+                                }
                             } else {
                                 if (self::$command->getCommandMember() == 'fetch') {
                                     if (Validator::isURLSafeName($itemaddressparts[$i])) {

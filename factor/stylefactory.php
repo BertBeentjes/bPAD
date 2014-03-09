@@ -65,7 +65,7 @@ class StyleFactory extends Factory {
                 foreach ($styleparams as $styleparam) {
                     $styleversionbody = str_replace(Terms::styleparam_placeholder($styleparam), $styleparam->getVersion($this->getMode(), $styleversion->getContext())->getBody(), $styleversionbody);
                 }
-                $showstyleparams .= '*/' . PHP_EOL . PHP_EOL;
+                $showstyleparams = '*/' . PHP_EOL . PHP_EOL;
                 // add the styleversionbody to the content
                 $this->setContent($this->getContent() . $styleversionbody . PHP_EOL . PHP_EOL);
             }

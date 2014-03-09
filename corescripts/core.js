@@ -34,6 +34,7 @@ var showadminbuttons = false; // show the admin buttons or not, default not
 var settings = "#settings#"; // insert the relevant site settings here, "#settings#" is replaced server side by a json string, the quotes are there to prevent an annoying syntax error
 var processing = "#processing#"; // processing message, used in a modal dialog when processing something
 var refreshinghash = false; // set to true when refreshing the hash from the code
+var initialhash = 'default'; // initial hash value
 
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
@@ -130,7 +131,7 @@ function refreshHash() {
 }
 
 function fetchContent() {    
-    var hash = '';
+    var hash = initialhash;
     if (window.location.hash.length > 6) {
         hash = window.location.hash.substring(2, window.location.hash.length - 5);;
     }
@@ -163,6 +164,10 @@ function doBootStrapping() {
     if (window.location.hash != '') {
         // fetch new content 
         fetchContent();
+    }
+    refreshHash();
+    if (window.location.hash.length > 6) {
+        initialhash = window.location.hash.substring(2, window.location.hash.length - 5);;
     }
     // monitor the hash
     $(window).on("hashchange", function () {

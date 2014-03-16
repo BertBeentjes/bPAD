@@ -273,8 +273,14 @@ class PositionFactory extends Factory {
         if ($this->hasTerm(Terms::POSITION_OBJECT_NAME)) {
             $this->replaceTerm(Terms::POSITION_OBJECT_NAME, $this->getContainerObject()->getName());
         }
+        if ($this->hasTerm(Terms::POSITION_ROOT_OBJECT_ID)) {
+            $this->replaceTerm(Terms::POSITION_ROOT_OBJECT_ID, $this->getPosition()->getContainer()->getObjectTemplateRootObject()->getId());
+        }
+        if ($this->hasTerm(Terms::POSITION_PARENT_ROOT_OBJECT_ID)) {
+            $this->replaceTerm(Terms::POSITION_PARENT_ROOT_OBJECT_ID, $this->getPosition()->getContainer()->getObjectTemplateRootObject()->getVersion($this->getMode())->getObjectParent()->getVersion($this->getMode())->getObjectTemplateRootObject()->getId());
+        }
         if ($this->hasTerm(Terms::POSITION_PARENT_SEO_URL)) {
-            $this->replaceTerm(Terms::POSITION_PARENT_SEO_URL, $this->getContainerObject()->getObjectVersion($this->getMode())->getObjectParent()->getSEOURL($this->getMode()));
+            $this->replaceTerm(Terms::POSITION_PARENT_SEO_URL, $this->getContainerObject()->getVersion($this->getMode())->getObjectParent()->getSEOURL($this->getMode()));
         }
         if ($this->hasTerm(Terms::POSITION_ROOT_CHANGE_DATE)) {
             $this->replaceTerm(Terms::POSITION_ROOT_CHANGE_DATE, $this->getContainerObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getChangeDate()->format(Helper::getDateTimeFormat()));
@@ -306,7 +312,12 @@ class PositionFactory extends Factory {
     private function factorClassSuffix() {
         // insert the class suffices
         $style = $this->getPosition()->getStyle();
-        $this->replaceTerm(Terms::CLASS_SUFFIX, $style->getClassSuffix() . "_" . $style->getVersion($this->getMode(), $this->getContext())->getContext()->getContextGroup()->getShortName() . '_' . $style->getVersion($this->getMode(), $this->getContext())->getContext()->getShortName());
+        $context = $this->getContext();
+        // find an original style, other styles aren't in the css
+        while (!$style->getVersion($this->getMode(), $context)->getOriginal()) {
+            $context = $context->getBackupContext();
+        }
+        $this->replaceTerm(Terms::CLASS_SUFFIX, $style->getClassSuffix() . "_" . $style->getVersion($this->getMode(), $context)->getContext()->getContextGroup()->getShortName() . '_' . $style->getVersion($this->getMode(), $context)->getContext()->getShortName());
     }
 
     /**

@@ -3290,7 +3290,7 @@ class Store {
      */
     public static function outdateInstances() {
         $stmt = self::$connection->stmt_init();
-        if ($stmt->prepare("UPDATE objectcache INNER JOIN objectversions ON objectcache.fk_object_id=objectversions.fk_object_id INNER JOIN positions ON objectversions.id=positions.fk_objectversion_id INNER JOIN positioninstances ON positions.id=positioninstances.fk_position_id SET objectcache.outdated=1, positioninstances.outdated=1")) {
+        if ($stmt->prepare("UPDATE positioninstances SET positioninstances.outdated=1")) {
             return self::actionQuery($stmt);
         }
     }

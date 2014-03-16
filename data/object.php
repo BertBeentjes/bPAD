@@ -262,7 +262,7 @@ class Object extends SettedEntity {
             CacheObjects::outdateObject($this);
             CacheObjects::outdateObject($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectParent());
             CacheObjects::outdateObject($this->getVersion(Modes::getMode(Mode::EDITMODE))->getObjectParent());
-            CacheObjects::outdateInstances($this);
+            CacheObjects::outdateInstances();
             CacheObjects::outdateReferrals($this);
             CacheObjects::outdateLinkedContentItems();
         }

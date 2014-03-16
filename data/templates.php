@@ -91,13 +91,13 @@ class Templates {
         $fields = array();
         // create id/name pairs, even though in this case they are the same, it should
         // be done for creating list box options
-        $fields[0][0] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC);
+        $fields[0][0] = PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC;
         $fields[0][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC);
-        $fields[1][0] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC);
+        $fields[1][0] = PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC;
         $fields[1][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC);
-        $fields[2][0] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC);
+        $fields[2][0] = PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC;
         $fields[2][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC);
-        $fields[3][0] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC);
+        $fields[3][0] = PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC;
         $fields[3][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC);
         $counter = 4;
         if ($template->getId() != Template::DEFAULT_TEMPLATE) {

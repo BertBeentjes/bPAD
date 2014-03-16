@@ -52,6 +52,8 @@ class Terms {
     const OBJECT_CONFIG_PANEL = '#configpanel#'; // config panel
     const OBJECT_BREADCRUMBS = '#breadcrumbs#'; // insert bread crumbs, using the predefined structures bread crumb and bread crumb separator
     const OBJECT_ID = '#objectid#'; // the id of the object
+    const OBJECT_ROOT_OBJECT_ID = '#rootobjectid#'; // the id of the root object
+    const OBJECT_PARENT_ROOT_OBJECT_ID = '#parentrootobjectid#'; // the id of the root object of the parent
     const OBJECT_ITEM_ID = '#id#'; // the id of an item connected to the object, e.g. the edit panel, the add panel or the config panel
     const OBJECT_ITEM_CONTENT = '#co#'; // the content of an item connected to the object, e.g. the edit button name or the edit panel content
     const OBJECT_ITEM_COMMAND = '#command#'; // a command used in this object
@@ -75,6 +77,8 @@ class Terms {
     const POSITION_ID = '#id#'; // the id of the position
     const POSITION_OBJECT_ID = '#objectid#'; // the id of the object that contains this position
     const POSITION_OBJECT_NAME = '#objectname#'; // the name of the object that contains this position
+    const POSITION_ROOT_OBJECT_ID = '#rootobjectid#'; // the id of the root object
+    const POSITION_PARENT_ROOT_OBJECT_ID = '#parentrootobjectid#'; // the id of the root object of the parent
     const POSITION_ROOT_OBJECT_NAME = '#rootobjectname#'; // the name of the root object for this template based structure
     const POSITION_FILE_DIR_NAME = '#dirname#'; // the directory name of the file in this position
     const POSITION_FILE_NAME = '#filename#'; // the name of the file in this position

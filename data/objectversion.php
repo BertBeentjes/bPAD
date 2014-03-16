@@ -126,9 +126,9 @@ Class ObjectVersion extends StoredEntity {
             }
             // update the templateid and rootobjectid for contentitems of this object version
             $this->recalculatePositionContentitems();
+            // update the cache for the addressable parents of this object version
+            CacheObjectAddressableParentObjects::updateCache($this);
         }
-        // update the cache for the addressable parents of this object version
-        // CacheObjectAddressableParentObjects::updateCache($this);
         return ($thischanged && $parentchanged);
     }
 

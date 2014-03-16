@@ -185,7 +185,7 @@ class Request {
                         for ($i = 0; $i < $count; $i++) {
                             $part = explode('.', $itemaddressparts[$i]);
                             if (count($part) == 4) {
-                                if (Validator::isNumeric($part[2]) && Validator::isURLSafeName($part[3])) {
+                                if (Validator::isNumeric($part[0]) && Validator::isNumeric($part[1]) && Validator::isNumeric($part[2]) && Validator::isURLSafeName($part[3])) {
                                     // store the position number and object name in the url,
                                     // this is done for the event that two objects have the same 
                                     // name. The url will not work correctly in that event, but 
@@ -205,7 +205,13 @@ class Request {
                                         throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_5');
                                     }
                                 } else {
-                                    throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_4');
+                                    if (self::$command->getCommandMember() == 'instance') {
+                                        if (count($part) == 3 && Validator::isNumeric($part[0]) && Validator::isNumeric($part[1]) && Validator::isNumeric($part[2])) {
+                                            // ok
+                                        }
+                                    } else {
+                                        throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_4');
+                                    }
                                 }
                             }
                         }

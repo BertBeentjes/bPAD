@@ -192,6 +192,12 @@ class ObjectFactory extends Factory {
         if ($this->hasTerm(Terms::OBJECT_ID)) {
             $this->replaceTerm(Terms::OBJECT_ID, $this->getObject()->getId());
         }
+        if ($this->hasTerm(Terms::OBJECT_ROOT_OBJECT_ID)) {
+            $this->replaceTerm(Terms::OBJECT_ROOT_OBJECT_ID, $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getId());
+        }
+        if ($this->hasTerm(Terms::OBJECT_PARENT_ROOT_OBJECT_ID)) {
+            $this->replaceTerm(Terms::OBJECT_PARENT_ROOT_OBJECT_ID, $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getVersion($this->getMode())->getObjectParent()->getVersion($this->getMode())->getObjectTemplateRootObject()->getId());
+        }
         if ($this->hasTerm(Terms::OBJECT_NAME)) {
             $this->replaceTerm(Terms::OBJECT_NAME, $this->getObject()->getName());
         }
@@ -220,9 +226,14 @@ class ObjectFactory extends Factory {
         while ($this->hasTerm(Terms::OBJECT_UID)) {
             $this->replaceTermOnce(Terms::OBJECT_UID, 'UO' . $this->getObject()->getId() . '_' . $number);
         }
-        // insert the class suffices
+        // insert the class suffix
         $style = $this->getObject()->getVersion($this->getMode())->getStyle();
-        $this->replaceTerm(Terms::CLASS_SUFFIX, $style->getClassSuffix() . "_" . $style->getVersion($this->getMode(), $this->getContext())->getContext()->getContextGroup()->getShortName() . '_' . $style->getVersion($this->getMode(), $this->getContext())->getContext()->getShortName());
+        $context = $this->getContext();
+        // find an original style, other styles aren't in the css
+        while (!$style->getVersion($this->getMode(), $context)->getOriginal()) {
+            $context = $context->getBackupContext();
+        }
+        $this->replaceTerm(Terms::CLASS_SUFFIX, $style->getClassSuffix() . "_" . $style->getVersion($this->getMode(), $context)->getContext()->getContextGroup()->getShortName() . '_' . $style->getVersion($this->getMode(), $context)->getContext()->getShortName());
     }
 
     /**

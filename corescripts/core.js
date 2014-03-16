@@ -106,9 +106,11 @@ function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
     }
     // correct the position of the page after loading new content, only correct
     // if the page moved more than 5 pixels
-    var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
-    if (Math.abs(contloc - newcontloc) > 5) {
-        $('body').scrollTop($('#' + container).offset().top - contloc);
+    if ($('#' + container).length) {
+        var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
+        if (Math.abs(contloc - newcontloc) > 5) {
+            $('body').scrollTop($('#' + container).offset().top - contloc);
+        }
     }
 }
 
@@ -302,8 +304,69 @@ function addEvents(divid) {
         // remove the attribute, so the event isn't attached again
         $(this).removeAttr('data-bpad-onchange-submit');
     });
-    // start a lazy load sequence
-    lazyEvent();
+    // clear another div when this one is filled, or clear this one when the
+    // other gets filled
+    $('[data-bpad-clear-content]').each(function() {
+        // get the linked item
+        var clearcontent = $(this).attr('data-bpad-clear-content');
+        var divid = $(this).attr('id');
+        // if the content has been cleared
+        if ($('#' + divid + '[data-bpad-content-cleared]').length) {
+            // check if the cleared div has been filled
+            if (!$('#' + clearcontent).is(':empty')) {
+                // clear this one
+                $(this).html('');
+                $(this).removeAttr('data-bpad-content-cleared');
+            }
+        } else {
+            // otherwise clear the other div and remember that it has been cleared
+            if (!$('#' + clearcontent).is(':empty') && !$(this).is(':empty')) {
+                $('#' + clearcontent).html('');
+                $(this).attr('data-bpad-content-cleared', clearcontent);
+            }
+        }
+    });
+    // move an item to a new location, clear the location first
+    $(selector + '[data-bpad-clear-move]').each(function() {
+        var clearmove = $(this).attr('data-bpad-clear-move');
+        if ($('#' + clearmove).length) {
+            $('#' + clearmove).html('');
+            $('#' + clearmove).append(this);
+            $(this).removeAttr('data-bpad-clear-move');
+        }
+    });
+    // move an item to a new location
+    $(selector + '[data-bpad-move]').each(function() {
+        var moveto = $(this).attr('data-bpad-move');
+        if ($('#' + moveto).length) {
+            $('#' + moveto).append(this);
+            $(this).removeAttr('data-bpad-move');
+        }
+    });
+    // move an item and replace the target
+    $(selector + '[data-bpad-replace]').each(function() {
+        var replace = $(this).attr('data-bpad-replace');
+        if ($('#' + replace).length) {
+            $('#' + replace).replaceWith(this);
+            $(this).removeAttr('data-bpad-replace');
+        }
+    });
+    // after move/replace, add an index number to numbered items (e.g. used in carousel)
+    $(selector + '[data-bpad-index]').each(function() {
+        var attrib = $(this).attr('data-bpad-index');
+        var value = $(this).parent().children().index(this);
+        $(this).attr(attrib, value);
+    });
+    // after indexing, autostart the carousels
+    $(selector + '[data-bpad-carousel-autostart]').each(function() {
+        var options = $(this).attr('data-bpad-carousel-autostart');
+        if (options.length > 0) {
+            options = jQuery.parseJSON(options);
+            $(this).carousel(options);
+        } else {
+            $(this).carousel();
+        }
+    });
     // show markup for menu-items that are active
     $('[data-bpad-activate]').each(function(i) {
         // the activate condition
@@ -342,6 +405,8 @@ function addEvents(divid) {
             }
         }
     });
+    // start a lazy load sequence
+    lazyEvent();
 }
 
 /**

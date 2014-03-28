@@ -358,8 +358,8 @@ class ContentItemFactory extends Factory {
         if (preg_match($pattern, $line) > 0) {
             $line .= $postfix;
             $replacement = $this->getStructureBodyByName($replacementname);
-            if (preg_match("#co#", $replacement) > 0) {
-                $replacement = str_replace("#co#", $part, $replacement);
+            if (preg_match(Terms::POSITION_CONTENT, $replacement) > 0) {
+                $replacement = str_replace(Terms::POSITION_CONTENT, $part, $replacement);
                 $line = preg_replace($pattern, $replacement, $line);
             } else {
                 // for internal links do something special with the first part

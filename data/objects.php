@@ -112,7 +112,7 @@ class Objects {
                 Store::deleteObjectSessions($object->getId());
                 // delete the caches for the object (addressable parent, object cache)
                 CacheObjects::removeObjectFromCache($object);
-                CacheObjectAddressableParentObjects::removeObjectFromCache($object);
+                CacheObjectAddressableParentObjects::removeObjectFromCache($object);                
                 // delete the object user group roles
                 Store::deleteObjectUserGroupRoles($object->getId());
                 // delete the position content
@@ -124,6 +124,8 @@ class Objects {
                 Store::deleteObjectPositions($object->getId());
                 // delete the object versions
                 Store::deleteObjectVersions($object->getId());
+                // delete the object from other objects
+                Store::deleteObjectFromPositionContentItems($object->getId());
                 // delete the object
                 Store::deleteObject($object->getId());
             }

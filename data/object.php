@@ -115,8 +115,8 @@ class Object extends SettedEntity {
             if ($result = Store::getObjectParentIds($this->getId(), $mode->getId())) {
                 if ($row = $result->fetchObject()) {
                     $objectparent = Objects::getObject($row->parentobjectid);
-                    $positionparent = $objectparent->getVersion($mode)->getPosition($row->parentpositionnumber);
-                    $this->objectversions[$mode->getId()] = new ObjectVersion($this, $objectparent, $positionparent, $this->findObjectTemplateRoot($objectparent, $mode), $mode);
+                    //$positionparent = $objectparent->getVersion($mode)->getPosition($row->parentpositionnumber);
+                    $this->objectversions[$mode->getId()] = new ObjectVersion($this, $objectparent, $row->parentpositionnumber, $this->findObjectTemplateRoot($objectparent, $mode), $mode);
                     return $this->objectversions[$mode->getId()];
                 }
             }

@@ -539,7 +539,7 @@ class EditAdminFactory extends AdminFactory {
                 break;
             case PositionContentItem::INPUTTYPE_INPUTBOX:
                 // create the input box
-                $section .= $this->factorTextInput($baseid . '_body', CommandFactory::editPositionContentItemBody($contentitem), $contentitem->getBody(), $label);
+                $section .= $this->factorTextInput($baseid . '_body', CommandFactory::editPositionContentItemBody($contentitem), Helper::escapeContentQuote($contentitem->getBody()), $label);
                 break;
             case PositionContentItem::INPUTTYPE_TEXTAREA:
                 // create the text area

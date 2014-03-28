@@ -29,6 +29,7 @@
  * @since 0.4.0
  */
 class CacheObjects {
+    private static $internallinksoutdated = false;
 
     /**
      * Retrieve a cached object
@@ -204,7 +205,10 @@ class CacheObjects {
      * outdate the cache for content items that contain internal links to objects
      */
     public static function outdateLinkedContentItems() {
-        Store::outdateLinkedContentItems();
+        if (!self::$internallinksoutdated) {
+            Store::outdateLinkedContentItems();
+            self::$internallinksoutdated = true;
+        }
     }
 
 }

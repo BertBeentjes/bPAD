@@ -208,9 +208,19 @@ class Request {
                                     if (self::$command->getCommandMember() == 'instance') {
                                         if (count($part) == 3 && Validator::isNumeric($part[0]) && Validator::isNumeric($part[1]) && Validator::isNumeric($part[2])) {
                                             // ok
+                                        } else {
+                                            throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_7');
                                         }
                                     } else {
-                                        throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_4');
+                                        if (self::$command->getCommandMember() == 'load') {
+                                            if (count($part) == 3 && Validator::isLazyLoadId($part[0]) && Validator::isNumeric($part[1]) && Validator::isURLSafeName($part[2])) {
+                                                // ok
+                                            } else {
+                                                throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_8');
+                                            }
+                                        } else {
+                                            throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_SYNTAX) . ' @ ' . __METHOD__ . '_4');
+                                        }
                                     }
                                 }
                             }

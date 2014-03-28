@@ -297,6 +297,15 @@ Class Validator {
     }
 
     /**
+     * Check whether a string consists of numbers-numbers
+     * 
+     * @param string $str
+     */
+    public static function isLazyLoadId($str) {
+        return preg_match('/^[0-9]+\-[0-9]+$/', $str);
+    }
+
+    /**
      * Check whether a string consists purely of capitals and underscores
      * 
      * @param string $str

@@ -35,6 +35,10 @@ var settings = "#settings#"; // insert the relevant site settings here, "#settin
 var processing = "#processing#"; // processing message, used in a modal dialog when processing something
 var refreshinghash = false; // set to true when refreshing the hash from the code
 var initialhash = 'default'; // initial hash value
+var commandqueue = ''; // create an empty command queue
+var checkcommandnrqueue = ''; // create an empty command queue
+var commandvaluequeue = ''; // create an empty command queue
+var queuenumber = 0; // a number for the queue
 
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
@@ -86,9 +90,13 @@ function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
     if (replace) {
         // check whether the container to replace is coupled to this content fetch (it may have changed client-side during the roundtrip)
         if ($('#' + container).attr('data-bpad-command-number') + '-' + commandnr) {
-            $('#' + container).replaceWith(result);
+            $('#' + container).html(result);
+            var origdiv = $('#' + container)[0];
+            var replacer = origdiv.firstChild;
             // now add the events to the new html
             addEvents(container);
+            // now remove the placeholder
+            origdiv.parentNode.replaceChild(replacer, origdiv);
         }
     } else {
         // check the command number for new commands. If a new command is given, don't
@@ -103,13 +111,13 @@ function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
             // now change the url to match the content
             refreshHash();
         }
-    }
-    // correct the position of the page after loading new content, only correct
-    // if the page moved more than 5 pixels
-    if ($('#' + container).length) {
-        var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
-        if (Math.abs(contloc - newcontloc) > 5) {
-            $('body').scrollTop($('#' + container).offset().top - contloc);
+        // correct the position of the page after loading new content, only correct
+        // if the page moved more than 5 pixels
+        if ($('#' + container).length) {
+            var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
+            if (Math.abs(contloc - newcontloc) > 5) {
+                $('body').scrollTop($('#' + container).offset().top - contloc);
+            }
         }
     }
 }
@@ -132,10 +140,11 @@ function refreshHash() {
     }
 }
 
-function fetchContent() {    
+function fetchContent() {
     var hash = initialhash;
     if (window.location.hash.length > 6) {
-        hash = window.location.hash.substring(2, window.location.hash.length - 5);;
+        hash = window.location.hash.substring(2, window.location.hash.length - 5);
+        ;
     }
     doCommand('object,' + hash + ',content.fetch', false, '');
 }
@@ -169,10 +178,11 @@ function doBootStrapping() {
     }
     refreshHash();
     if (window.location.hash.length > 6) {
-        initialhash = window.location.hash.substring(2, window.location.hash.length - 5);;
+        initialhash = window.location.hash.substring(2, window.location.hash.length - 5);
+        ;
     }
     // monitor the hash
-    $(window).on("hashchange", function () {
+    $(window).on("hashchange", function() {
         if (refreshinghash) {
             // hash is changed from the code, ignore
             refreshinghash = false;
@@ -250,12 +260,34 @@ function addEvents(divid) {
         $(this).on('keyup', {
             cmd: command
         }, function(event) {
-            // execute the command
-            doCommand(event.data.cmd, true, this.value);
+            if ($(this).attr('data-bpad-onscrollkey') == 'blur') {
+                // blur when the user tries to scroll
+                var code = (event.keyCode ? event.keyCode : event.which);
+                if (code == 33 || code == 34 || code == 38 || code == 40) {
+                    $(this).blur();
+                } else {
+                    // if the key stroke has changed the value
+                    if (this.value != $(this).attr('data-bpad-last-value')) {
+                        // update the last value
+                        $(this).attr('data-bpad-last-value', this.value);
+                        // execute the command
+                        queueCommand(event.data.cmd, true, this.value);
+                    }
+                }
+            } else {
+                // if the key stroke has changed the value
+                if (this.value != $(this).attr('data-bpad-last-value')) {
+                    // update the last value
+                    $(this).attr('data-bpad-last-value', this.value);
+                    // execute the command
+                    queueCommand(event.data.cmd, true, this.value);
+                }
+            }
         }
         );
         // remove the attribute, so the event isn't attached again
         $(this).removeAttr('data-bpad-onkeyup');
+        $(this).attr('data-bpad-last-value', this.value);
     });
     // add on change events to nodes that request it
     $(selector + '[data-bpad-onchange]').each(function() {
@@ -634,6 +666,35 @@ function checkCommand(thiscommand, thisvalue) {
     }
 }
 
+function queueCommand(thiscommand, checkcommandnr, thisvalue) {
+    // check whether the command queue is empty or not
+    if (commandqueue == '') {
+        commandqueue = thiscommand;
+    } else {
+        // check whether this command is already in the queue
+        if (commandqueue != thiscommand) {
+            doCommand(commandqueue, checkcommandnrqueue, commandvaluequeue);
+            commandqueue = thiscommand;
+        }
+    }
+    checkcommandnrqueue = checkcommandnr;
+    commandvaluequeue = thisvalue;
+    queuenumber = queuenumber + 1;
+    var curnum = queuenumber;
+    setTimeout(function() {
+        checkCommandQueue(curnum)
+    }, 500);
+}
+
+function checkCommandQueue(number) {
+    if (number == queuenumber) {
+        doCommand(commandqueue, checkcommandnrqueue, commandvaluequeue);
+        commandqueue = '';
+        checkcommandnrqueue = '';
+        commandvaluequeue = '';
+    }
+}
+
 /**
  * Execute a command
  * 
@@ -712,7 +773,11 @@ function doCommand(thiscommand, checkcommandnr, thisvalue) {
  * @returns boolean true if in range
  */
 function inRange(target) {
-    return $(target).offset().top - $('body').scrollTop() - (2 * $(window).height()) < 0;
+    var myscrolltop = $("body").scrollTop();
+    if ($("html").scrollTop() > myscrolltop) {
+        myscrolltop = $("html").scrollTop();
+    }
+    return $(target).offset().top - myscrolltop - (2 * $(window).height()) < 0;
 }
 
 /**

@@ -48,6 +48,7 @@ Class ObjectVersion extends StoredEntity {
     private $objecttemplaterootobject; // the objecttemplateroot for the object this is a version of
     private $objectparent; // the hierarchical parent object for the object this is a version of (can be found in the positionparent, but is here to make code easier to read)
     private $positionparent; // the hierarchical parent position for the object this is a version of
+    private $positionparentnumber; // the hierarchical parent position number for the object this is a version of
     // objectversions contain positions
     private $positionsloaded = false; // flags whether the positions are loaded
     private $positions = array(); // array with the positions, only to be used in getPositions, other methods must use getPositions to get the array
@@ -57,15 +58,15 @@ Class ObjectVersion extends StoredEntity {
      * 
      * @param object the object that contains this version
      * @param object the direct parent object for the object in this mode
-     * @param position the position of the parent object this object is in, in this mode
+     * @param int the number of the position of the parent object this object is in, in this mode
      * @param object the template root object for this mode
      * @param mode the mode
      */
 
-    public function __construct($object, $objectparent, $positionparent, $objecttemplaterootobject, $mode) {
+    public function __construct($object, $objectparent, $positionparentnumber, $objecttemplaterootobject, $mode) {
         $this->tablename = Store::getTableObjectVersions();
         $this->objectparent = $objectparent;
-        $this->positionparent = $positionparent;
+        $this->positionparentnumber = $positionparentnumber;
         $this->objecttemplaterootobject = $objecttemplaterootobject;
         $this->mode = $mode;
         $this->container = $object;
@@ -124,14 +125,17 @@ Class ObjectVersion extends StoredEntity {
                     $parentchanged = $this->objectparent->getVersion($this->getMode())->setChanged();
                 }
             }
-            // update the templateid and rootobjectid for contentitems of this object version
-            $this->recalculatePositionContentitems();
-            // update the cache for the addressable parents of this object version
-            CacheObjectAddressableParentObjects::updateCache($this);
+            // when changing an object version in view mode, the caches should be updated
+            if ($this->getMode()->getId() == Mode::VIEWMODE) {
+                // update the templateid and rootobjectid for contentitems of this object version
+                $this->recalculatePositionContentitems();
+                // update the cache for the addressable parents of this object version
+                CacheObjectAddressableParentObjects::updateCache($this);
+            }
         }
         return ($thischanged && $parentchanged);
     }
-
+    
     /**
      * Recalculate the template id and object root id for position content items.
      * These values are used in instances to make retrieving them (much) faster.
@@ -430,6 +434,11 @@ Class ObjectVersion extends StoredEntity {
      * @return position the parent position
      */
     public function getPositionParent() {
+        if (!isset($this->positionparent)) {
+            if (isset($this->positionparentnumber)) {
+                $this->positionparent = $this->getObjectParent()->getVersion($this->getMode())->getPosition($this->positionparentnumber);
+            }
+        }
         return $this->positionparent;
     }
 

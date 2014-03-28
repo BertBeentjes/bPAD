@@ -57,6 +57,16 @@ class Helper {
     }
 
     /**
+     * escape the " symbol in content that goes into an input box
+     * 
+     * @param content the string containing the content to be escaped
+     * @return string the resulting string with the escaped qoute
+     */
+    public static function escapeContentQuote($content) {
+            return str_replace('"', '&quot;', $content);
+    }
+
+    /**
      * get the currect date / time in a format that the Store can handle
      * 
      * @return string the date and time string

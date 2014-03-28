@@ -3490,6 +3490,20 @@ class Store {
     }
     
     /**
+     * delete an object from position content items as the root, as preparation for deleting the object
+     * 
+     * @param int $objectid the object id
+     */
+    public static function deleteObjectFromPositionContentItems($objectid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE positioncontentitems SET positioncontentitems.fk_rootobject_id=? WHERE positioncontentitems.fk_rootobject_id=?")) {
+            $defaultrootobjectid = SysCon::SITE_ROOT_OBJECT;
+            $stmt->bind_param("ii", $defaultrootobjectid, $objectid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
      * delete the positions for an object
      * 
      * @param int $objectid the object id

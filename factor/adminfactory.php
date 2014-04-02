@@ -229,6 +229,21 @@ class AdminFactory extends Factory {
     }
 
     /**
+     * factor a collapsed section for the admin panel
+     * 
+     * @param string $id the id for the section
+     * @param string $value the start value of the input
+     * @param string $label label
+     * @return string the complete input
+     */
+    protected function factorSectionCollapsed($id, $value, $label) {
+        $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_SECTION_COLLAPSED)->getVersion($this->getMode(), $this->getContext())->getBody();
+        // no command and no label for the button groups
+        $admin = $this->factorTerms($structure, $id, '', $value, $label);
+        return $admin;
+    }
+
+    /**
      * factor an admin sub item
      * 
      * @param string $value the start value of the input

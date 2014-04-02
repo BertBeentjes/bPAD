@@ -38,6 +38,8 @@ class Error {
         switch ($debuglevel) {
             case 'trace': $message = $e->getTraceAsString() . PHP_EOL . $e->getMessage(); break;
             case 'errors': $message = $e->getMessage(); break;
+            case 'production': break;
+            default: break;
         }
         return $message;
     }

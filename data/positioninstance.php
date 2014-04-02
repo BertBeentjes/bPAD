@@ -33,6 +33,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     private $searchwords; // restrict the instance to objects containing the search words
     private $parent; // restrict the instance to descendants of a certain parent object
     private $activeitems; // show active or inactive objects (recycle bin)
+    private $fillonload; // fill the instance when loading the page or, in case of search, wait for the user input
     private $orderby; // ordering of the objects to show
     private $groupby; // grouping of the objects to show
     private $objects; // the position instance objects
@@ -59,6 +60,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
         $this->searchwords = $attr->searchwords;
         $this->parent = Objects::getObject($attr->parentid);
         $this->activeitems = $attr->activeitems;
+        $this->fillonload = $attr->fillonload;
         $this->orderby = $attr->orderby;
         $this->groupby = $attr->groupby;
         $this->outdated = $attr->outdated;
@@ -259,6 +261,28 @@ class PositionInstance extends StoredEntity implements PositionContent {
     public function setActiveItems($newbool) {
         if (Store::setPositionInstanceActiveItems($this->id, $newbool) && $this->setChanged()) {
             $this->activeitems = $newbool;
+            return true;
+        }
+    }        
+
+    /**
+     * Getter for fillonload. 
+     * 
+     * @return boolean  if the instance shows on load
+     */
+    public function getFillOnLoad() {
+        return $this->fillonload;
+    }
+    
+    /**
+     * Setter for fill on load
+     * 
+     * @param boolean newbool the new value for fillonload
+     * @return boolean true if success
+     */
+    public function setFillOnLoad($newbool) {
+        if (Store::setPositionInstanceFillOnLoad($this->id, $newbool) && $this->setChanged()) {
+            $this->fillonload = $newbool;
             return true;
         }
     }        

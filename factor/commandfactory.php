@@ -486,6 +486,16 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to edit the position instance fill on load
+     * 
+     * @param positioninstance $positioninstance
+     * @return string
+     */
+    public static function editPositionInstanceFillOnLoad($positioninstance) {
+        return 'position,' . $positioninstance->getContainer()->getContainer()->getContainer()->getId() . '.' . $positioninstance->getContainer()->getNumber() . ',change.positioninstancefillonload' . '.' . $positioninstance->getContainer()->getContainer()->getMode()->getId();
+    }
+
+    /**
      * Compose the command to edit the position instance order by
      * 
      * @param positioninstance $positioninstance

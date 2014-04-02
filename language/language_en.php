@@ -186,6 +186,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_COMBOBOX] = 'Administrator - combobox';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX] = 'Administrator - listbox';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX_OPTION] = 'Administrator - listbox option';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION] = 'Administrator - section';
+$lang[LSSNames::STRUCTURE_ADMIN_SECTION_COLLAPSED] = 'Administrator - section collapsed';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION_HEADER] = 'Administrator - section header';
 $lang[LSSNames::STRUCTURE_ADMIN_SEPARATOR] = 'Administrator - separator';
 $lang[LSSNames::STRUCTURE_ADMIN_SUB_ITEM] = 'Administrator - sub item';

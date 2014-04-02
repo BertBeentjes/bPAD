@@ -53,16 +53,22 @@ class CachePositionInstances {
             $positioninstance->setOutdated(false);
         }
         // the cache is now up to date, get the objects from the cache and if necessary do the user search
-        if ($usersearch > '') {
-            $objects = array();
-            // get and return the cached objects
-            if ($result = Store::getPositionInstanceCacheObjectsByPositionInstanceIdWithUserSearch($positioninstance->getId(), $usersearch)) {
-                while ($row = $result->fetchObject()) {
-                    $objectvalues = array();
-                    $objectvalues['object'] = Objects::getObject($row->objectid);
-                    $objectvalues['groupvalue'] = $row->groupvalue;
-                    $objects[] = $objectvalues;
+        // if there is a user search, or the instance should not fill on load (that is: wait for user search input)
+        if ($usersearch > '' || !$positioninstance->getFillOnLoad()) {
+            // if there is a user search
+            if ($usersearch > '') {
+                $objects = array();
+                // get and return the cached objects
+                if ($result = Store::getPositionInstanceCacheObjectsByPositionInstanceIdWithUserSearch($positioninstance->getId(), $usersearch)) {
+                    while ($row = $result->fetchObject()) {
+                        $objectvalues = array();
+                        $objectvalues['object'] = Objects::getObject($row->objectid);
+                        $objectvalues['groupvalue'] = $row->groupvalue;
+                        $objects[] = $objectvalues;
+                    }
                 }
+            } else {
+                // no user search and no fill on load, return nothing
             }
         } else {
             $objects = array();

@@ -39,6 +39,7 @@ var commandqueue = ''; // create an empty command queue
 var checkcommandnrqueue = ''; // create an empty command queue
 var commandvaluequeue = ''; // create an empty command queue
 var queuenumber = 0; // a number for the queue
+var analyticsurl = ''; // store the last analyticsurl
 
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
@@ -123,9 +124,11 @@ function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
 }
 
 /**
- * refresh the hash after loading content
+ * Fetch the new hash, based upon the content
+ * 
+ * @returns string
  */
-function refreshHash() {
+function newHash() {
     var newhash = '';
     $('[data-bpad-url-name!=""][data-bpad-url-name]').each(function() {
         newhash = newhash + '/';
@@ -134,7 +137,15 @@ function refreshHash() {
     if (newhash > '') {
         newhash = newhash + '.html';
     }
+    return newhash;
+}
+
+/**
+ * refresh the hash after loading content
+ */
+function refreshHash() {
     if (window.location.hash != '#' + newhash) {
+        var newhash = newHash();
         refreshinghash = true;
         window.location.hash = newhash;
     }
@@ -144,7 +155,6 @@ function fetchContent() {
     var hash = initialhash;
     if (window.location.hash.length > 6) {
         hash = window.location.hash.substring(2, window.location.hash.length - 5);
-        ;
     }
     doCommand('object,' + hash + ',content.fetch', false, '');
 }
@@ -153,6 +163,16 @@ function fetchContent() {
  * Initialize the page after the first load
  */
 function doBootStrapping() {
+    // optionally, load Google Analytics
+    if (settings.GOOGLE_ANALYTICSCODE.length > 6) {
+        $.getScript('http://www.google-analytics.com/ga.js');
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', settings.GOOGLE_ANALYTICSCODE, 'bertbeentjes.nl');
+    }
     // initialize the session
     sessionidentifier = $("#bpad_content_root").attr("data-bpad-session-id");
     lastcommandid = $("#bpad_content_root").attr("data-bpad-command-id");
@@ -172,14 +192,15 @@ function doBootStrapping() {
     $(window).on("scroll", function() {
         lazyEvent();
     });
-    if (window.location.hash != '') {
+    var newhash = newHash();
+    // if the hash isn't empty and isn't the current page, load the content requested by the hash
+    if (window.location.hash != '' && window.location.hash != '#' + newhash) {
         // fetch new content 
         fetchContent();
     }
     refreshHash();
     if (window.location.hash.length > 6) {
         initialhash = window.location.hash.substring(2, window.location.hash.length - 5);
-        ;
     }
     // monitor the hash
     $(window).on("hashchange", function() {
@@ -191,6 +212,23 @@ function doBootStrapping() {
             fetchContent();
         }
     });
+    checkAnalytics();
+}
+
+/** 
+ * checks whether something should be sent to Google Analytics 
+ */
+function checkAnalytics() {
+    if (settings.GOOGLE_ANALYTICSCODE.length > 6) {
+        var thisurl = window.location.hash;
+        if (thisurl.substring(0,1) == '#') {
+            thisurl = thisurl.substring(1);
+        }
+        if (thisurl != analyticsurl) {
+            ga('send', 'pageview', thisurl);
+            analyticsurl = thisurl;
+        }
+    }
 }
 
 /**
@@ -218,6 +256,8 @@ function addEvents(divid) {
     $(selector + 'textarea').autosize();
     // show or hide the admin buttons
     showAdminButtons();
+    // activate collapsable sections   
+    $(selector + '.collapse').collapse();
     // add on click events to nodes that request it
     $(selector + '[data-bpad-onclick]').each(function() {
         // get the command
@@ -437,6 +477,8 @@ function addEvents(divid) {
             }
         }
     });
+    // check whether analytics should be updated
+    checkAnalytics();
     // start a lazy load sequence
     lazyEvent();
 }

@@ -178,8 +178,10 @@ class EditAdminFactory extends AdminFactory {
                                 $childobject = $position->getPositionContent()->getObject();
                                 // is the object visible
                                 if ($childobject->isVisible($this->getMode(), $this->getContext())) {
-                                    // factor the template add buttons for a normal object
-                                    $section .= $this->factorButtonGroup($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'), Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                                    // factor the template add buttons for a normal object                                   
+                                    $addbuttonsection = $this->factorButtonGroupAlt($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'));
+                                    $addbuttonsection = $this->factorSectionCollapsed($baseid . '_SC' . $curnumber, $addbuttonsection, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                                    $section .= $addbuttonsection;
                                     if ($childobject->getIsObjectTemplateRoot() && !$childobject->getIsTemplate() && !$childobject->getTemplate()->getSearchable()) {
                                         $subitem = '';
                                         $subitem = $childobject->getName();
@@ -192,7 +194,9 @@ class EditAdminFactory extends AdminFactory {
                         }
                     } elseif ($createlast) {
                         // factor the template add buttons
-                        $section .= $this->factorButtonGroup($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'), Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                        $addbuttonsection = $this->factorButtonGroupAlt($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'));
+                        $addbuttonsection = $this->factorSectionCollapsed($baseid . '_SC' . $curnumber, $addbuttonsection, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                        $section .= $addbuttonsection;
                         $buttonadded = true;
                     }
                 }
@@ -254,6 +258,7 @@ class EditAdminFactory extends AdminFactory {
 
         // TODO: add an undo button, that does an undo based upon the command log 
         // $section .= $this->factorButton($baseid, CommandFactory::editObjectUndo($object), Helper::getLang(AdminLabels::ADMIN_BUTTON_UNDO));
+        
         // add a keep button, keep is the natural state, so it only needs to close the admin section
         if (!$object->getNew()) {
             $section .= $this->factorButton($baseid . '_keep', CommandFactory::editObjectKeep($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_KEEP));
@@ -264,10 +269,6 @@ class EditAdminFactory extends AdminFactory {
         }
         // 'recycle bin' button
         $section .= $this->factorRecycleBinButton($baseid, $object);
-
-        // TODO: add a move button, to move items to other places in the site
-        // the move button opens a section with the possible target locations.
-        //$section .= $this->factorButton($baseid, CommandFactory::editObjectMove($object), Helper::getLang(AdminLabels::ADMIN_BUTTON_MOVE));
 
         $section = $this->factorButtonGroup($section);
 
@@ -584,6 +585,8 @@ class EditAdminFactory extends AdminFactory {
         $section .= $this->factorListBox($baseid . '_object', CommandFactory::editPositionInstanceParent($instance), $objects, $instance->getParent()->getId(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_PARENT));
         // activeitems
         $section .= $this->factorCheckBox($baseid . '_activeitems', CommandFactory::editPositionInstanceActiveItems($instance), $instance->getActiveItems(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_ACTIVE_ITEMS));
+        // fillonload
+        $section .= $this->factorCheckBox($baseid . '_fillonload', CommandFactory::editPositionInstanceFillOnLoad($instance), $instance->getFillOnLoad(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_FILL_ON_LOAD));
         // order by
         $orderby = Templates::getTemplateOrderFieldsByTemplate($instance->getTemplate());
         $section .= $this->factorListBox($baseid . '_orderby', CommandFactory::editPositionInstanceOrderBy($instance), $orderby, $instance->getOrderBy(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_ORDER_BY));

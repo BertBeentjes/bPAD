@@ -185,6 +185,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_COMBOBOX] = 'Beheer - lijst/invoerveld';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX] = 'Beheer - lijstveld';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX_OPTION] = 'Beheer - lijstveld optie';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION] = 'Beheer - sectie';
+$lang[LSSNames::STRUCTURE_ADMIN_SECTION_COLLAPSED] = 'Beheer - sectie ingeklapt';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION_HEADER] = 'Beheer - sectiekop';
 $lang[LSSNames::STRUCTURE_ADMIN_SEPARATOR] = 'Beheer - scheider';
 $lang[LSSNames::STRUCTURE_ADMIN_SUB_ITEM] = 'Beheer - subsectie';

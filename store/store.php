@@ -489,7 +489,7 @@ class Store {
      * @return resultset id, objectid, templateid, listwords, searchwords, parentid, activeitems, orderby, groupby, createdate, createuserid, changedate, changeuserid
      */
     public static function getPositionInstance($positionid) {
-        return self::selectQuery("SELECT id, object_id objectid, template_id templateid, listwords, searchwords, parent_id parentid, activeitems, orderby, groupby, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid, outdated FROM positioninstances WHERE fk_position_id=" . $positionid);
+        return self::selectQuery("SELECT id, object_id objectid, template_id templateid, listwords, searchwords, parent_id parentid, activeitems, fillonload, orderby, groupby, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid, outdated FROM positioninstances WHERE fk_position_id=" . $positionid);
     }
 
     /**
@@ -1910,6 +1910,22 @@ class Store {
         $intbool = (int) $bool;
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("UPDATE positioninstances SET activeitems=? WHERE id=?")) {
+            $stmt->bind_param("ii", $intbool, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * prepare a statement to update the position instance fillonload value
+     * 
+     * @param int the id of the row to update
+     * @param bool the new activeitems value
+     * @return boolean  if action query succeeds
+     */
+    public static function setPositionInstanceFillOnLoad($id, $bool) {
+        $intbool = (int) $bool;
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE positioninstances SET fillonload=? WHERE id=?")) {
             $stmt->bind_param("ii", $intbool, $id);
             return self::actionQuery($stmt);
         }

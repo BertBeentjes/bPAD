@@ -130,8 +130,9 @@ class ContentFactory extends Factory {
     private function factorSettings() {
         $settings = '{';
         $settings .= 'SITE_ROOT_OBJECT : "' . SysCon::SITE_ROOT_OBJECT . '", ';
-        $settings .= Settings::getSetting(Setting::SITE_ROOT)->getName() . ' : "' . Settings::getSetting(Setting::SITE_ROOT)->getValue() . '", ';
-        $settings .= Settings::getSetting(Setting::SITE_ROOTFOLDER)->getName() . ' : "' . Settings::getSetting(Setting::SITE_ROOTFOLDER)->getValue() . '"';
+        $settings .= 'SITE_ROOT : "' . Settings::getSetting(Setting::SITE_ROOT)->getValue() . '", ';
+        $settings .= 'SITE_ROOTFOLDER : "' . Settings::getSetting(Setting::SITE_ROOTFOLDER)->getValue() . '", ';
+        $settings .= 'GOOGLE_ANALYTICSCODE : "' . Settings::getSetting(Setting::GOOGLE_ANALYTICSCODE)->getValue() . '"';
         $settings .= '}';
         return $settings;
     }

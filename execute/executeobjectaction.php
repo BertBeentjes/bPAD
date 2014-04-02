@@ -429,6 +429,7 @@ class ExecuteObjectAction {
      */
     private function copyPositionInstance($source, $target) {
         $target->setActiveItems($source->getActiveItems());
+        $target->setFillOnLoad($source->getFillOnLoad());
         $target->setGroupBy($source->getGroupBy());
         $target->setListWords($source->getListWords());
         $target->setObject($source->getObject());

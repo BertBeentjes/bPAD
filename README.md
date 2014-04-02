@@ -39,7 +39,7 @@ Status and developments
 
 The first version of bPAD was created in 2010-2013. But as with most projects started from scratch, the code base was created with a slightly different focus than the final product. Creating some issues with the maintaince of the code and some quality issues. So when in 2013 I decided to go open source, a full code rebuild was necessary to get the code up to standards.
 
-This code rebuild is currently underway and progressing according to plan. The current version here on GitHub is basically usable, but not finished. The aim is to have a stable alpha version in Q2 of 2014. This version will be usable for stand alone websites.
+This code rebuild is currently underway and progressing according to plan. The current version here on GitHub is basically usable, but not finished. The aim is to have a stable alpha version in Q3 of 2014. This version will be usable for stand alone websites.
 
 After this initial version, the aim is to create a beta version of the site that also supports content, content block and design sharing between sites. This makes it possible for users to share content blocks or the design of content blocks with other sites, without any installation. This beta release is planned for the end of 2014 or the beginning of 2015.
 

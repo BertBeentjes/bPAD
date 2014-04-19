@@ -496,6 +496,16 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to edit the position instance use instance context
+     * 
+     * @param positioninstance $positioninstance
+     * @return string
+     */
+    public static function editPositionInstanceUseInstanceContext($positioninstance) {
+        return 'position,' . $positioninstance->getContainer()->getContainer()->getContainer()->getId() . '.' . $positioninstance->getContainer()->getNumber() . ',change.positioninstanceuseinstancecontext' . '.' . $positioninstance->getContainer()->getContainer()->getMode()->getId();
+    }
+
+    /**
      * Compose the command to edit the position instance order by
      * 
      * @param positioninstance $positioninstance

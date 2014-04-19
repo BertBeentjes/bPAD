@@ -34,6 +34,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     private $parent; // restrict the instance to descendants of a certain parent object
     private $activeitems; // show active or inactive objects (recycle bin)
     private $fillonload; // fill the instance when loading the page or, in case of search, wait for the user input
+    private $useinstancecontext; // use the instance context, or the default context (e.g. for site search)
     private $orderby; // ordering of the objects to show
     private $groupby; // grouping of the objects to show
     private $objects; // the position instance objects
@@ -61,6 +62,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
         $this->parent = Objects::getObject($attr->parentid);
         $this->activeitems = $attr->activeitems;
         $this->fillonload = $attr->fillonload;
+        $this->useinstancecontext = $attr->useinstancecontext;
         $this->orderby = $attr->orderby;
         $this->groupby = $attr->groupby;
         $this->outdated = $attr->outdated;
@@ -268,7 +270,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     /**
      * Getter for fillonload. 
      * 
-     * @return boolean  if the instance shows on load
+     * @return boolean whether the instance shows on load
      */
     public function getFillOnLoad() {
         return $this->fillonload;
@@ -283,6 +285,28 @@ class PositionInstance extends StoredEntity implements PositionContent {
     public function setFillOnLoad($newbool) {
         if (Store::setPositionInstanceFillOnLoad($this->id, $newbool) && $this->setChanged()) {
             $this->fillonload = $newbool;
+            return true;
+        }
+    }        
+
+    /**
+     * Getter for useinstancecontext. 
+     * 
+     * @return boolean  whether the instance context is used
+     */
+    public function getUseInstanceContext() {
+        return $this->useinstancecontext;
+    }
+    
+    /**
+     * Setter for use instance context
+     * 
+     * @param boolean newbool the new value for useinstancecontext
+     * @return boolean true if success
+     */
+    public function setUseInstanceContext($newbool) {
+        if (Store::setPositionInstanceUseInstanceContext($this->id, $newbool) && $this->setChanged()) {
+            $this->useinstancecontext = $newbool;
             return true;
         }
     }        

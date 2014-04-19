@@ -107,11 +107,16 @@ class PositionFactory extends Factory {
                 }
                 break;
             case PositionContent::POSITIONTYPE_INSTANCE:
-                // get the instance context for the current context group
-                if ($this->getPosition()->getPositionContent()->getActiveItems()) {
-                    $instancecontext = Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), Context::CONTEXT_INSTANCE);
+                // check whether to use the instance context or the default context
+                if ($this->getPosition()->getPositionContent()->getUseInstanceContext()) {
+                    // get the instance context for the current context group
+                    if ($this->getPosition()->getPositionContent()->getActiveItems()) {
+                        $instancecontext = Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), Context::CONTEXT_INSTANCE);
+                    } else {
+                        $instancecontext = Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), Context::CONTEXT_RECYCLEBIN);
+                    }
                 } else {
-                    $instancecontext = Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), Context::CONTEXT_RECYCLEBIN);
+                    $instancecontext = $this->getContext();
                 }
                 // factor the search box, if there
                 $this->factorInstanceTerms();

@@ -56,10 +56,23 @@ class Content extends Respond {
                 $parts = Request::getCommand()->getItemAddressParts();
                 // get the factory for this position
                 $instancecontent = new PositionFactory(Objects::getObject($parts[1])->getVersion(Request::getCommand()->getMode())->getPosition($parts[2]), Request::getCommand()->getContext(), Request::getCommand()->getMode());
-                // get the instance context for the current context group
-                $instancecontext = Contexts::getContextByGroupAndName(Request::getCommand()->getContext()->getContextGroup(), Context::CONTEXT_INSTANCE);
-                // now factor the content
-                $this->getResponse()->setContent(CacheObjects::getChildObjects($instancecontent->factorInstance($instancecontext, Request::getCommand()->getValue()), Request::getCommand()->getMode()));
+                // get the context from the command
+                $instancecontext = Request::getCommand()->getContext();
+                // if the position is an instance, factor it
+                if ($instancecontent->getPosition()->getPositionContent()->getType() == PositionContent::POSITIONTYPE_INSTANCE) {
+                    if ($instancecontent->getPosition()->getPositionContent()->getUseInstanceContext()) {
+                        // if the instance context must be used, get the instance context for the current context group
+                        if ($instancecontent->getPosition()->getPositionContent()->getActiveItems()) {
+                            // show active items in the instance context
+                            $instancecontext = Contexts::getContextByGroupAndName(Request::getCommand()->getContext()->getContextGroup(), Context::CONTEXT_INSTANCE);
+                        } else {
+                            // show inactive items in the recycle bin context
+                            $instancecontext = Contexts::getContextByGroupAndName(Request::getCommand()->getContext()->getContextGroup(), Context::CONTEXT_RECYCLEBIN);
+                        }
+                    }
+                    // now factor the content
+                    $this->getResponse()->setContent(CacheObjects::getChildObjects($instancecontent->factorInstance($instancecontext, Request::getCommand()->getValue()), Request::getCommand()->getMode()));
+                }
                 break;
         }
     }

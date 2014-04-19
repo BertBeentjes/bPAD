@@ -544,6 +544,17 @@ class Execute {
                         Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
                     }
                     break;
+                case 'positioninstanceuseinstancecontext':
+                    if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_INSTANCE) {
+                        $instance = $position->getPositionContent();
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($instance->getUseInstanceContext());
+                        // set the new value
+                        $instance->setUseInstanceContext(!$instance->getUseInstanceContext());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
                 case 'positioninstanceorderby':
                     if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_INSTANCE) {
                         $instance = $position->getPositionContent();

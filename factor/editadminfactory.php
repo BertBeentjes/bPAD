@@ -587,6 +587,8 @@ class EditAdminFactory extends AdminFactory {
         $section .= $this->factorCheckBox($baseid . '_activeitems', CommandFactory::editPositionInstanceActiveItems($instance), $instance->getActiveItems(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_ACTIVE_ITEMS));
         // fillonload
         $section .= $this->factorCheckBox($baseid . '_fillonload', CommandFactory::editPositionInstanceFillOnLoad($instance), $instance->getFillOnLoad(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_FILL_ON_LOAD));
+        // useinstancecontext
+        $section .= $this->factorCheckBox($baseid . '_useinstancecontext', CommandFactory::editPositionInstanceUseInstanceContext($instance), $instance->getUseInstanceContext(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_USE_INSTANCE_CONTEXT));
         // order by
         $orderby = Templates::getTemplateOrderFieldsByTemplate($instance->getTemplate());
         $section .= $this->factorListBox($baseid . '_orderby', CommandFactory::editPositionInstanceOrderBy($instance), $orderby, $instance->getOrderBy(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_ORDER_BY));

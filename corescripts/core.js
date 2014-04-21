@@ -441,48 +441,63 @@ function addEvents(divid) {
             $(this).carousel();
         }
     });
-    // show markup for menu-items that are active
-    $('[data-bpad-activate]').each(function(i) {
-        // the activate condition
-        var bpadactivate = this.getAttribute('data-bpad-activate');
-        // the attribute to set
-        var bpadattribute = this.getAttribute('data-bpad-attribute');
-        // the value for the attribute
-        var bpadvalue = this.getAttribute('data-bpad-value');
-        // get the id of the object
-        var bpaditemid = this.getAttribute('data-bpad-itemid');
-        // if so, set the active value
-        if (bpadactivate == 'object' && $('[data-bpad-objectid="' + bpaditemid + '"]').length) {
-            if (this.getAttribute(bpadattribute) != bpadvalue + '_active' && this.getAttribute(bpadattribute) != bpadvalue + '_active.png') {
-                if (bpadattribute == 'class') {
-                    this.className = bpadvalue + ' active';
-                } else {
-                    if (bpadattribute == 'src') {
-                        this.src = bpadvalue + '_active.png';
+    // show markup for menu-items that are active, but only when there are no deeplinks
+    if (countDeepLinks() == 0) {
+        $('[data-bpad-activate]').each(function(i) {
+            // the activate condition
+            var bpadactivate = this.getAttribute('data-bpad-activate');
+            // the attribute to set
+            var bpadattribute = this.getAttribute('data-bpad-attribute');
+            // the value for the attribute
+            var bpadvalue = this.getAttribute('data-bpad-value');
+            // get the id of the object
+            var bpaditemid = this.getAttribute('data-bpad-itemid');
+            // if so, set the active value
+            if (bpadactivate == 'object' && $('[data-bpad-objectid="' + bpaditemid + '"]').length) {
+                if (this.getAttribute(bpadattribute) != bpadvalue + '_active' && this.getAttribute(bpadattribute) != bpadvalue + '_active.png') {
+                    if (bpadattribute == 'class') {
+                        this.className = bpadvalue + ' active';
                     } else {
-                        this.setAttribute(bpadattribute, bpadvalue + '_active');
+                        if (bpadattribute == 'src') {
+                            this.src = bpadvalue + '_active.png';
+                        } else {
+                            this.setAttribute(bpadattribute, bpadvalue + '_active');
+                        }
+                    }
+                }
+            } else {
+                // if not, set the default value
+                if (this.getAttribute(bpadattribute) != bpadvalue && this.getAttribute(bpadattribute) != bpadvalue + '.png') {
+                    if (bpadattribute == 'class') {
+                        this.className = bpadvalue;
+                    } else {
+                        if (bpadattribute == 'src') {
+                            this.src = bpadvalue + '.png';
+                        } else {
+                            this.setAttribute(bpadattribute, bpadvalue);
+                        }
                     }
                 }
             }
-        } else {
-            // if not, set the default value
-            if (this.getAttribute(bpadattribute) != bpadvalue && this.getAttribute(bpadattribute) != bpadvalue + '.png') {
-                if (bpadattribute == 'class') {
-                    this.className = bpadvalue;
-                } else {
-                    if (bpadattribute == 'src') {
-                        this.src = bpadvalue + '.png';
-                    } else {
-                        this.setAttribute(bpadattribute, bpadvalue);
-                    }
-                }
-            }
-        }
-    });
+        });
+    }
     // check whether analytics should be updated
     checkAnalytics();
     // start a lazy load sequence
     lazyEvent();
+}
+
+/**
+ * count the number of deep links active
+ */
+function countDeepLinks(selector) {
+    selector = selector || "";
+    // count the number of deeplinks active
+    var deeplinks = 0;
+    $(selector + ' [data-bpad-deep-link]').each(function(i) {
+        deeplinks++;
+    });
+    return deeplinks;
 }
 
 /**
@@ -563,22 +578,32 @@ function checkCommand(thiscommand, thisvalue) {
     this.newcommand = thiscommand;
     this.replace = false;
     // if it's a content.get command, check what content to get
-    if (this.parsedcommand.commandgroup == 'content' && this.parsedcommand.commandmember == 'get') {
+    if (this.parsedcommand.commandgroup == 'content' && (this.parsedcommand.commandmember == 'get' || this.parsedcommand.commandmember == 'refresh')) {
         var length = this.parsedcommand.itemaddressparts.length;
         var part;
         var partparts;
+        var deeplinks;
         this.value = settings.SITE_ROOT_OBJECT;
         for (var i = 0; i < length; i++) {
             part = this.parsedcommand.itemaddressparts[i];
             partparts = part.split(".");
             // if the requested container object exists
             if ($('#P' + partparts[0]).length) {
-                // the starting point can be the child object
-                this.value = partparts[1];
-                // the container can be the container
-                this.container = 'P' + partparts[0];
-                // maybe this container has the wrong content
-                this.newitemaddress = part;
+                deeplinks = countDeepLinks('#P' + partparts[0]);
+                if (deeplinks == 0 || i == 0) {
+                    // the starting point can be the child object
+                    this.value = partparts[1];
+                    // the container can be the container
+                    this.container = 'P' + partparts[0];
+                    // check whether the container contains the right content, if so, and the content
+                    // isn't deep linked (incomplete) and the request is not a refresh
+                    if ($('#P' + partparts[2]).length && deeplinks == 0 && !this.parsedcommand.commandmember == 'refresh') {
+                        // do nothing here, the content is already loaded
+                    } else {
+                        // load the correct content
+                        this.newitemaddress = part;
+                    }
+                }
             } else {
                 // there is no container yet, so add this content to the container to be loaded
                 if (this.newitemaddress.length) {
@@ -674,7 +699,7 @@ function checkCommand(thiscommand, thisvalue) {
     if (this.parsedcommand.commandgroup == 'change' && (this.parsedcommand.commandmember == 'publishobject' || this.parsedcommand.commandmember == 'cancelobject')) {
         hideAdminContainer('EP' + this.parsedcommand.itemaddress);
     }
-    // if it's a change admin.cancelobject, close the edit panel
+    // if it's a change admin.keepobject, close the edit panel
     if (this.parsedcommand.commandgroup == 'change' && this.parsedcommand.commandmember == 'keepobject') {
         hideAdminContainer('EP' + this.parsedcommand.itemaddress);
         this.value = this.parsedcommand.itemaddress;

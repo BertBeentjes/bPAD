@@ -377,7 +377,7 @@ class ContentItemFactory extends Factory {
                                     if (Authorization::getObjectPermission($object, Authorization::OBJECT_VIEW)) {
                                         // create the reference to the object
                                         $thisreplacement = str_replace(Terms::POSITION_REFERRAL, CommandFactory::getObject($object, $this->getMode(), $this->getContext()), $replacement);
-                                        $thisreplacement = str_replace(Terms::POSITION_REFERRAL_URL, $object->getBaseSEOURL($this->getMode()), $thisreplacement);
+                                        $thisreplacement = str_replace(Terms::POSITION_REFERRAL_URL, $object->getSEOURL($this->getMode()), $thisreplacement);
                                         $line = str_replace("[" . $objectid . "|", $thisreplacement, $line);
                                     } else {
                                         $line = str_replace("[" . $objectid . "|", "", $line);

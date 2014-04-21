@@ -43,6 +43,28 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to get this object deep linked from the frontend, this command
+     * is used to load the complete tree of content leading to this object. 
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function getObjectDeepLink($object, $mode, $context) {
+        $address = $object->getAddress($mode);
+        // deep links are only allowed when instances are allowed and the object isn't addressable by itself and the parent of the object has a pn layout
+        if ($object->getTemplate()->getInstanceAllowed() && $object->getVersion($mode)->getObjectParent()->getVersion($mode)->getLayout()->isPNType() && !$object->isAddressable($mode)) {
+            $deepaddress = $object->getDeepAddress($mode);
+            if ($address > '') {
+                $address .= '/';
+            }
+            $address .= $deepaddress;
+        } 
+        return 'object,' . $address . ',content.get.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
      * Compose the command to load a specific object, used for refreshing an object
      * after changes have been made.
      * 
@@ -68,7 +90,7 @@ class CommandFactory {
         if (isset($parent)) {
             $parentid = $parent->getId();
         }
-        return 'object,' . $parentpositionid . '.' . $parentrootid . '.' . $parentid . '.' . Helper::getURLSafeString($object->getName()) . ',content.get.' . $mode->getId() . '.' . $context->getId();
+        return 'object,' . $parentpositionid . '.' . $parentrootid . '.' . $parentid . '.' . Helper::getURLSafeString($object->getName()) . ',content.refresh.' . $mode->getId() . '.' . $context->getId();
     }
 
     /**

@@ -297,6 +297,15 @@ Class Validator {
     }
 
     /**
+     * Check whether a string is a positive or negative number
+     * 
+     * @param string $str
+     */
+    public static function isNumber($str) {
+        return preg_match('/^[\-]{0,1}[0-9]+$/', $str);
+    }
+
+    /**
      * Check whether a string consists of numbers-numbers
      * 
      * @param string $str
@@ -350,7 +359,7 @@ Class Validator {
     }
 
     /**
-     * Check whether a string contains a url, containing only letters, numbers, . and /
+     * Check whether a string contains a url, containing only letters, numbers, . and / and -
      * 
      * @param string $str
      */

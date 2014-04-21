@@ -349,8 +349,13 @@ class EditAdminFactory extends AdminFactory {
     private function factorObjectHeader($object, $baseid) {
         $section = '';
         $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editObjectName($object), $object->getName(), Helper::getLang(AdminLabels::ADMIN_OBJECT_NAME));
+        // show the link for addressable objects
         if ($object->isAddressable($this->getMode())) {
             $section .= $this->factorTextInput($baseid . '_link', '', Terms::object_internal_link($object), Helper::getLang(AdminLabels::ADMIN_OBJECT_INTERNAL_LINK), 'disabled');
+        }
+        // show a deep link for instanciable objects
+        if ($object->getTemplate()->getInstanceAllowed() && !$object->isAddressable($this->getMode())) {
+            $section .= $this->factorTextInput($baseid . '_deeplink', '', $object->getDeepLink($this->getMode()), Helper::getLang(AdminLabels::ADMIN_OBJECT_DEEP_LINK), 'disabled');
         }
         return $section;
     }

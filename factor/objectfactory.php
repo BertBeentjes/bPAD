@@ -222,6 +222,19 @@ class ObjectFactory extends Factory {
         if ($this->hasTerm(Terms::OBJECT_BREADCRUMBS)) {
             $this->replaceTerm(Terms::OBJECT_BREADCRUMBS, $this->factorBreadCrumbs());
         }
+        if ($this->hasTerm(Terms::OBJECT_PARENT_SEO_URL)) {
+            $this->replaceTerm(Terms::OBJECT_PARENT_SEO_URL, $this->getObject()->getVersion($this->getMode())->getObjectParent()->getSEOURL($this->getMode()));
+        }
+        if ($this->hasTerm(Terms::OBJECT_SEO_URL)) {
+            $this->replaceTerm(Terms::OBJECT_SEO_URL, $this->getObject()->getSEOURL($this->getMode()));
+        }
+        if ($this->hasTerm(Terms::OBJECT_DEEP_LINK)) {
+            $this->replaceTerm(Terms::OBJECT_DEEP_LINK, $this->getObject()->getDeepLink($this->getMode()));
+        }
+        if ($this->hasTerm(Terms::OBJECT_DEEP_LINK_COMMAND)) {
+            $context = Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), context::CONTEXT_DEFAULT);
+            $this->replaceTerm(Terms::OBJECT_DEEP_LINK_COMMAND, CommandFactory::getObjectDeepLink($this->getObject(), $this->getMode(), $context));
+        }
         $number = 1;
         while ($this->hasTerm(Terms::OBJECT_UID)) {
             $this->replaceTermOnce(Terms::OBJECT_UID, 'UO' . $this->getObject()->getId() . '_' . $number);
@@ -246,9 +259,32 @@ class ObjectFactory extends Factory {
         // If the layout is of the #pn# type (has an undefined number of positions), 
         // if the object has an argument, the position(s) to show depend on the value of the argument
         if ($this->getObject()->getVersion($this->getMode())->getLayout()->isPNType()) {
+            // pn types aren't cacheable because of deep linking
+            $this->cacheable = false;
             if ($this->getObject()->getVersion($this->getMode())->getArgument()->isDefault()) {
-                // explode #pn#
-                $this->explodePN();
+                $objectfound = false;
+                // check for a deep linked object id
+                if (Request::getURL()->checkDeepLink($this->getObject(), $this->getMode())) {
+                    $object = Request::getURL()->getDeepLinkObject($this->getObject(), $this->getMode());
+                    $position = $object->getVersion($this->getMode())->getPositionParent();
+                    // if the position is part of the current object
+                    if ($position->getContainer()->getContainer()->getId() == $this->getObject()->getId()) {
+                        // if the object is instanciable and not addressable it can be deep linked
+                        if (!$object->isAddressable($this->getMode()) && $object->getTemplate()->getInstanceAllowed()) {
+                            $showposition = $position->getNumber();
+                            // the deep linked object has been found,
+                            // empty the url
+                            Request::getURL()->removeURLParts();
+                            $objectfound = true;
+                        }
+                    }
+                }
+                if ($objectfound) {
+                    $this->replacePNDeepLink($showposition, $object->getId()); // show the position found in a deep link
+                } else {
+                    // explode #pn#
+                    $this->explodePN(); // show all positions
+                }
             } else {
                 // the content of this object depends on the argument (effectively: the requested url), this object can't be cached
                 $this->cacheable = false;
@@ -272,9 +308,9 @@ class ObjectFactory extends Factory {
                                     $objectfound = true;
                                 }
                             }
-                            if (count($showobjectparts) == 2) {
+                            if (count($showobjectparts) == 3) {
                                 // only check the position id, the name may have changed
-                                if ($position->getId() == $showobjectparts[0]) {
+                                if ($position->getId() == $showobjectparts[1]) {
                                     $showposition = $position->getNumber();
                                     $objectfound = true;
                                 }
@@ -360,9 +396,23 @@ class ObjectFactory extends Factory {
     /**
      * replace the #pn# code by the required position
      * 
+     * @param int $number the position number
      */
     private function replacePN($number) {
         $this->replaceTerm(Terms::OBJECT_PN, Terms::object_p($number));
+    }
+
+    /**
+     * replace the #pn# code by the required position in a deep link
+     * 
+     * @param int $number the position number
+     * @param int $objectid the object to deep link to
+     */
+    private function replacePNDeepLink($number, $objectid) {
+        $deeplinkstructure = Structures::getStructureByName(LSSNames::STRUCTURE_DEEP_LINK)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $deeplink = str_replace(Terms::ADMIN_CONTENT, Terms::object_p($number), $deeplinkstructure);
+        $deeplink = str_replace(Terms::ADMIN_OBJECT_ID, $objectid, $deeplink);
+        $this->replaceTerm(Terms::OBJECT_PN, $deeplink);
     }
 
     /**
@@ -419,13 +469,15 @@ class ObjectFactory extends Factory {
         $breadcrumbseparatorstructure = Structures::getStructureByName(LSSNames::STRUCTURE_BREADCRUMB_SEPARATOR)->getVersion($this->getMode(), $this->getContext())->getBody();
         $breadcrumbs = '';
         foreach ($parents as $parent) {
-            if ($breadcrumbs > '') {
-                $breadcrumbs .= $breadcrumbseparatorstructure;
+            if (!$parent->isSiteRoot()) {
+                if ($breadcrumbs > '') {
+                    $breadcrumbs .= $breadcrumbseparatorstructure;
+                }
+                $breadcrumb = str_replace(Terms::POSITION_CONTENT, $parent->getName(), $breadcrumbstructure);
+                $breadcrumb = str_replace(Terms::POSITION_REFERRAL, CommandFactory::getObject($parent, $this->getMode(), Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), Context::CONTEXT_DEFAULT)), $breadcrumb);
+                $breadcrumb = str_replace(Terms::POSITION_REFERRAL_URL, $parent->getBaseSEOURL($this->getMode()), $breadcrumb);
+                $breadcrumbs .= $breadcrumb;
             }
-            $breadcrumb = str_replace(Terms::POSITION_CONTENT, $parent->getName(), $breadcrumbstructure);
-            $breadcrumb = str_replace(Terms::POSITION_REFERRAL, CommandFactory::getObject($parent, $this->getMode(), $this->getContext()), $breadcrumb);
-            $breadcrumb = str_replace(Terms::POSITION_REFERRAL_URL, $parent->getBaseSEOURL($this->getMode()), $breadcrumb);
-            $breadcrumbs .= $breadcrumb;
         }
         return $breadcrumbs;
     }
@@ -594,4 +646,5 @@ class ObjectFactory extends Factory {
     }
 
 }
+
 ?>

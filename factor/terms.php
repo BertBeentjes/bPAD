@@ -65,6 +65,10 @@ class Terms {
     const OBJECT_CHANGE_DATE = '#changedate#'; // the change date of this object
     const OBJECT_ROOT_CHANGE_DATE = '#rootchangedate#'; // the change date of the root object
     const OBJECT_ARGUMENT_NAME = '#argumentname#'; // the name of the argument used in this template
+    const OBJECT_SEO_URL = '#seourl#'; // the seo friendly url of this object
+    const OBJECT_PARENT_SEO_URL = '#parentseourl#'; // the seo friendly url of the direct parent of this object, used by addressable objects to create a url one level up
+    const OBJECT_DEEP_LINK = '#deeplink#'; // the deep link to this object (only for instanciable objects)
+    const OBJECT_DEEP_LINK_COMMAND = '#deeplinkcommand#'; // the ajax command for deep linking to this object
     const CLASS_SUFFIX = '#c#'; // the suffix that defines the css class to use for the current context
     const POSITION_UID = '#uid#'; // insert a unique id here, can be used multiple times in one position, for multiple unique id's
     const POSITION_MODE_ID = '#modeid#'; // the id of the current mode

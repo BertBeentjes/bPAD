@@ -284,9 +284,6 @@ class PositionFactory extends Factory {
         if ($this->hasTerm(Terms::POSITION_PARENT_ROOT_OBJECT_ID)) {
             $this->replaceTerm(Terms::POSITION_PARENT_ROOT_OBJECT_ID, $this->getPosition()->getContainer()->getObjectTemplateRootObject()->getVersion($this->getMode())->getObjectParent()->getVersion($this->getMode())->getObjectTemplateRootObject()->getId());
         }
-        if ($this->hasTerm(Terms::POSITION_PARENT_SEO_URL)) {
-            $this->replaceTerm(Terms::POSITION_PARENT_SEO_URL, $this->getContainerObject()->getVersion($this->getMode())->getObjectParent()->getSEOURL($this->getMode()));
-        }
         if ($this->hasTerm(Terms::POSITION_ROOT_CHANGE_DATE)) {
             $this->replaceTerm(Terms::POSITION_ROOT_CHANGE_DATE, $this->getContainerObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getChangeDate()->format(Helper::getDateTimeFormat()));
         }
@@ -301,6 +298,9 @@ class PositionFactory extends Factory {
         }
         if ($this->hasTerm(Terms::POSITION_ROOT_OBJECT_NAME)) {
             $this->replaceTerm(Terms::POSITION_ROOT_OBJECT_NAME, $this->getContainerObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getName());
+        }
+        if ($this->hasTerm(Terms::POSITION_PARENT_SEO_URL)) {
+            $this->replaceTerm(Terms::POSITION_PARENT_SEO_URL, $this->getContainerObject()->getVersion($this->getMode())->getObjectParent()->getSEOURL($this->getMode()));
         }
         if ($this->hasTerm(Terms::POSITION_SEO_URL)) {
             $this->replaceTerm(Terms::POSITION_SEO_URL, $this->getContainerObject()->getSEOURL($this->getMode()));

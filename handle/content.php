@@ -48,6 +48,7 @@ class Content extends Respond {
                 $this->getResponse()->setContent(CacheObjects::getCacheObject(Objects::getObject(SysCon::SITE_ROOT_OBJECT), Contexts::getContextByGroupAndName($this->getContextGroup(), Context::CONTEXT_DEFAULT), $this->getMode()));
                 break;
             case 'get':
+            case 'refresh':
             case 'load': 
                 $this->getResponse()->setContent(CacheObjects::getCacheObject(Objects::getObject(Request::getCommand()->getValue()), Request::getCommand()->getContext(), Request::getCommand()->getMode()));
                 break;

@@ -175,6 +175,7 @@ $lang[LSSNames::STRUCTURE_BUTTON_TOGGLE] = 'Buttons';
 $lang[LSSNames::STRUCTURE_EDIT_BUTTON] = 'Edit';
 $lang[LSSNames::STRUCTURE_CONFIG_PANEL] = 'Config panel';
 $lang[LSSNames::STRUCTURE_ADD_PANEL] = 'Add panel';
+$lang[LSSNames::STRUCTURE_DEEP_LINK] = 'Deep link';
 $lang[LSSNames::STRUCTURE_EDIT_PANEL] = 'Edit panel';
 $lang[LSSNames::STRUCTURE_MOVE_BUTTON] = 'Move';
 $lang[LSSNames::STRUCTURE_MOVE_PANEL] = 'Move panel';
@@ -202,6 +203,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_GROUP_ALT] = 'Administrator - button grou
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Name';
 $lang[AdminLabels::ADMIN_OBJECT_INTERNAL_LINK] = 'Link to this item';
+$lang[AdminLabels::ADMIN_OBJECT_DEEP_LINK] = 'Deep link to this item';
 $lang[AdminLabels::ADMIN_OBJECT_ACTIVE] = 'Active';
 $lang[AdminLabels::ADMIN_OBJECT_SET] = 'Set';
 $lang[AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT] = 'Layout';

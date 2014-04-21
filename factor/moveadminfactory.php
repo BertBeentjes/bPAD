@@ -43,19 +43,18 @@ class MoveAdminFactory extends AdminFactory {
             if (!$this->getObject()->getTemplate()->isDefault() && !$this->getObject()->getTemplate()->getSearchable() && !$this->getObject()->getIsTemplate() && $this->getObject()->getIsObjectTemplateRoot()) {
                 $objectversion = $this->getObject()->getVersion($this->getMode());
                 // with general permission, show all templates or the ones in the requested set
-                // check for available positions
-                if ($objectversion->hasAvailablePositions()) {
-                    $baseid = 'M' . $this->getObject()->getId() . '_T';
-                    // create the add buttons
-                    $buttons = $this->factorButtonGroupAlt($this->factorMoveButtons($baseid));
-                    // add a cancel button
-                    $buttons .= $this->factorButton($baseid . '_cancel', CommandFactory::moveObjectCancel($this->getObject()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
-                    // create a section
-                    $admin .= $this->factorSection($baseid . '_cancelbutton', $buttons);
-                } else {
-                    Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
-                }
+                $baseid = 'M' . $this->getObject()->getId() . '_T';
+                // create the add buttons
+                $buttons = $this->factorButtonGroupAlt($this->factorMoveButtons($baseid));
+                // add a cancel button
+                $buttons .= $this->factorButton($baseid . '_cancel', CommandFactory::moveObjectCancel($this->getObject()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
+                // create a section
+                $admin .= $this->factorSection($baseid . '_cancelbutton', $buttons);
+            } else {
+                Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
             }
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
         }
         $this->setContent($admin);
     }
@@ -113,7 +112,7 @@ class MoveAdminFactory extends AdminFactory {
     public function getObject() {
         return $this->object;
     }
-    
+
     /**
      * Check whether this is a viable target object, check the parent and check for loops
      * 

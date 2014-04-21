@@ -97,9 +97,10 @@ class Helper {
     
     /**
      * Convert a string to something that is safe to use in a url
-     * spaces to dashes
-     * all that is no alfanumeric character by nothing
-     * double dashes by a single dash
+     * - spaces to dashes
+     * - all that is no alfanumeric character by nothing
+     * - double dashes by a single dash
+     * - leading dashes to nothing
      * 
      * @param string $input
      * @return string
@@ -110,6 +111,7 @@ class Helper {
         $output = preg_replace('/_/', '-', $output);
         $output = preg_replace('/[^a-zA-Z0-9\-]/', '', $output);
         $output = preg_replace('/\-\-+/', '-', $output);
+        $output = preg_replace('/^\-/', '', $output);
         return $output;
     }
     

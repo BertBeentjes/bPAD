@@ -174,6 +174,7 @@ $lang[LSSNames::STRUCTURE_BUTTON_TOGGLE] = 'Knoppen';
 $lang[LSSNames::STRUCTURE_EDIT_BUTTON] = 'Bewerken';
 $lang[LSSNames::STRUCTURE_CONFIG_PANEL] = 'Configuratiepaneel';
 $lang[LSSNames::STRUCTURE_ADD_PANEL] = 'Toevoegpaneel';
+$lang[LSSNames::STRUCTURE_DEEP_LINK] = 'Diepe link';
 $lang[LSSNames::STRUCTURE_EDIT_PANEL] = 'Bewerkenpaneel';
 $lang[LSSNames::STRUCTURE_MOVE_BUTTON] = 'Verplaatsen';
 $lang[LSSNames::STRUCTURE_MOVE_PANEL] = 'Verplaatsenpaneel';
@@ -201,6 +202,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_GROUP_ALT] = 'Beheer - knoppengroep alter
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_OBJECT_INTERNAL_LINK] = 'Link naar dit item';
+$lang[AdminLabels::ADMIN_OBJECT_DEEP_LINK] = 'Diepe link naar dit item';
 $lang[AdminLabels::ADMIN_OBJECT_ACTIVE] = 'Actief';
 $lang[AdminLabels::ADMIN_OBJECT_SET] = 'Set';
 $lang[AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT] = 'Indeling';

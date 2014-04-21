@@ -659,6 +659,16 @@ class Object extends SettedEntity {
         }
         return $address;
     }
+    /**
+     * Get the deep object address, used for deep links
+     * 
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public function getDeepAddress($mode) {
+        return $this->getVersion($mode)->getObjectParent()->getVersion($mode)->getPositionParent()->getId() . '.' . $this->getVersion($mode)->getObjectParent()->getId() . '.' . $this->getVersion($mode)->getPositionParent()->getId() . '.' . Helper::getURLSafeString($this->getVersion($mode)->getObjectTemplateRootObject()->getName());
+    }
 
     /**
      * Get the object address, the address specifies which objects must be selected
@@ -724,6 +734,23 @@ class Object extends SettedEntity {
      */
     public function getSEOURL($mode) {
         return Settings::getSetting(Setting::SITE_ROOTFOLDER)->getValue() . $this->getBaseSEOURL($mode) . '.html';
+    }
+
+    /**
+     * Create the deep link for this object (/siterootfolder/name/name/name/-###/name.html)
+     * this url is used for deep linking to an article, e.g. from social media sites
+     * 
+     * @param mode 
+     * @return string
+     */
+    public function getDeepLink($mode) {
+        // get the seo url
+        $deeplink = $this->getSEOURL($mode);
+        // remove the .html part
+        $deeplink = substr($deeplink, 0, strlen($deeplink) - 5);
+        // add the id and the name
+        $deeplink .= '/-' . $this->getId() . '/' . $this->getURLName() . '.html';
+        return $deeplink;
     }
 
     /**

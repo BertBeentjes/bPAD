@@ -220,7 +220,7 @@ class Execute {
                     // only with manage object authorization
                     if (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE)) {
                         // validate, if this is a template object or there is no inheritance, proceed
-                        if (Validator::isNumeric(Request::getCommand()->getValue()) && ($objectversion->getArgument()->getId() != Argument::DEFAULT_ARGUMENT)) {
+                        if (Validator::isNumber(Request::getCommand()->getValue()) && ($objectversion->getArgument()->getId() != Argument::DEFAULT_ARGUMENT)) {
                             // store the old value in the command
                             Request::getCommand()->setOldValue($objectversion->getArgumentDefault());
                             // set the new value

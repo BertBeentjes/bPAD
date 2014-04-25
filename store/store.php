@@ -3731,7 +3731,7 @@ class Store {
                     } else {
                         $listwordsselection .= ' OR ';
                     }
-                    $listwordsselection .= " positioncontentitems.contentitembody='" . mysql_real_escape_string($listword) . "' ";
+                    $listwordsselection .= " positioncontentitems.contentitembody='" . self::$connection->real_escape_string($listword) . "' ";
                 }
             }
             if ($listwordsselection > '') {
@@ -3769,7 +3769,7 @@ class Store {
                     } else {
                         $searchwordsselection .= ' OR ';
                     }
-                    $searchwordsselection .= " positioncontentitems.contentitembody='" . mysql_real_escape_string($searchword) . "' ";
+                    $searchwordsselection .= " positioncontentitems.contentitembody='" . self::$connection->real_escape_string($searchword) . "' ";
                 }
             }
             if ($searchwordsselection > '') {
@@ -3806,7 +3806,7 @@ class Store {
                     break;
                 default:
                     // it's a list field
-                    $query .= "INNER JOIN positioncontentitems ON matches.objectid=positioncontentitems.fk_rootobject_id INNER JOIN positions ON positioncontentitems.fk_position_id=positions.id INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_mode_id=" . $modeid . " AND positioncontentitems.name = '" . mysql_real_escape_string($orderby) . "' AND positioncontentitems.inputtype='INPUTTYPE_COMBOBOX' ORDER BY positioncontentitems.contentitembody ASC, objectversions.changedate DESC ";
+                    $query .= "INNER JOIN positioncontentitems ON matches.objectid=positioncontentitems.fk_rootobject_id INNER JOIN positions ON positioncontentitems.fk_position_id=positions.id INNER JOIN objectversions ON positions.fk_objectversion_id=objectversions.id WHERE objectversions.fk_mode_id=" . $modeid . " AND positioncontentitems.name = '" . self::$connection->real_escape_string($orderby) . "' AND positioncontentitems.inputtype='INPUTTYPE_COMBOBOX' ORDER BY positioncontentitems.contentitembody ASC, objectversions.changedate DESC ";
                     break;
             }
         }

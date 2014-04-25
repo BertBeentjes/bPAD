@@ -165,15 +165,22 @@ function fetchContent() {
 function doBootStrapping() {
     // optionally, load Google Analytics
     if (settings.hasOwnProperty('GOOGLE_ANALYTICSCODE')) {
-	    if (settings.GOOGLE_ANALYTICSCODE.length > 6) {
-		$.getScript('http://www.google-analytics.com/ga.js');
-		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        if (settings.GOOGLE_ANALYTICSCODE.length > 6) {
+            $.getScript('http://www.google-analytics.com/ga.js');
+            (function(i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function() {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-	    ga('create', settings.GOOGLE_ANALYTICSCODE, 'bertbeentjes.nl');
-	}
+            ga('create', settings.GOOGLE_ANALYTICSCODE, 'bertbeentjes.nl');
+        }
     }
     // initialize the session
     sessionidentifier = $("#bpad_content_root").attr("data-bpad-session-id");
@@ -224,7 +231,7 @@ function checkAnalytics() {
     if (settings.hasOwnProperty('GOOGLE_ANALYTICSCODE')) {
         if (settings.GOOGLE_ANALYTICSCODE.length > 6) {
             var thisurl = window.location.hash;
-            if (thisurl.substring(0,1) == '#') {
+            if (thisurl.substring(0, 1) == '#') {
                 thisurl = thisurl.substring(1);
             }
             if (thisurl != analyticsurl) {
@@ -442,45 +449,44 @@ function addEvents(divid) {
         }
     });
     // show markup for menu-items that are active, but only when there are no deeplinks
-    if (countDeepLinks() == 0) {
-        $('[data-bpad-activate]').each(function(i) {
-            // the activate condition
-            var bpadactivate = this.getAttribute('data-bpad-activate');
-            // the attribute to set
-            var bpadattribute = this.getAttribute('data-bpad-attribute');
-            // the value for the attribute
-            var bpadvalue = this.getAttribute('data-bpad-value');
-            // get the id of the object
-            var bpaditemid = this.getAttribute('data-bpad-itemid');
-            // if so, set the active value
-            if (bpadactivate == 'object' && $('[data-bpad-objectid="' + bpaditemid + '"]').length) {
-                if (this.getAttribute(bpadattribute) != bpadvalue + '_active' && this.getAttribute(bpadattribute) != bpadvalue + '_active.png') {
-                    if (bpadattribute == 'class') {
-                        this.className = bpadvalue + ' active';
+    var countdeeplinks = countDeepLinks();
+    $('[data-bpad-activate]').each(function(i) {
+        // the activate condition
+        var bpadactivate = this.getAttribute('data-bpad-activate');
+        // the attribute to set
+        var bpadattribute = this.getAttribute('data-bpad-attribute');
+        // the value for the attribute
+        var bpadvalue = this.getAttribute('data-bpad-value');
+        // get the id of the object
+        var bpaditemid = this.getAttribute('data-bpad-itemid');
+        // if so, set the active value
+        if (bpadactivate == 'object' && $('[data-bpad-objectid="' + bpaditemid + '"]').length && countdeeplinks == 0) {
+            if (this.getAttribute(bpadattribute) != bpadvalue + '_active' && this.getAttribute(bpadattribute) != bpadvalue + '_active.png') {
+                if (bpadattribute == 'class') {
+                    this.className = bpadvalue + ' active';
+                } else {
+                    if (bpadattribute == 'src') {
+                        this.src = bpadvalue + '_active.png';
                     } else {
-                        if (bpadattribute == 'src') {
-                            this.src = bpadvalue + '_active.png';
-                        } else {
-                            this.setAttribute(bpadattribute, bpadvalue + '_active');
-                        }
-                    }
-                }
-            } else {
-                // if not, set the default value
-                if (this.getAttribute(bpadattribute) != bpadvalue && this.getAttribute(bpadattribute) != bpadvalue + '.png') {
-                    if (bpadattribute == 'class') {
-                        this.className = bpadvalue;
-                    } else {
-                        if (bpadattribute == 'src') {
-                            this.src = bpadvalue + '.png';
-                        } else {
-                            this.setAttribute(bpadattribute, bpadvalue);
-                        }
+                        this.setAttribute(bpadattribute, bpadvalue + '_active');
                     }
                 }
             }
-        });
-    }
+        } else {
+            // if not, set the default value
+            if (this.getAttribute(bpadattribute) != bpadvalue && this.getAttribute(bpadattribute) != bpadvalue + '.png') {
+                if (bpadattribute == 'class') {
+                    this.className = bpadvalue;
+                } else {
+                    if (bpadattribute == 'src') {
+                        this.src = bpadvalue + '.png';
+                    } else {
+                        this.setAttribute(bpadattribute, bpadvalue);
+                    }
+                }
+            }
+        }
+    });
     // check whether analytics should be updated
     checkAnalytics();
     // start a lazy load sequence
@@ -600,9 +606,15 @@ function checkCommand(thiscommand, thisvalue) {
                     if ($('#P' + partparts[2]).length && deeplinks == 0 && !this.parsedcommand.commandmember == 'refresh') {
                         // do nothing here, the content is already loaded
                     } else {
-                        // load the correct content
                         this.newitemaddress = part;
                     }
+                } else {
+                    // the starting point can be the child object
+                    this.value = partparts[1];
+                    // the container can be the container
+                    this.container = 'P' + partparts[0];
+                    // load this item
+                    this.newitemaddress = part;
                 }
             } else {
                 // there is no container yet, so add this content to the container to be loaded

@@ -209,6 +209,10 @@ class PositionFactory extends Factory {
             } else {
                 $objects = $this->getPosition()->getPositionContent()->getObjects();
             }
+            $container = $this->getPosition()->getContainer()->getContainer()->getVersion($this->getMode())->getObjectTemplateRootObject();
+            while (!$container->isSiteRoot() && !$container->getTemplate()->getInstanceAllowed()) {
+                $container = $container->getVersion($this->getMode())->getObjectParent()->getVersion($this->getMode())->getObjectTemplateRootObject();
+            }
             $returnvalue = '';
             $lastgroupvalue = '';
             $instancecontent = '';
@@ -218,8 +222,8 @@ class PositionFactory extends Factory {
                 foreach ($objects as $objectvalues) {
                     $object = $objectvalues['object'];
                     $groupvalue = $objectvalues['groupvalue'];
-                    // check authorization for this object and show it
-                    if ($object->isVisible($this->getMode(), $instancecontext)) {
+                    // check authorization for this object and check that it isn't the container of this instance and show it
+                    if ($object->isVisible($this->getMode(), $instancecontext) && $object->getId()!=$container->getId()) {
                         // create a lazy load scenario for each object, a front end script lazy loads the content with the supplied command
                         $number = $number + 1;
                         // preload the first objects and lazy load the rest

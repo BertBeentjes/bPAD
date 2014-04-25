@@ -75,7 +75,7 @@ class RequestURL {
         $partparts = explode('_', $firstpart);
         if (count($partparts) == 3) {
             $linkobject = Objects::getObject($partparts[0]);
-            if ($linkobject->getId() == $object->getId()) {
+            if ($linkobject->getId() == $object->getId() && !$linkobject->isSiteRoot()) {
                 return true;
             }
         } else {

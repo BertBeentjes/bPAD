@@ -89,7 +89,8 @@ class Terms {
     const POSITION_FILE_EXTENSION = '#extension#'; // the extension of the file in this position
     const POSITION_CONTENT = '#co#'; // the content for this position
     const POSITION_CONTENT_SHORT = '#coshort#'; // the content for this position, maximized to 200 chars, ONLY for contentitems
-    const POSITION_CONTENT_PLAIN = '#coplain#'; // the content for this position, with markup, ONLY for contentitems
+    const POSITION_CONTENT_PLAIN = '#coplain#'; // the content for this position, without markup, ONLY for contentitems
+    const POSITION_CONTENT_HTML = '#cohtml#'; // the content for this position, inserted as html, ONLY for contentitems
     const POSITION_REFERRAL_URL = '#hr#'; // the url to the item for a referral
     const POSITION_REFERRAL = '#re#'; // the code to open an item
     const POSITION_REFERRAL_OBJECT_ID = '#refid#'; // the id of the item a referral is pointing to

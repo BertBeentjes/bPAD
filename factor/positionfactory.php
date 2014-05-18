@@ -89,6 +89,7 @@ class PositionFactory extends Factory {
         // fill in the content
         $positioncontent = '';
         $positionshortcontent = '';
+        $positioncontenthtml = '';
         switch ($this->getPosition()->getPositionContent()->getType()) {
             case PositionContent::POSITIONTYPE_CONTENTITEM:
                 // factor contentitem
@@ -104,6 +105,7 @@ class PositionFactory extends Factory {
                 } else {
                     $positioncontent = $positioncontentitem->getContent();
                     $positionshortcontent = $positioncontentitem->getShortContent();
+                    $positioncontenthtml = Helper::deEscapeHTMLSpecialChars($positioncontentitem->getContentItem()->getBody());
                 }
                 break;
             case PositionContent::POSITIONTYPE_INSTANCE:
@@ -138,6 +140,7 @@ class PositionFactory extends Factory {
         $this->replaceTerm(Terms::POSITION_CONTENT, $positioncontent);
         $this->replaceTerm(Terms::POSITION_CONTENT_SHORT, $positionshortcontent);
         $this->replaceTerm(Terms::POSITION_CONTENT_PLAIN, strip_tags($positioncontent));
+        $this->replaceTerm(Terms::POSITION_CONTENT_HTML, $positioncontenthtml);
         $this->factorClassSuffix($positioncontent);
         // ready!
         return true;

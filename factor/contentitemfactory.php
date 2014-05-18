@@ -187,7 +187,7 @@ class ContentItemFactory extends Factory {
         // in the content
         // TODO: this is a html specific function, maybe this function must be context
         // sensitive, and only be called when the output is html
-        $this->escapeHTMLSpecialChars();
+        $this->setContent(Helper::escapeHTMLSpecialChars($this->getContent()));
         // escape some special bPAD marker characters
         $this->escapeNonMarkers();
         // explode into paragraphs
@@ -314,17 +314,6 @@ class ContentItemFactory extends Factory {
         return $structurebody;
     }
     
-    /**
-     * escape some special html characters, to be used when there is no 
-     * html in the content
-     * 
-     */
-    private function escapeHTMLSpecialChars() {
-        $this->setContent(str_replace("&", "&amp;", $this->getContent()));
-        $this->setContent(str_replace("<", "&lt;", $this->getContent()));
-        $this->setContent(str_replace(">", "&gt;", $this->getContent()));
-    }
-
     /**
      * escape user input that are no markers (double chars)
      * 

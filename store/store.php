@@ -3769,7 +3769,7 @@ class Store {
                     } else {
                         $searchwordsselection .= ' OR ';
                     }
-                    $searchwordsselection .= " positioncontentitems.contentitembody='" . self::$connection->real_escape_string($searchword) . "' ";
+                    $searchwordsselection .= " positioncontentitems.contentitembody like '%" . self::$connection->real_escape_string($searchword) . "%' ";
                 }
             }
             if ($searchwordsselection > '') {

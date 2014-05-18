@@ -425,6 +425,9 @@ class ObjectFactory extends Factory {
             if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_REFERRAL) {
                 $this->cacheable = false;
             }
+            if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_INSTANCE) {
+                $this->cacheable = false;
+            }
             if ($this->hasTerm(Terms::object_p($position->getNumber()))) {
                 // if the position contains an object, check visibility for this object
                 $showposition = true;

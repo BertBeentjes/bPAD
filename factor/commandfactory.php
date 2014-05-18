@@ -630,7 +630,7 @@ class CommandFactory {
      * @return string
      */
     public static function addObjectCancel($object) {
-        return 'object,' . $object->getId() . ',change.canceladd';
+        return 'object,' . $object->getId() . ',change.cancelobject';
     }
 
     /**

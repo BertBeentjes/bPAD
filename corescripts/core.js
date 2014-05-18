@@ -83,10 +83,10 @@ function showError(result) {
 
 function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
     // store the current location of the container on the page
-    var contloc = 0;
-    if ($('#' + container).length) {
-        contloc = $('#' + container).offset().top - $('body').scrollTop();
-    }
+//    var contloc = 0;
+//    if ($('#' + container).length) {
+//        contloc = $('#' + container).offset().top - $('body').scrollTop();
+//    }
     // show the result
     if (replace) {
         // check whether the container to replace is coupled to this content fetch (it may have changed client-side during the roundtrip)
@@ -111,14 +111,20 @@ function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
             addEvents(container);
             // now change the url to match the content
             refreshHash();
-        }
-        // correct the position of the page after loading new content, only correct
-        // if the page moved more than 5 pixels
-        if ($('#' + container).length) {
-            var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
-            if (Math.abs(contloc - newcontloc) > 5) {
-                $('body').scrollTop($('#' + container).offset().top - contloc);
+            // correct the position of the page after loading new content, only correct
+            // if the page moved more than 5 pixels
+//            if ($('#' + container).length) {                
+//                var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
+//                alert ($('#' + container).offset().top + ':' + contloc + ':' + newcontloc);
+//                if (Math.abs(contloc - newcontloc) > 5) {
+//                    $('body').scrollTop($('#' + container).offset().top - contloc);
+//                }
+//            }
+            var margin = 200;
+            if (window.innerHeight < 600) {
+                margin = 120;
             }
+            $('body').scrollTop($('#' + container).offset().top - margin);
         }
     }
 }

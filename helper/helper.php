@@ -132,5 +132,30 @@ class Helper {
         return $stringname;
     }    
 
+        /**
+     * escape some special html characters, to be used when there is no 
+     * html in the content
+     * 
+     */
+    public static function escapeHTMLSpecialChars($content) {
+        $content = str_replace("&", "&amp;", $content);
+        $content = str_replace("<", "&lt;", $content);
+        $content = str_replace(">", "&gt;", $content);
+        return $content;
+    }
+
+    /**
+     * deescape some special html characters, to be used when there should be
+     * html in the content
+     * 
+     */
+    public static function deEscapeHTMLSpecialChars($content) {
+        $content = str_replace("&lt;", "<", $content);
+        $content = str_replace("&gt;", ">", $content);
+        $content = str_replace("&amp;", "&", $content);
+        return $content;
+    }
+
+
 }
 ?>

@@ -263,9 +263,13 @@ class EditAdminFactory extends AdminFactory {
         if (!$object->getNew()) {
             $section .= $this->factorButton($baseid . '_keep', CommandFactory::editObjectKeep($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_KEEP));
         }
-        if ($object->getActive() || $object->getNew()) {
+        if ($object->getActive() && !$object->getNew()) {
             // add a cancel button
             $section .= $this->factorButton($baseid . '_cancel', CommandFactory::editObjectCancel($object, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
+        }
+        if ($object->getNew()) {
+            // add a cancel button
+            $section .= $this->factorButton($baseid . '_cancel', CommandFactory::addObjectCancel($object), Helper::getLang(AdminLabels::ADMIN_BUTTON_CANCEL));
         }
         // 'recycle bin' button
         $section .= $this->factorRecycleBinButton($baseid, $object);

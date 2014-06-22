@@ -416,11 +416,12 @@ class ObjectFactory extends Factory {
     }
 
     /**
-     * show all positions in their numbered positions
+     * show all positions in their numbered positions, 
      * 
      */
     private function showAllPositions() {
         $positions = $this->getObject()->getVersion($this->getMode())->getPositions();
+        $objectsshown = 0; // check the number of objects shown, if too much, lazy load the rest
         foreach ($positions as $position) {
             if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_REFERRAL) {
                 $this->cacheable = false;
@@ -439,8 +440,26 @@ class ObjectFactory extends Factory {
                 }
                 // show the position
                 if ($showposition) {
+                    $lazyload = false;
+                    // if there is an object in this position
+                    if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_OBJECT) {
+                        // if the object is instanciable
+                        $object = $position->getPositionContent()->getObject();
+                        if ($object->getIsTemplateBased()) {
+                            if ($object->getTemplate()->getInstanceAllowed()) {
+                                // count the number of instanciable objects
+                                $objectsshown = $objectsshown + 1;
+                            }
+                        }
+                        // if there are more than x instanciable objects
+                        if ($objectsshown > Settings::getSetting(Setting::CONTENT_PRELOADPNOBJECTS)->getValue()) {
+                            // lazy load the rest
+                            $lazyload = true;
+                        }
+                    }
+                    // show the position with or without the lazy load for instanciable objects
                     $positionfactory = new PositionFactory($position, $this->getContext(), $this->getMode());
-                    $positionfactory->factor();
+                    $positionfactory->factor($lazyload, $objectsshown);
                     $this->replaceTerm(Terms::object_p($position->getNumber()), $positionfactory->getContent());
                 } else {
                     $this->replaceTerm(Terms::object_p($position->getNumber()), '');

@@ -79,9 +79,11 @@ class PositionFactory extends Factory {
     /**
      * factor an object position
      * 
+     * @param $objectlazyload boolean default false
+     * @param $objectlazyloadnr int default 0
      * @return boolean true if success
      */
-    public function factor() {
+    public function factor($objectlazyload = false, $objectlazyloadnr = 0) {
         // start by getting the structure for this position
         $this->setContent($this->getPosition()->getStructure()->getVersion($this->getMode(), $this->getContext())->getBody());
         // check for terms and resolve them
@@ -127,7 +129,14 @@ class PositionFactory extends Factory {
                 break;
             case PositionContent::POSITIONTYPE_OBJECT:
                 // create object placeholder
-                $positioncontent = Terms::object_placeholder($this->getPosition()->getPositionContent()->getObject(), $this->getContext());
+                if ($objectlazyload) {
+                    $lazyloadstructure = Structures::getStructureByName(LSSNames::STRUCTURE_LAZY_LOAD)->getVersion($this->getMode(), $this->getContext())->getBody();
+                    $containerid = $this->getPosition()->getId() . '-' . $objectlazyloadnr;
+                    $positioncontent = str_replace(Terms::POSITION_REFERRAL, CommandFactory::loadObject($this->getPosition()->getPositionContent()->getObject(), $containerid, $this->getMode(), $this->getContext()), $lazyloadstructure);
+                    $positioncontent = str_replace(Terms::POSITION_UID, 'I' . $containerid, $positioncontent);
+                } else {
+                    $positioncontent = Terms::object_placeholder($this->getPosition()->getPositionContent()->getObject(), $this->getContext());
+                }
                 break;
             case PositionContent::POSITIONTYPE_REFERRAL:
                 // factor referral

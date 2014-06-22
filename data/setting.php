@@ -59,6 +59,7 @@ class Setting extends NamedEntity {
     const CONTENT_SHOWLIGHTBOXOBJECTNAME = 402; // show the object name in the frontend lightbox edit window
     const CONTENT_USECONTENTDIVADMINCLASS = 403; // TODO: probably obsolete in new setup, clean up if necessary
     const CONTENT_PRELOADINSTANCES = 404; // the number of instances to preload when showing an instance, the rest is loaded with a lazy load mechanism
+    const CONTENT_PRELOADPNOBJECTS = 405; // the number of objects in a pn to preload when showing an instance, the rest is loaded with a lazy load mechanism
 
     const CONTEXT_DEFAULT = 500; // the default context
     const CONTEXT_DEFAULTMINWIDTH = 501; // the minimum screen width for using the default context

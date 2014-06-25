@@ -300,10 +300,10 @@ class ExecuteObjectAction {
         $target->setArgument($source->getArgument());
         if ($target->getArgument()->isCreate() && !$target->getContainer()->getIsTemplate()) {
             // create a new argument for this version
-            if (!isset($this->argument)) {
-                $this->argument = Arguments::newArgument();
+            if (NULL === $this->getArgument()) {
+                $this->setArgument(Arguments::newArgument());
             }
-            $target->setArgument($this->argument);
+            $target->setArgument($this->getArgument());
         }
         $target->setArgumentDefault($source->getArgumentDefault());
         $target->setInheritLayout($source->getInheritLayout());
@@ -350,10 +350,10 @@ class ExecuteObjectAction {
                 $this->copyPositionReferral($source->getPositionContent(), $targetreferral);
                 if ($targetreferral->getArgument()->isCreate() && !$target->getContainer()->getContainer()->getIsTemplate()) {
                     // create a new argument for this version
-                    if (!isset($this->argument)) {
-                        $this->argument = Arguments::newArgument();
+                    if (NULL === $this->getArgument()) {
+                        $this->setArgument(Arguments::newArgument());
                     }
-                    $targetreferral->setArgument($this->argument);
+                    $targetreferral->setArgument($this->getArgument());
                 }
                 break;
             case PositionContent::POSITIONTYPE_OBJECT:
@@ -369,8 +369,16 @@ class ExecuteObjectAction {
                         // recursive copy the object from the source position object to the target position object
                         // create a new executer
                         $exec = new ExecuteObjectAction();
+                        // if an argument has been created, pass it on to any children for reuse
+                        if (NULL !== $this->getArgument()) {
+                            $exec->setArgument($this->getArgument());
+                        }
                         // copy
                         $exec->copy($source->getPositionContent()->getObject(), $targetpositionobject, $this->addpermissionsfromsource);
+                        // if available, get the argument from the child for later use
+                        if (NULL !== $exec->getArgument()) {
+                            $this->setArgument($exec->getArgument());
+                        }
                         break;
                 }
                 break;
@@ -469,6 +477,24 @@ class ExecuteObjectAction {
      */
     public function setObject($newobject) {
         $this->object = $newobject;
+    }
+
+    /**
+     * The argument this executer is working with when copying objects
+     * 
+     * @return argument
+     */
+    public function getArgument() {
+        return $this->argument;
+    }
+
+    /**
+     * Set the argument for the executer
+     * 
+     * @param argument $newargument
+     */
+    public function setArgument($newargument) {
+        $this->argument = $newargument;
     }
 
     /**

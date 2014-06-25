@@ -94,13 +94,18 @@ class Execute {
                     }
                     break;
                 case 'objectactive':
-                    // store the old value in the command
-                    Request::getCommand()->setOldValue($object->getActive());
-                    // set the new value
-                    if ($object->getActive() == true) {
-                        $object->setActiveRecursive(false);
+                    // template objects can't be deactivated
+                    if (!$object->getIsTemplate()) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($object->getActive());
+                        // set the new value
+                        if ($object->getActive() == true) {
+                            $object->setActiveRecursive(false);
+                        } else {
+                            $object->setActiveRecursiveTemplateBasedChildren(true);
+                        }
                     } else {
-                        $object->setActiveRecursiveTemplateBasedChildren(true);
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
                     }
                     break;
                 case 'objectset':

@@ -40,6 +40,7 @@ class MoveAdminFactory extends AdminFactory {
         $admin = '';
         if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_EDIT)) {
             // only template based root objects that aren't part of a larger structure (template is searchable) are moveable
+            // --> these checks are also done in execute!
             if (!$this->getObject()->getTemplate()->isDefault() && !$this->getObject()->getTemplate()->getSearchable() && !$this->getObject()->getIsTemplate() && $this->getObject()->getIsObjectTemplateRoot()) {
                 $objectversion = $this->getObject()->getVersion($this->getMode());
                 // with general permission, show all templates or the ones in the requested set
@@ -81,6 +82,7 @@ class MoveAdminFactory extends AdminFactory {
                 // 3. the object must not be a template
                 // 4. the object must have a pn type layout
                 // 5. the user must have the permission to edit the object
+                // --> these checks are also done in execute!
                 if (self::checkTargetObject($object, $this->getObject(), $this->getMode()) && !$object->getIsTemplate() && $object->getActive() && $object->getVersion($this->getMode())->getLayout()->isPNType() && (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_EDIT))) {
                     $objectname = Objects::getObject($row->id)->getVersion($this->getMode())->getObjectTemplateRootObject()->getNameForMove($this->getMode());
                     $objects[$objectname] = $object;

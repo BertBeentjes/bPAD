@@ -178,10 +178,15 @@ class EditAdminFactory extends AdminFactory {
                                 $childobject = $position->getPositionContent()->getObject();
                                 // is the object visible
                                 if ($childobject->isVisible($this->getMode(), $this->getContext())) {
-                                    // factor the template add buttons for a normal object                                   
-                                    $addbuttonsection = $this->factorButtonGroupAlt($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'));
-                                    $addbuttonsection = $this->factorSectionCollapsed($baseid . '_SC' . $curnumber, $addbuttonsection, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
-                                    $section .= $addbuttonsection;
+                                    // factor the template add buttons for a normal object  
+                                    $addbuttons = $this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T');
+                                    // if there are buttons, add a section
+                                    if ($addbuttons > '') {
+                                        $addbuttonsection = $this->factorButtonGroupAlt($addbuttons);
+                                        $addbuttonsection = $this->factorSectionCollapsed($baseid . '_SC' . $curnumber, $addbuttonsection, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                                        $section .= $addbuttonsection;
+                                    }
+                                    // add the move/edit/cancel buttons
                                     if ($childobject->getIsObjectTemplateRoot() && !$childobject->getIsTemplate() && !$childobject->getTemplate()->getSearchable()) {
                                         $subitem = '';
                                         $subitem = $childobject->getName();

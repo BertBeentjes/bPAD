@@ -148,12 +148,14 @@ class Execute {
                     $exec->setObject($object);                    
                     $target = Objects::getObject(Request::getCommand()->getValue());
                     // check move conditions (permissions, right type of object, right set)
+                    // both for the object and for the target
                     $mode = Modes::getMode(Mode::EDITMODE);
-                    if (MoveAdminFactory::checkTargetObject($target, $object, $mode) && $object->getTemplate()->getSet()->getId()==$target->getSet()->getId() && !$object->getIsTemplate() && $object->getActive() && $object->getVersion($mode)->getLayout()->isPNType() && (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($object, Authorization::OBJECT_FRONTEND_EDIT))) {
+                    // --> these checks are also done in moveadminfactory!
+                    if (!$object->getTemplate()->isDefault() && !$object->getTemplate()->getSearchable() && !$object->getIsTemplate() && $object->getIsObjectTemplateRoot() && MoveAdminFactory::checkTargetObject($target, $object, $mode) && $object->getTemplate()->getSet()->getId()==$target->getSet()->getId() && !$target->getIsTemplate() && $target->getActive() && $target->getVersion($mode)->getLayout()->isPNType() && (Authorization::getObjectPermission($target, Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($target, Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($target, Authorization::OBJECT_FRONTEND_EDIT))) {
                         // store the command success in the old value
                         Request::getCommand()->setOldValue($exec->moveObject($target, $mode));
                     } else {
-                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
                     }
                     break;
                 case 'moveobjectup':

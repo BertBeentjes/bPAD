@@ -74,7 +74,7 @@ class ConfigTemplateAdminFactory extends ConfigAdminFactory {
         $admin = '';
         // template name
         $sectionheader = '';
-        if ($template->isDefault()) {
+        if ($template->isDefault() || $template->getIsBpadDefined()) {
             $sectionheader .= $this->factorTextInput($baseid . '_name', CommandFactory::editTemplateName($template), $template->getName(), Helper::getLang(AdminLabels::ADMIN_TEMPLATE_NAME), 'disabled');
         } else {
             $sectionheader .= $this->factorTextInput($baseid . '_name', CommandFactory::editTemplateName($template), $template->getName(), Helper::getLang(AdminLabels::ADMIN_TEMPLATE_NAME));

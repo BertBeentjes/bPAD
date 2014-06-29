@@ -33,6 +33,7 @@ class Template extends SettedEntity {
 
     const DEFAULT_TEMPLATE = 1;
 
+    private $isbpaddefined; // true if the template is defined by bpad
     private $deleted; // true if the template has been deleted
     private $structure; // the structure to use in a #pn# layout for the position where this template is used
     private $style; // the style to use in a #pn# layout for the position where this template is used
@@ -79,8 +80,24 @@ class Template extends SettedEntity {
         $this->style = Styles::getStyle($attr->styleid);
         $this->instanceallowed = (bool) $attr->instanceallowed;
         $this->searchable = (bool) $attr->searchable;
+        $this->isbpaddefined = (bool) $attr->isbpaddefined;
         parent::initAttributes($attr);
         return true;
+    }
+
+    /**
+     * setter for the name, check whether the template is bpad defined or not first
+     * 
+     * @param newname the name
+     * @return boolean  if success
+     * @throws exception if the update in the store fails or if the style is bPAD defined
+     */
+    public function setName($newname) {
+        if (!$this->isbpaddefined) {
+            parent::setName($newname);
+            return true;
+        }
+        throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_IS_DEFINED_BY_BPAD) . ' @ ' . __METHOD__);
     }
 
     /**
@@ -182,6 +199,16 @@ class Template extends SettedEntity {
         } else {
             throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
         }
+    }
+
+    /**
+     * is the template defined by bpad or not, no setter, this bool is only
+     * changed through update scripts 
+     * 
+     * @return boolean isbpaddefined or not
+     */
+    public function getIsBpadDefined() {
+        return $this->isbpaddefined;
     }
 
     /**

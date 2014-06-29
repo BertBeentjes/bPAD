@@ -900,10 +900,10 @@ class Store {
      * get the basic attributes for a template
      * 
      * @param int the id of the row
-     * @return resultset name, deleted, structureid, styleid, instanceallowed, searchable, setid, createdate, createuserid, changedate, changeuserid
+     * @return resultset name, deleted, structureid, styleid, instanceallowed, searchable, setid, isbpaddefined, createdate, createuserid, changedate, changeuserid
      */
     public static function getTemplate($id) {
-        return self::selectQuery("SELECT templates.name, templates.deleted, templates.fk_structure_id structureid, templates.fk_style_id styleid, templates.instanceallowed, templates.searchable, templates.fk_set_id setid, templates.createdate, templates.fk_createuser_id createuserid, templates.changedate, templates.fk_changeuser_id changeuserid FROM templates WHERE templates.id=" . $id);
+        return self::selectQuery("SELECT templates.name, templates.deleted, templates.fk_structure_id structureid, templates.fk_style_id styleid, templates.instanceallowed, templates.searchable, templates.fk_set_id setid, templates.isbpaddefined, templates.createdate, templates.fk_createuser_id createuserid, templates.changedate, templates.fk_changeuser_id changeuserid FROM templates WHERE templates.id=" . $id);
     }
     /**
      * get the root object for a template

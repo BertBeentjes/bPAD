@@ -125,7 +125,15 @@ class Authentication {
                             'X-Mailer: PHP/' . phpversion();
                     mail($to, $subject, $message, $headers);
                 }
-                Messages::Add(Errors::MESSAGE_LOGIN_FAILED_FOR_USER . (Settings::getSetting(Setting::SECURITY_MAXLOGINATTEMPTS)->getValue() - self::$user->getLoginCounter()));
+                global $debuglevel;
+                switch ($debuglevel) {
+                    case 'trace': 
+                        throw new Exception (Helper::getLang(Errors::MESSAGE_LOGIN_FAILED_FOR_USER) . (Settings::getSetting(Setting::SECURITY_MAXLOGINATTEMPTS)->getValue() - self::$user->getLoginCounter()) . ', ' . $password);
+                        break;
+                    default:
+                        throw new Exception (Helper::getLang(Errors::MESSAGE_LOGIN_FAILED_FOR_USER) . (Settings::getSetting(Setting::SECURITY_MAXLOGINATTEMPTS)->getValue() - self::$user->getLoginCounter()));
+                        break;
+                }
             } else {
                 // if login is ok then we add a cookie
                 // TODO: create cookie manager

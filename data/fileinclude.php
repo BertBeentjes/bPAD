@@ -27,8 +27,10 @@
  * @since 0.4.0
  */
 class FileInclude extends NamedEntity {
+
+    const DEFAULT_FILE_INCLUDE = 1;
+
     private $mimetype; // the mime type, used to set the correct return type
-    
     private $fileincludeversions = array(); // the versions for this file include
     
     /**
@@ -110,4 +112,3 @@ class FileInclude extends NamedEntity {
     }
 
 }
-?>

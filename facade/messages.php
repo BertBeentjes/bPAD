@@ -52,5 +52,3 @@ class Messages {
         return $messagestring;
     }
 }
-
-?>

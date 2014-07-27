@@ -57,5 +57,3 @@ class Errors {
     const ERROR_ALREADY_EXISTS = 27; // trying to create something that is already there
     
 }
-
-?>

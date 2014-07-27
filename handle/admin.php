@@ -184,15 +184,101 @@ class Admin extends Respond {
                 break;
             case 'configtemplates':
             case 'configtemplate':
-                // create the config panel
-                $configadminfactory = new ConfigTemplateAdminFactory();
-                // initialize the admin factory
-                $configadminfactory->setContext(Request::getCommand()->getContext());
-                $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
-                // factor the config panel
-                $configadminfactory->factor();
-                // get the factored item
-                $this->getResponse()->setContent($configadminfactory->getContent());
+                if (Authorization::getPagePermission(Authorization::TEMPLATE_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigTemplateAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configusers':
+            case 'configuser':
+                if (Authorization::getPagePermission(Authorization::USER_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigUserAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configusergroups':
+            case 'configusergroup':
+                if (Authorization::getPagePermission(Authorization::USER_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigUserGroupAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configroles':
+            case 'configrole':
+                if (Authorization::getPagePermission(Authorization::ROLE_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigRoleAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configsettings':
+            case 'configsetting':
+                if (Authorization::getPagePermission(Authorization::SETTING_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigSettingAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configincludefiles':
+            case 'configincludefile':
+                if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigIncludeFileAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configsnippets':
+            case 'configsnippet':
+                if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigSnippetAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
                 break;
             default:
                 throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_CONTENT) . ': ' . Request::getCommand()->getItem() . ' @ ' . __METHOD__);
@@ -201,5 +287,3 @@ class Admin extends Respond {
     }
 
 }
-
-?>

@@ -36,5 +36,3 @@ class PositionEmpty {
         return PositionContent::POSITIONTYPE_EMPTY;
     }
 }
-
-?>

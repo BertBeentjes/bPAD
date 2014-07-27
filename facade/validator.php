@@ -46,6 +46,102 @@ Class Validator {
     }
 
     /**
+     * validate the user id, valid if a user with this id exists in the store
+     * 
+     * @param userid the id to validate
+     * @return boolean  if valid
+     * @throws exception when store not available
+     */
+    public static function validUser($userid) {
+        if (self::isNumeric($userid)) {
+            if (Store::getUser($userid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * validate the user group id, valid if a user group with this id exists in the store
+     * 
+     * @param usergroupid the id to validate
+     * @return boolean  if valid
+     * @throws exception when store not available
+     */
+    public static function validUserGroup($usergroupid) {
+        if (self::isNumeric($usergroupid)) {
+            if (Store::getUserGroup($usergroupid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * validate the role id, valid if a role with this id exists in the store
+     * 
+     * @param roleid the id to validate
+     * @return boolean  if valid
+     * @throws exception when store not available
+     */
+    public static function validRole($roleid) {
+        if (self::isNumeric($roleid)) {
+            if (Store::getRole($roleid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * validate the setting id, valid if a setting with this id exists in the store
+     * 
+     * @param settingid the id to validate
+     * @return boolean  if valid
+     * @throws exception when store not available
+     */
+    public static function validSetting($settingid) {
+        if (self::isNumeric($settingid)) {
+            if (Store::getSetting($settingid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * validate the includefile id, valid if a includefile with this id exists in the store
+     * 
+     * @param includefileid the id to validate
+     * @return boolean  if valid
+     * @throws exception when store not available
+     */
+    public static function validIncludeFile($includefileid) {
+        if (self::isNumeric($includefileid)) {
+            if (Store::getFileInclude($includefileid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * validate the snippet id, valid if a snippet with this id exists in the store
+     * 
+     * @param snippetid the id to validate
+     * @return boolean  if valid
+     * @throws exception when store not available
+     */
+    public static function validSnippet($snippetid) {
+        if (self::isNumeric($snippetid)) {
+            if (Store::getSnippet($snippetid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
      * validate the template id
      * 
      * @param int templateid the id to validate
@@ -389,5 +485,3 @@ Class Validator {
     }
 
 }
-
-?>

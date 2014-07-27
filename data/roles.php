@@ -28,7 +28,6 @@
  */
 class Roles {
     private static $roles = array();
-    private static $rolesloaded = false;
     
     /**
      * get a role by id, checks whether the role is loaded,
@@ -49,30 +48,12 @@ class Roles {
     }
 
     /**
-     * get a role by id, checks whether the role is loaded,
-     * loads the role if necessary and fills it on demand with
-     * further information
+     * Get all roles
      * 
-     * @return Role[]
+     * @return resultset
      */
     public static function getRoles () {
-        // return all roles
-        if (self::$rolesloaded) {
-            return self::$roles;
-        } else {
-            $roleset = Store::getRoles();
-            while ($row = $roleset->fetchObject()) {
-                if (isset(self::$roles[$row->id])) {
-                    // role has been set already
-                } else {
-                    self::$roles[$row->id] = new Role($row->id);
-                }
-            }
-            self::$rolesloaded = true;
-            return self::$roles;
-        }
+        return Store::getRoles();
     }
-
+    
 }
-
-?>

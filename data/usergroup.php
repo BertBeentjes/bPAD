@@ -27,6 +27,8 @@
  * @since 0.4.0
  */
 class UserGroup extends NamedEntity{
+    
+    const DEFAULT_USERGROUP = 1;
 
     /**
      * Constructor, sets the basic user group attributes
@@ -57,6 +59,59 @@ class UserGroup extends NamedEntity{
         throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTES_NOT_LOADING) . ': ' . $this->id . ' @ ' . __METHOD__);
     }
     
+    /**
+     * Is the user group used somewhere?
+     * 
+     * @return boolean true if used
+     */
+    public function isUsed() {
+        if ($result = Store::getUserGroupUsed($this->getId())) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Is the user group removable?
+     * 
+     * @return boolean true if removable
+     */
+    public function isRemovable() {
+        return !$this->isUsed();
+    }
+    
+    /**
+     * Add a user to the group
+     * 
+     * @param user $user
+     * @return boolean true if added
+     */
+    public function addUser($user) {
+        $usergroups = $user->getUserGroups();
+        if (array_key_exists($this->getId(), $usergroups)) {
+            // the user is already there, can't add twice
+            return false;
+        } else {
+            Store::insertUserUserGroup($user->getId(), $this->getId());
+            return true;
+        }
+    } 
+    
+    /**
+     * Delete a user from the group
+     * 
+     * @param user $user
+     * @return boolean true if deleted
+     */
+    public function deleteUser($user) {
+        $usergroups = $user->getUserGroups();
+        if (array_key_exists($this->getId(), $usergroups)) {
+            Store::deleteUserUserGroup($user->getId(), $this->getId());
+            return true;
+        } else {
+            // the user isn't there, can't be deleted
+            return false;
+        }
+    }    
+        
 }
-
-?>

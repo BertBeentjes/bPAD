@@ -969,5 +969,3 @@ Class ObjectVersion extends StoredEntity {
     }
 
 }
-
-?>

@@ -87,5 +87,3 @@ class AddAdminFactory extends AdminFactory {
     }
 
 }
-
-?>

@@ -45,5 +45,3 @@ interface PositionContent {
     public function getId();
     
 }
-
-?>

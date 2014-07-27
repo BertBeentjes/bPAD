@@ -99,6 +99,30 @@ class ConfigAdminFactory extends AdminFactory {
         if (Authorization::getPagePermission(Authorization::TEMPLATE_MANAGE)) {
             $section .= $this->factorMenuItem(CommandFactory::configTemplates($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_TEMPLATES));
         }
+        // add user button (check authorization)
+        if (Authorization::getPagePermission(Authorization::USER_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configUsers($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_USERS));
+        }
+        // add user button (check authorization)
+        if (Authorization::getPagePermission(Authorization::USER_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configUserGroups($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_USERGROUPS));
+        }
+        // add role button (check authorization)
+        if (Authorization::getPagePermission(Authorization::ROLE_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configRoles($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_ROLES));
+        }
+        // add setting button (check authorization)
+        if (Authorization::getPagePermission(Authorization::SETTING_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configSettings($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_SETTINGS));
+        }
+        // add include files button (check authorization)
+        if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configIncludeFiles($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_INCLUDE_FILES));
+        }
+        // add snippets button (check authorization)
+        if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configSnippets($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_SNIPPETS));
+        }
         return $section;
     }
 
@@ -147,5 +171,3 @@ class ConfigAdminFactory extends AdminFactory {
     }
 
 }
-
-?>

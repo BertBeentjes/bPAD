@@ -133,6 +133,12 @@ class Required {
             case 'ConfigStyleParamAdminFactory': require ('factor/configstyleparamadminfactory.php'); break;
             case 'ConfigSetAdminFactory': require ('factor/configsetadminfactory.php'); break;
             case 'ConfigTemplateAdminFactory': require ('factor/configtemplateadminfactory.php'); break;
+            case 'ConfigUserAdminFactory': require ('factor/configuseradminfactory.php'); break;
+            case 'ConfigUserGroupAdminFactory': require ('factor/configusergroupadminfactory.php'); break;
+            case 'ConfigRoleAdminFactory': require ('factor/configroleadminfactory.php'); break;
+            case 'ConfigSettingAdminFactory': require ('factor/configsettingadminfactory.php'); break;
+            case 'ConfigIncludeFileAdminFactory': require ('factor/configincludefileadminfactory.php'); break;
+            case 'ConfigSnippetAdminFactory': require ('factor/configsnippetadminfactory.php'); break;
             case 'ContentFactory': require ('factor/contentfactory.php'); break;
             case 'ContentItemFactory': require ('factor/contentitemfactory.php'); break;
             case 'CommandFactory': require ('factor/commandfactory.php'); break;
@@ -187,5 +193,3 @@ class Required {
     }
 
 }
-
-?>

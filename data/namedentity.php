@@ -68,5 +68,3 @@ abstract class NamedEntity extends StoredEntity {
     }
 
 }
-
-?>

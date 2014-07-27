@@ -37,5 +37,3 @@ class Login extends Respond {
         Authentication::login(Request::getCommand()->getItemAddress(), Request::getCommand()->getValue());
     }
 }
-
-?>

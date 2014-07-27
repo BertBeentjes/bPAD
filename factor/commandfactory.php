@@ -789,6 +789,150 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to load the users configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configUsers($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configusers' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the individual user configurator in the config detail panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configUser($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configuser' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the user groups configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configUserGroups($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configusergroups' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the individual user group configurator in the config detail panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configUserGroup($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configusergroup' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the roles configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configRoles($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configroles' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the individual role configurator in the config detail panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configRole($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configrole' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the settings configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configSettings($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configsettings' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the indivudual setting configurator in the config detail panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configSetting($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configsetting' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the include files configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configIncludeFiles($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configincludefiles' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the indivudual include file configurator in the config detail panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configIncludeFile($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configincludefile' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the snippets configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configSnippets($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configsnippets' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the individual snippet configurator in the config detail panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configSnippet($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configsnippet' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
      * Compose the command to load the individual template configurator in the config detail panel
      * 
      * @param object $object
@@ -1284,6 +1428,120 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to edit the user name
+     * 
+     * @param user $user
+     * @return string
+     */
+    public static function editUserName($user) {
+        return 'user,' . $user->getId() . ',change.username';
+    }
+
+    /**
+     * Compose the command to edit the user password
+     * 
+     * @param user $user
+     * @return string
+     */
+    public static function editUserPassword($user) {
+        return 'user,' . $user->getId() . ',change.userpassword';
+    }
+
+    /**
+     * Compose the command to edit the user first name
+     * 
+     * @param user $user
+     * @return string
+     */
+    public static function editUserFirstName($user) {
+        return 'user,' . $user->getId() . ',change.userfirstname';
+    }
+
+    /**
+     * Compose the command to edit the user last name
+     * 
+     * @param user $user
+     * @return string
+     */
+    public static function editUserLastName($user) {
+        return 'user,' . $user->getId() . ',change.userlastname';
+    }
+
+    /**
+     * Compose the command to edit the user user group
+     * 
+     * @param user $user
+     * @param usergroup $usergroup
+     * @return string
+     */
+    public static function editUserUserGroup($user, $usergroup) {
+        return 'user,' . $user->getId() . '.' . $usergroup->getId() . ',change.userusergroup';
+    }
+
+    /**
+     * Compose the command to reset the user login counter
+     * 
+     * @param object $object
+     * @param user $user
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function editUserLoginCounter($object, $user, $mode, $context) {
+        return 'user,' . $user->getId() . ',change.userlogincounter' . '|' . self::configUser($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to edit the user group name
+     * 
+     * @param usergroup $usergroup
+     * @return string
+     */
+    public static function editUserGroupName($usergroup) {
+        return 'usergroup,' . $usergroup->getId() . ',change.usergroupname';
+    }
+
+    /**
+     * Compose the command to edit the role name
+     * 
+     * @param role $role
+     * @return string
+     */
+    public static function editRoleName($role) {
+        return 'role,' . $role->getId() . ',change.rolename';
+    }
+
+    /**
+     * Compose the command to edit the setting name
+     * 
+     * @param setting $setting
+     * @return string
+     */
+    public static function editSettingName($setting) {
+        return 'setting,' . $setting->getId() . ',change.settingname';
+    }
+
+    /**
+     * Compose the command to edit the includefile name
+     * 
+     * @param includefile $includefile
+     * @return string
+     */
+    public static function editIncludeFileName($includefile) {
+        return 'includefile,' . $includefile->getId() . ',change.includefilename';
+    }
+
+    /**
+     * Compose the command to edit the snippet name
+     * 
+     * @param snippet $snippet
+     * @return string
+     */
+    public static function editSnippetName($snippet) {
+        return 'snippet,' . $snippet->getId() . ',change.snippetname';
+    }
+
+    /**
      * Compose the command to remove a set 
      * 
      * @param object $object
@@ -1297,6 +1555,84 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to remove a user 
+     * 
+     * @param object $object
+     * @param user $user
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeUser($object, $user, $mode, $context) {
+        return 'user,' . $user->getId() . ',change.userremove' . '|' . self::configUsers($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to remove a user group
+     * 
+     * @param object $object
+     * @param usergroup $usergroup
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeUserGroup($object, $usergroup, $mode, $context) {
+        return 'usergroup,' . $usergroup->getId() . ',change.usergroupremove' . '|' . self::configUserGroups($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to remove a role 
+     * 
+     * @param object $object
+     * @param role $role
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeRole($object, $role, $mode, $context) {
+        return 'role,' . $role->getId() . ',change.roleremove' . '|' . self::configRoles($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to remove a setting 
+     * 
+     * @param object $object
+     * @param setting $setting
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeSetting($object, $setting, $mode, $context) {
+        return 'setting,' . $setting->getId() . ',change.settingremove' . '|' . self::configSettings($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to remove a includefile 
+     * 
+     * @param object $object
+     * @param includefile $includefile
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeIncludeFile($object, $includefile, $mode, $context) {
+        return 'includefile,' . $includefile->getId() . ',change.includefileremove' . '|' . self::configIncludeFiles($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to remove a snippet 
+     * 
+     * @param object $object
+     * @param snippet $snippet
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeSnippet($object, $snippet, $mode, $context) {
+        return 'snippet,' . $snippet->getId() . ',change.snippetremove' . '|' . self::configSnippets($object, $mode, $context);
+    }
+
+    /**
      * Compose the command to add a set 
      * 
      * @param object $object
@@ -1306,6 +1642,78 @@ class CommandFactory {
      */
     public static function addSet($object, $mode, $context) {
         return 'set,' . Set::DEFAULT_SET . ',change.setadd' . '|' . self::configSets($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add a user 
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addUser($object, $mode, $context) {
+        return 'user,' . User::DEFAULT_USER . ',change.useradd' . '|' . self::configUsers($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add a user group
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addUserGroup($object, $mode, $context) {
+        return 'usergroup,' . UserGroup::DEFAULT_USERGROUP . ',change.usergroiupadd' . '|' . self::configUserGroups($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add a role 
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addRole($object, $mode, $context) {
+        return 'role,' . Role::DEFAULT_ROLE . ',change.roleadd' . '|' . self::configRoles($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add a setting 
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addSetting($object, $mode, $context) {
+        return 'setting,' . Setting::DEFAULT_SETTING . ',change.settingadd' . '|' . self::configSettings($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add a included file 
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addIncludeFile($object, $mode, $context) {
+        return 'includefile,' . FileInclude::DEFAULT_FILE_INCLUDE . ',change.includefileadd' . '|' . self::configIncludeFiles($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add a snippet 
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addSnippet($object, $mode, $context) {
+        return 'snippet,' . Snippet::DEFAULT_SNIPPET . ',change.snippetadd' . '|' . self::configSnippets($object, $mode, $context);
     }
 
     /**
@@ -1469,5 +1877,3 @@ class CommandFactory {
     }
 
 }
-
-?>

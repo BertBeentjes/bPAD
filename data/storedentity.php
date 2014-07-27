@@ -148,5 +148,3 @@ abstract class StoredEntity {
     }
     
 }
-
-?>

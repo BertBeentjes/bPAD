@@ -270,7 +270,7 @@ class ObjectFactory extends Factory {
                     // if the position is part of the current object
                     if ($position->getContainer()->getContainer()->getId() == $this->getObject()->getId()) {
                         // if the object is instanciable and not addressable it can be deep linked
-                        if (!$object->isAddressable($this->getMode()) && $object->getTemplate()->getInstanceAllowed()) {
+                        if (!$object->isAddressable($this->getMode()) && $object->getTemplate()->getInstanceAllowed() && $object->isVisible($this->getMode(), $this->getContext())) {
                             $showposition = $position->getNumber();
                             // the deep linked object has been found,
                             // empty the url
@@ -299,11 +299,12 @@ class ObjectFactory extends Factory {
                     foreach ($positions as $position) {
                         // if the position contains an object
                         if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_OBJECT) {
+                            $object = $position->getPositionContent()->getObject();
                             // and the object name is equal to the name of the object to show
                             $showobjectparts = explode('_', $showobject);
                             if (count($showobjectparts) == 1) {
                                 // check the name
-                                if (Helper::getURLSafeString($position->getPositionContent()->getObject()->getName()) == $showobject) {
+                                if (Helper::getURLSafeString($object->getName()) == $showobject && $object->isVisible($this->getMode(), $this->getContext())) {
                                     $showposition = $position->getNumber();
                                     $objectfound = true;
                                 }
@@ -668,5 +669,3 @@ class ObjectFactory extends Factory {
     }
 
 }
-
-?>

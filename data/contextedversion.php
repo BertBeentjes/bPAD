@@ -181,5 +181,3 @@ class ContextedVersion extends StoredEntity {
     }
     
 }
-
-?>

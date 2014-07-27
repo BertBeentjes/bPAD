@@ -81,5 +81,3 @@ class Argument extends NamedEntity {
     }
     
 }
-
-?>

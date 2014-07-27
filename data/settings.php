@@ -44,6 +44,14 @@ class Settings {
             return self::$settings[$id];
         }
     }
-}
 
-?>
+    /**
+     * Get all settings
+     * 
+     * @return resultset
+     */
+    public static function getSettings () {
+        return Store::getSettings();
+    }
+         
+}

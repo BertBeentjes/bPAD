@@ -214,5 +214,3 @@ class StyleParam extends NamedEntity {
     }
 
 }
-
-?>

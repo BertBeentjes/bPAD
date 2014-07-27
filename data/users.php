@@ -61,6 +61,38 @@ class Users {
             }
         }
     }
-}
+    
+    /**
+     * Get all users
+     * 
+     * @return resultset
+     */
+    public static function getUsers () {
+        return Store::getUsers();
+    }
+    
+    /**
+     * Create a new user
+     * 
+     * @return type
+     */
+    public static function newUser() {
+        $userid = Store::insertUser();
+        return true;
+    }
 
-?>
+    /**
+     * remove a user, you can only remove users that aren't used, and you can't remove users defined by bPAD
+     * 
+     * @param user $user
+     * @return type
+     */
+    public static function removeUser($user) {
+        if ($user->isRemovable()) {
+            Store::deleteUser($user->getId());
+            unset(self::$users[$user->getId()]);
+            return true;
+        }
+        return false;
+    }
+}

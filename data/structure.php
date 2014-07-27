@@ -276,5 +276,3 @@ class Structure extends SettedEntity {
     }
 
 }
-
-?>

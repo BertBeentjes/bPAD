@@ -706,5 +706,3 @@ class Permission extends StoredEntity {
     }
 
 }
-
-?>

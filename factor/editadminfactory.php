@@ -125,9 +125,13 @@ class EditAdminFactory extends AdminFactory {
             } else {
                 // if this is a searchable subobject, add delete, move up, move down buttons
                 if ($object->getIsObjectTemplateRoot() && $object->getTemplate()->getSearchable()) {
+                    $subitemname = '';
                     $section .= $this->factorSubItemButtons($baseid, $object);
+                    $subitemname .= $this->factorTextInput($baseid . '_name', CommandFactory::editObjectName($object), $object->getName(), Helper::getLang(AdminLabels::ADMIN_OBJECT_NAME));
+                    $admin .= $this->factorSectionCollapsed($object->getId(), $subitemname . $section, $object->getName());
+                } else {
+                    $admin .= $this->factorSubItem($section);
                 }
-                $admin .= $this->factorSubItem($section);
             }
             // wrap the section
             // return the result
@@ -183,7 +187,7 @@ class EditAdminFactory extends AdminFactory {
                                     // if there are buttons, add a section
                                     if ($addbuttons > '') {
                                         $addbuttonsection = $this->factorButtonGroupAlt($addbuttons);
-                                        $addbuttonsection = $this->factorSectionCollapsed($baseid . '_SC' . $curnumber, $addbuttonsection, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                                        $addbuttonsection = $this->factorSectionAdd($baseid . '_SC' . $curnumber, $addbuttonsection, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
                                         $section .= $addbuttonsection;
                                     }
                                     // add the move/edit/cancel buttons
@@ -200,7 +204,7 @@ class EditAdminFactory extends AdminFactory {
                     } elseif ($createlast) {
                         // factor the template add buttons
                         $addbuttonsection = $this->factorButtonGroupAlt($this->factorAddButtons($object, $curnumber, $baseid . '_A' . $curnumber . '_T'));
-                        $addbuttonsection = $this->factorSectionCollapsed($baseid . '_SC' . $curnumber, $addbuttonsection, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
+                        $addbuttonsection = $this->factorSectionAdd($baseid . '_SC' . $curnumber, $addbuttonsection, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON));
                         $section .= $addbuttonsection;
                         $buttonadded = true;
                     }
@@ -283,6 +287,17 @@ class EditAdminFactory extends AdminFactory {
 
         $section = $this->factorButtonGroup($section);
 
+        // add a button to show/hide the add buttons
+        // add a button to show/hide layouts, styles, structures
+        if (!$object->getIsTemplate()) {       
+            $toggles = '';
+
+            $toggles .= $this->factorButtonToggleAdd();
+            $toggles .= $this->factorButtonToggleLSS();
+
+            $section .= $this->factorButtonGroup($toggles);
+        }
+                
         return $section;
     }
 
@@ -351,6 +366,30 @@ class EditAdminFactory extends AdminFactory {
     }
 
     /**
+     * Create the toggle button for add items
+     * 
+     * @return string
+     */
+    private function factorButtonToggleAdd() {
+        $edit = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_ADD)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_ADD_NAME), $edit);
+        $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, 'showhide-add', $edit);
+        return $edit;
+    }
+
+    /**
+     * Create the toggle button for lss items
+     * 
+     * @return string
+     */
+    private function factorButtonToggleLSS() {
+        $edit = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_LSS)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_LSS_NAME), $edit);
+        $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, 'showhide-lss', $edit);
+        return $edit;
+    }
+
+    /**
      * Create the header for editing an object, and edit the object name and active bit
      * 
      * @param object $object
@@ -404,7 +443,7 @@ class EditAdminFactory extends AdminFactory {
             if ($objectversion->getContainer()->getIsTemplate()) {
                 $section .= $this->factorListBox($baseid . '_layout', CommandFactory::editTemplateObjectVersionLayout($objectversion, $this->getContainerObject(), $this->getMode(), $this->getContext()), $layouts, $objectversion->getLayout()->getId(), Helper::getLang(AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT));
             } else {
-                $section .= $this->factorListBox($baseid . '_layout', CommandFactory::editObjectVersionLayout($objectversion), $layouts, $objectversion->getLayout()->getId(), Helper::getLang(AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT));
+                $section .= $this->factorListBoxLSS($baseid . '_layout', CommandFactory::editObjectVersionLayout($objectversion), $layouts, $objectversion->getLayout()->getId(), Helper::getLang(AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT));
             }
         }
         if ($objectversion->getInheritStyle() == false || $objectversion->getContainer()->getIsTemplate() == true) {
@@ -413,7 +452,11 @@ class EditAdminFactory extends AdminFactory {
             } else {
                 $styles = Styles::getStylesBySet(Style::OBJECT_STYLE, $objectversion->getContainer()->getSet(), $objectversion->getStyle());
             }
-            $section .= $this->factorListBox($baseid . '_style', CommandFactory::editObjectVersionStyle($objectversion), $styles, $objectversion->getStyle()->getId(), Helper::getLang(AdminLabels::ADMIN_OBJECT_VERSION_STYLE));
+            if ($objectversion->getContainer()->getIsTemplate()) {
+                $section .= $this->factorListBox($baseid . '_style', CommandFactory::editObjectVersionStyle($objectversion), $styles, $objectversion->getStyle()->getId(), Helper::getLang(AdminLabels::ADMIN_OBJECT_VERSION_STYLE));
+            } else {
+                $section .= $this->factorListBoxLSS($baseid . '_style', CommandFactory::editObjectVersionStyle($objectversion), $styles, $objectversion->getStyle()->getId(), Helper::getLang(AdminLabels::ADMIN_OBJECT_VERSION_STYLE));
+            }
         }
         // edit argumentdefault: with managecontent permission only
         if (Authorization::getObjectPermission($objectversion->getContainer(), Authorization::OBJECT_MANAGE)) {
@@ -423,7 +466,7 @@ class EditAdminFactory extends AdminFactory {
             }
         }
         // edit argument, inheritlayout, inheritstyle, template: when in a template
-        if ($objectversion->getContainer()->getIsTemplate() == true) {
+        if ($objectversion->getContainer()->getIsTemplate()) {
             // edit argument
             $arguments = Arguments::getArguments();
             $section .= $this->factorListBox($baseid . '_argument', CommandFactory::editObjectVersionArgument($objectversion), $arguments, $objectversion->getArgument()->getId(), Helper::getLang(AdminLabels::ADMIN_OBJECT_VERSION_ARGUMENT));
@@ -455,7 +498,11 @@ class EditAdminFactory extends AdminFactory {
             } else {
                 $structures = Structures::getStructuresBySet($object->getSet(), $position->getStructure());
             }
-            $section .= $this->factorListBox($baseid . '_structure', CommandFactory::editPositionStructure($position), $structures, $position->getStructure()->getId(), Helper::getLang(AdminLabels::ADMIN_POSITION_STRUCTURE));
+            if ($object->getIsTemplate()) {
+                $section .= $this->factorListBox($baseid . '_structure', CommandFactory::editPositionStructure($position), $structures, $position->getStructure()->getId(), Helper::getLang(AdminLabels::ADMIN_POSITION_STRUCTURE));
+            } else {
+                $section .= $this->factorListBoxLSS($baseid . '_structure', CommandFactory::editPositionStructure($position), $structures, $position->getStructure()->getId(), Helper::getLang(AdminLabels::ADMIN_POSITION_STRUCTURE));
+            }
         }
         if ($position->getInheritStyle() == false || $object->getIsTemplate() == true) {
             if ($object->getSet()->isDefault()) {
@@ -463,10 +510,14 @@ class EditAdminFactory extends AdminFactory {
             } else {
                 $styles = Styles::getStylesBySet(Style::POSITION_STYLE, $object->getSet(), $position->getStyle());
             }
-            $section .= $this->factorListBox($baseid . '_style', CommandFactory::editPositionStyle($position), $styles, $position->getStyle()->getId(), Helper::getLang(AdminLabels::ADMIN_POSITION_STYLE));
+            if ($object->getIsTemplate()) {
+                $section .= $this->factorListBox($baseid . '_style', CommandFactory::editPositionStyle($position), $styles, $position->getStyle()->getId(), Helper::getLang(AdminLabels::ADMIN_POSITION_STYLE));
+            } else {
+                $section .= $this->factorListBoxLSS($baseid . '_style', CommandFactory::editPositionStyle($position), $styles, $position->getStyle()->getId(), Helper::getLang(AdminLabels::ADMIN_POSITION_STYLE));
+            }
         }
         // edit inherit style & structure if part of a template
-        if ($object->getIsTemplate() == true) {
+        if ($object->getIsTemplate()) {
             // edit inheritlayout
             $section .= $this->factorCheckBox($baseid . '_inheritlayout', CommandFactory::editPositionInheritStructure($position), $position->getInheritStructure(), Helper::getLang(AdminLabels::ADMIN_POSITION_INHERIT_STRUCTURE));
             // edit inheritstyle
@@ -673,5 +724,3 @@ class EditAdminFactory extends AdminFactory {
     }
 
 }
-
-?>

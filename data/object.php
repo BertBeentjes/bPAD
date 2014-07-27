@@ -877,5 +877,3 @@ class Object extends SettedEntity {
     }
 
 }
-
-?>

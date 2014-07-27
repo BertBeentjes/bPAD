@@ -67,5 +67,3 @@ class UploadFactory extends ContentFactory {
         return '';
     }
 }
-
-?>

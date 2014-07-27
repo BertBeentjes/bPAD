@@ -122,5 +122,3 @@ class ConfigLayoutAdminFactory extends ConfigAdminFactory {
     }
 
 }
-
-?>

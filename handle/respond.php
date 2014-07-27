@@ -139,5 +139,3 @@ abstract class Respond implements Handler{
     }
 
 }
-
-?>

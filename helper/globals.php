@@ -30,5 +30,3 @@ require ('globals/dbsettings.php'); // the database settings
 
 // load the default language file for errors during connection to the store
 require ('language/language_en.php');
-
-?>

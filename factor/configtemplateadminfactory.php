@@ -128,5 +128,3 @@ class ConfigTemplateAdminFactory extends ConfigAdminFactory {
     }
 
 }
-
-?>

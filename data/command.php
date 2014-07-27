@@ -297,5 +297,3 @@ class Command extends Log {
     }
 
 }
-
-?>

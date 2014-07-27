@@ -28,9 +28,11 @@
  * @since 0.4.0
  */
 class Snippet extends NamedEntity {
+
+    const DEFAULT_SNIPPET = 1;
+
     private $contextgroup; // the context group the snippet belongs to
     private $mimetype; // the mime type of the content in the snippet
-    
     private $snippetversions = array(); // the versions for this snippet
     
     /**
@@ -138,4 +140,3 @@ class Snippet extends NamedEntity {
     }
 
 }
-?>

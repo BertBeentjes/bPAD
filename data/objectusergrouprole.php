@@ -175,5 +175,3 @@ class ObjectUserGroupRole extends StoredEntity {
     }
     
 }
-
-?>

@@ -178,6 +178,34 @@ class AdminFactory extends Factory {
     }
 
     /**
+     * factor an admin listbox for layout items
+     * 
+     * @param string $id the id to use
+     * @param string $command the command to execute 
+     * @param mixed $options resultset or array, the options for the list box
+     * @param string $value the start value of the input
+     * @param string $label the label for the input
+     * @return string the complete input
+     */
+    protected function factorListBoxLSS($id, $command, $listoptions, $value, $label) {
+        $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_LISTBOX_LSS)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $admin = $this->factorTerms($structure, $id, $command, $value, $label);
+        $options = '';
+        if (is_a($listoptions, 'resultset')) {
+            while ($listoption = $listoptions->fetchObject()) {
+                $options .= $this->factorListBoxOption($listoption->id, $listoption->name, $value);
+            }
+        }
+        if (is_array($listoptions)) {
+            foreach ($listoptions as $listoption) {
+                $options .= $this->factorListBoxOption($listoption[0], $listoption[1], $value);
+            }
+        }
+        $admin = str_replace(Terms::ADMIN_OPTIONS, $options, $admin);
+        return $admin;
+    }
+
+    /**
      * factor an admin combobox or listbox option
      * 
      * @param string $id the id to use
@@ -239,6 +267,20 @@ class AdminFactory extends Factory {
     protected function factorSectionCollapsed($id, $value, $label) {
         $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_SECTION_COLLAPSED)->getVersion($this->getMode(), $this->getContext())->getBody();
         // no command and no label for the button groups
+        $admin = $this->factorTerms($structure, $id, '', $value, $label);
+        return $admin;
+    }
+
+    /**
+     * factor a collapsed section for the admin panel
+     * 
+     * @param string $id the id for the section
+     * @param string $value the start value of the input
+     * @param string $label label
+     * @return string the complete input
+     */
+    protected function factorSectionAdd($id, $value, $label) {
+        $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_SECTION_ADD)->getVersion($this->getMode(), $this->getContext())->getBody();
         $admin = $this->factorTerms($structure, $id, '', $value, $label);
         return $admin;
     }
@@ -322,7 +364,7 @@ class AdminFactory extends Factory {
      * @param string $command the command to execute when an input changes
      * @param string $value the value of an input in the structure
      * @param string $label the text label for the input
-     * @param string $disabled (optional)
+     * @param string $disabled (optional) disable the input
      * @return string
      */
     protected function factorTerms($structure, $id, $command, $value, $label, $disabled = '') {
@@ -330,6 +372,8 @@ class AdminFactory extends Factory {
         $structure = str_replace(Terms::ADMIN_COMMAND, $command, $structure);
         $structure = str_replace(Terms::ADMIN_LABEL, $label, $structure);
         $structure = str_replace(Terms::ADMIN_DISABLED, $disabled, $structure);
+
+        // add the value last, to prevent terms in the value to be changed
         $structure = str_replace(Terms::ADMIN_VALUE, $value, $structure);
         return $structure;
     }
@@ -374,5 +418,3 @@ class AdminFactory extends Factory {
     }
 
 }
-
-?>

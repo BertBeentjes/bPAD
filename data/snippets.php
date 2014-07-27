@@ -60,7 +60,14 @@ class Snippets {
             }
         }
     }
-
+    
+    /**
+     * Get all snippets
+     * 
+     * @return resultset
+     */
+    public static function getSnippets () {
+        return Store::getSnippets();
+    }
+    
 }
-
-?>

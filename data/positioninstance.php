@@ -357,5 +357,3 @@ class PositionInstance extends StoredEntity implements PositionContent {
     }        
 
 }
-
-?>

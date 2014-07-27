@@ -294,5 +294,3 @@ class Template extends SettedEntity {
     }
     
 }
-
-?>

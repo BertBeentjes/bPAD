@@ -89,5 +89,3 @@ class IncludeFile extends Respond {
     }
     
 }
-
-?>

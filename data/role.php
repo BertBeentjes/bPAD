@@ -28,6 +28,8 @@
  */
 class Role extends NamedEntity{
     
+    const DEFAULT_ROLE = 1;
+
     private $permissions = array(); // contains the permissions for this role
     private $permissionsloaded = false; // are the permissions loaded?
 
@@ -81,5 +83,3 @@ class Role extends NamedEntity{
     }
 
 }
-
-?>

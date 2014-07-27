@@ -29,5 +29,3 @@ class SysCon {
     CONST PUBLIC_USER = 'public'; // the user name for the public user (anonymous access)
     CONST SITE_ROOT_OBJECT = 1; // the object id for the root object of the site
 }
-
-?>

@@ -21,7 +21,7 @@
  * along with bPAD.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$debuglevel = 'production';
+$debuglevel = 'trace';
 
 // load the required class that auto loads all classes
 require 'helper/required.php';
@@ -100,5 +100,3 @@ try {
 } catch (Exception $e) {
     exit (Error::showMessage($e));
 }
-
-?>

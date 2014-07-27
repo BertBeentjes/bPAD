@@ -384,5 +384,3 @@ class ContentItemFactory extends Factory {
     }
 
 }
-
-?>

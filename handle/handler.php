@@ -34,5 +34,3 @@ interface Handler {
      */
     public function respond();
 }
-
-?>

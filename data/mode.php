@@ -40,5 +40,3 @@ class Mode extends ValueListEntity {
     }
     
 }
-
-?>

@@ -178,5 +178,3 @@ abstract class Log {
     }
 
 }
-
-?>

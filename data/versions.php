@@ -41,5 +41,3 @@ class Versions {
         return $version;
     }
 }
-
-?>

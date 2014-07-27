@@ -1106,6 +1106,92 @@ class Execute {
     }
 
     /**
+     * Execute a change in an user
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param user $user
+     * @param usergroup $usergroup optional
+     */
+    public static function changeUser($user, $usergroup = NULL) {
+        // first check authorization, some people can manage all users, most only themselves
+        if (Authorization::getPagePermission(Authorization::USER_MANAGE) || Authentication::getUser()->getId() == $user->getId()) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'username':
+                    // validate
+                    if (Validator::isName(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($user->getName());
+                        // set the new value
+                        $user->setName(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'userpassword':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($user->getPassword());
+                    // set the new value
+                    $user->setFirstName(Authentication::middleSalt(Request::getCommand()->getValue()));
+                    break;
+                case 'userfirstname':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($user->getFirstName());
+                    // set the new value
+                    $user->setFirstName(Request::getCommand()->getValue());
+                    break;
+                case 'userlastname':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($user->getLastName());
+                    // set the new value
+                    $user->setLastName(Request::getCommand()->getValue());
+                    break;
+                case 'userlogincounter':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($user->getLoginCounter());
+                    // set the new value
+                    $user->setLoginCounter(0);
+                    break;
+                case 'userusergroup':
+                    $done = false;
+                    // set the new value
+                    if (is_object($usergroup)) {
+                        $usergroups = $user->getUserGroups();
+                        if (array_key_exists($usergroup->getId(), $usergroups)) {
+                            // remove the user from the user group
+                            $done = $usergroup->deleteUser($user);
+                        } else {
+                            // add the user to the user group
+                            $done = $usergroup->addUser($user);
+                        }
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    }
+                    // store true in the command, the change will be made
+                    Request::getCommand()->setOldValue($done);
+                    break;
+                case 'useradd':
+                    // store the success value in the command
+                    // add a new user
+                    Request::getCommand()->setOldValue(Users::newUser());
+                    break;
+                case 'userremove':
+                    // store the success value in the command
+                    // remove the specified user
+                    Request::getCommand()->setOldValue(Users::removeUser($user));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
      * Execute a change in an template
      * Check for authorization
      * Validate the value if necessary
@@ -1200,5 +1286,3 @@ class Execute {
     }
 
 }
-
-?>

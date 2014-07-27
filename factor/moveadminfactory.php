@@ -138,5 +138,3 @@ class MoveAdminFactory extends AdminFactory {
     }
 
 }
-
-?>

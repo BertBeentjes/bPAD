@@ -150,8 +150,8 @@ function newHash() {
  * refresh the hash after loading content
  */
 function refreshHash() {
+    var newhash = newHash();
     if (window.location.hash != '#' + newhash) {
-        var newhash = newHash();
         refreshinghash = true;
         window.location.hash = newhash;
     }
@@ -293,6 +293,18 @@ function addEvents(divid) {
                     $('#errormessage').html('');
                 });
                 break;
+            case 'showhide-add':
+                $(this).on("click", function() {
+                    $('[data-bpad-hide-add]').toggle();
+                    this.blur();
+                });
+                break;
+            case 'showhide-lss':
+                $(this).on("click", function() {
+                    $('[data-bpad-hide-lss]').toggle();
+                    this.blur();
+                });
+                break;
             default:
                 // attach the event and pass the command info
                 $(this).on('click', {
@@ -306,6 +318,22 @@ function addEvents(divid) {
         }
         // remove the attribute, so the event isn't attached again
         $(this).removeAttr('data-bpad-onclick');
+    });
+    // hide add buttons in the edit interface
+    $(selector + '[data-bpad-hide-add]').each(function() {
+        // get the value
+        var value = $(this).attr('data-bpad-hide-add');
+        if (value == 'hide') {
+            $(this).hide();
+        }
+    });
+    // hide lss buttons in the edit interface
+    $(selector + '[data-bpad-hide-lss]').each(function() {
+        // get the value
+        var value = $(this).attr('data-bpad-hide-lss');
+        if (value == 'hide') {
+            $(this).hide();
+        }
     });
     // add on click events to nodes that request it
     $(selector + '[data-bpad-onkeyup]').each(function() {
@@ -682,7 +710,7 @@ function checkCommand(thiscommand, thisvalue) {
         this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
     }
     // if it's a admin.config... command, check where to load the config content
-    if (this.parsedcommand.commandgroup == 'admin' && (this.parsedcommand.commandmember == 'configlayouts' || this.parsedcommand.commandmember == 'configstructures' || this.parsedcommand.commandmember == 'configstyles' || this.parsedcommand.commandmember == 'configstyleparams' || this.parsedcommand.commandmember == 'configsets' || this.parsedcommand.commandmember == 'configtemplates')) {
+    if (this.parsedcommand.commandgroup == 'admin' && (this.parsedcommand.commandmember == 'configlayouts' || this.parsedcommand.commandmember == 'configstructures' || this.parsedcommand.commandmember == 'configstyles' || this.parsedcommand.commandmember == 'configstyleparams' || this.parsedcommand.commandmember == 'configsets' || this.parsedcommand.commandmember == 'configusers' ||  this.parsedcommand.commandmember == 'configusergroups' || this.parsedcommand.commandmember == 'configroles' || this.parsedcommand.commandmember == 'configsettings' || this.parsedcommand.commandmember == 'configincludefiles' || this.parsedcommand.commandmember == 'configsnippets' || this.parsedcommand.commandmember == 'configtemplates')) {
         this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configlayout') {
@@ -704,6 +732,30 @@ function checkCommand(thiscommand, thisvalue) {
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configset') {
         this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
         this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_setlist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configuser') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_userlist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configusergroup') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_usergrouplist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configrole') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_rolelist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configsetting') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_settinglist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configincludefile') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_includefilelist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configsnippet') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_snippetlist').val();
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configtemplate') {
         this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);

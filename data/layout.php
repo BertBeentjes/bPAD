@@ -311,5 +311,3 @@ class Layout extends SettedEntity {
     }
 
 }
-
-?>

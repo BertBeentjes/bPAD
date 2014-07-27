@@ -55,4 +55,3 @@ class Upload extends Page {
         $this->executer->uploadFile();
     }
 }
-?>

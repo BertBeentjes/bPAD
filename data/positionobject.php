@@ -81,5 +81,3 @@ class PositionObject extends StoredEntity implements PositionContent {
     }
     
 }
-
-?>

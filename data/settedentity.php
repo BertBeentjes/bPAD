@@ -67,5 +67,3 @@ abstract class SettedEntity extends NamedEntity{
     }
 
 }
-
-?>

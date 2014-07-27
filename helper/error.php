@@ -44,5 +44,3 @@ class Error {
         return $message;
     }
 }
-
-?>

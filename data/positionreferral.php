@@ -159,5 +159,3 @@ class PositionReferral extends StoredEntity implements PositionContent {
     }
     
 }
-
-?>

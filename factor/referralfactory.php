@@ -87,5 +87,3 @@ class ReferralFactory extends Factory {
         }
     }
 }
-
-?>

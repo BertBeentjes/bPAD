@@ -1010,7 +1010,52 @@ class Store {
      * @return resultset id
      */
     public static function getRoles() {
-        return self::selectQuery("SELECT id FROM roles");
+        return self::selectQuery("SELECT roles.id, roles.name FROM roles ORDER BY roles.name");
+    }
+
+    /**
+     * get the users
+     * 
+     * @return resultset id
+     */
+    public static function getUsers() {
+        return self::selectQuery("SELECT users.id, users.name FROM users ORDER BY users.name");
+    }
+
+    /**
+     * get the user groups
+     * 
+     * @return resultset id
+     */
+    public static function getUserGroups() {
+        return self::selectQuery("SELECT usergroups.id, usergroups.name FROM usergroups ORDER BY usergroups.name");
+    }
+
+    /**
+     * get the settings
+     * 
+     * @return resultset id
+     */
+    public static function getSettings() {
+        return self::selectQuery("SELECT settings.id, settings.name FROM settings ORDER BY settings.name");
+    }
+
+    /**
+     * get the file includes
+     * 
+     * @return resultset id
+     */
+    public static function getFileIncludes() {
+        return self::selectQuery("SELECT fileincludes.id, fileincludes.name FROM fileincludes ORDER BY fileincludes.name");
+    }
+
+    /**
+     * get the snippets
+     * 
+     * @return resultset id
+     */
+    public static function getSnippets() {
+        return self::selectQuery("SELECT snippets.id, snippets.name FROM snippets ORDER BY snippets.name");
     }
 
     /**
@@ -1129,7 +1174,7 @@ class Store {
      * @return resultset id
      */
     public static function getOrphanedObjects() {
-        return self::selectQuery("SELECT objects.id FROM objects LEFT JOIN positionobjects ON objects.id=positionobjects.fk_object_id WHERE positionobjects.id IS NULL AND objects.istemplate = 0");
+        return self::selectQuery("SELECT objects.id FROM objects LEFT JOIN positionobjects ON objects.id=positionobjects.fk_object_id WHERE positionobjects.id IS NULL AND objects.istemplate = 0 AND objects.id <> " . SysCon::SITE_ROOT_OBJECT);
     }
 
     /**
@@ -3457,6 +3502,39 @@ class Store {
     }
     
     /**
+     * insert a new user user group into the Store
+     * 
+     * @param int $userid
+     * @param int $usergroupid
+     */
+    public static function insertUserUserGroup($userid, $usergroupid) {
+        $stmt = self::$connection->stmt_init();
+        // prevent doubles
+        if ($result = self::selectQuery('SELECT id FROM userusergroup WHERE fk_user_id=' . $userid . ' AND fk_usergroup_id=' . $usergroupid)) {
+            return;
+        }
+        // no double, so insert
+        if ($stmt->prepare("INSERT INTO userusergroup (fk_user_id, fk_usergroup_id, createdate, fk_createuser_id) VALUES (?, ?, NOW(), ?)")) {
+            $stmt->bind_param("iii", $userid, $usergroupid, Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+    
+    /**
+     * delete an user user group from the Store
+     * 
+     * @param int $userid
+     * @param int $usergroupid
+     */
+    public static function deleteUserUserGroup($userid, $usergroupid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM userusergroup WHERE fk_user_id=? AND fk_usergroup_id=?")) {
+            $stmt->bind_param("ii", $userid, $usergroupid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
      * delete the object user group roles for an object from the Store
      * 
      * @param int $objectid the object id
@@ -3854,6 +3932,16 @@ class Store {
     }
 
     /**
+     * get a record where the user group is used
+     * 
+     * @param int $id
+     * @return resultset id
+     */
+    public static function getUserGroupUsed($usergroupid) {
+        return self::selectQuery("SELECT id FROM userusergroup WHERE fk_usergroup_id=" . $usergroupid . " LIMIT 0,1");
+    }
+
+    /**
      * get a record where the template is used
      * 
      * @param int $id
@@ -4175,6 +4263,33 @@ class Store {
     }
     
     /**
+     * insert a new user into the Store
+     * 
+     * @return int the new id
+     */
+    public static function insertUser() {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO users (createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("ii", Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * delete a user from the Store
+     * 
+     * @param int $userid the set to delete
+     * @return boolean true if success
+     */
+    public static function deleteUser($userid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM users WHERE id=?")) {
+            $stmt->bind_param("i", $userid);
+            return self::actionQuery($stmt);
+        }
+    }
+    
+    /**
      * insert a new template into the Store
      * 
      * @return int the new id
@@ -4310,5 +4425,3 @@ class Store {
     }
     
 }
-
-?>

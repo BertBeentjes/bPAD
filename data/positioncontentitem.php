@@ -235,5 +235,3 @@ class PositionContentItem extends NamedEntity implements PositionContent {
     }
     
 }
-
-?>

@@ -126,6 +126,17 @@ class Change extends Respond {
                         $set = Sets::getSet(Request::getCommand()->getItemAddress());
                         Execute::changeSet($set);
                         break;
+                    case 'user':
+                        $addressparts = Request::getCommand()->getItemAddressParts();
+                        if (count($addressparts) == 2) {
+                            $user = Users::getUser($addressparts[0]);
+                            $usergroup = UserGroups::getUserGroup($addressparts[1]);
+                            Execute::changeUser($user, $usergroup);
+                        } else {
+                            $user = Users::getUser($addressparts[0]);
+                            Execute::changeUser($user);
+                        }
+                        break;
                     case 'template':
                         $template = Templates::getTemplate(Request::getCommand()->getItemAddress());
                         Execute::changeTemplate($template);
@@ -169,4 +180,3 @@ class Change extends Respond {
     }
 
 }
-?>

@@ -27,6 +27,9 @@
  * @since 0.4.0
  */
 class Setting extends NamedEntity {
+
+    const DEFAULT_SETTING = 100;
+
     private $value; // the value of the setting
     
     /**
@@ -176,5 +179,3 @@ class Setting extends NamedEntity {
     }    
         
 }
-
-?>

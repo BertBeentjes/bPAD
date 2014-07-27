@@ -46,6 +46,13 @@ class UserGroups {
             return self::$usergroups[$usergroupid];
         }
     }
+    
+    /**
+     * Get all user groups
+     * 
+     * @return resultset
+     */
+    public static function getUserGroups () {
+        return Store::getUserGroups();
+    }
 }
-
-?>

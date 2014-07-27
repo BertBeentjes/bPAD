@@ -25,4 +25,3 @@ $database['host'] = "127.0.0.1";
 $database['name'] = "bpad";
 $database['user'] = "bpad";
 $database['password'] = "password123";
-?>

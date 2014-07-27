@@ -190,5 +190,3 @@ class Context extends NamedEntity{
     }
 
 }
-
-?>

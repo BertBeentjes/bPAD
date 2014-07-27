@@ -61,6 +61,14 @@ class FileIncludes {
         }
         throw new Exception (Helper::getLang(Errors::ERROR_FILE_INCLUDE_NOTFOUND) . ' @ ' . __METHOD__);
     }
-}
 
-?>
+    /**
+     * Get all fileincludes
+     * 
+     * @return resultset
+     */
+    public static function getFileIncludes () {
+        return Store::getFileIncludes();
+    }
+    
+}

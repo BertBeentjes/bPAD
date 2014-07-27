@@ -327,5 +327,3 @@ class Style extends SettedEntity {
     }
 
 }
-
-?>

@@ -28,7 +28,8 @@
  */
 class User extends NamedEntity{
     
-    CONST USER_ADMINISTRATOR = 1;
+    const USER_ADMINISTRATOR = 1;
+    const DEFAULT_USER = 1;
 
     private $usergroups = array(); // the user groups this user is a member of
     private $usergroupsloaded = false; // are the user groups loaded
@@ -211,6 +212,16 @@ class User extends NamedEntity{
         }
     }    
     
+    /**
+     * Is the user removable?
+     * 
+     * @return boolean true if removable
+     */
+    public function isRemovable() {
+        // for now, no users are removable through the application
+        // TODO: make users removable
+        // TODO: decide on whether users can be removed completely, or just marked inactive
+        return false;
+    }
+    
 }
-
-?>

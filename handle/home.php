@@ -39,4 +39,3 @@ class Home extends Page {
     }
     
 }
-?>

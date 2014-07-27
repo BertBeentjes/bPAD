@@ -84,5 +84,3 @@ class ContextGroup extends NamedEntity {
     }
 
 }
-
-?>

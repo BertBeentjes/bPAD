@@ -86,5 +86,3 @@ class StyleFactory extends Factory {
     }
 
 }
-
-?>

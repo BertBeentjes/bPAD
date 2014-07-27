@@ -348,5 +348,3 @@ class Position extends StoredEntity {
     }
 
 }
-
-?>

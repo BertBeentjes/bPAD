@@ -102,5 +102,3 @@ class ModedVersion extends StoredEntity {
     }
     
 }
-
-?>

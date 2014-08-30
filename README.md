@@ -47,6 +47,4 @@ After this initial version, the aim is to create a beta version of the site that
 Installation
 ============
 
-The code base provided here has to be used in combination with a database. This database is not yet fully available. The way bPAD is set up, an empty database is not enough, it needs to be filled with content block templates. This part is under development and will be available along with the full alpha version. Before that, it can be requested by sending me an email.
-
-The development of the database coincides with the creation of a website with basic information and examples of the use of bPAD.
+Installation instructions are given with the releases. There is currently no installer. The code base is provided in combination with a prefilled database that contains everything needed to create a web site.

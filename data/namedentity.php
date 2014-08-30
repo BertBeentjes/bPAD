@@ -52,19 +52,12 @@ abstract class NamedEntity extends StoredEntity {
     }
 
     /**
-     * setter for the name
+     * the name of a setting can't be changed
      * 
-     * @param newname the name
-     * @return boolean  if success
-     * @throws exception if the update in the store fails
+     * @throws exception 
      */
-    public function setName($newname)  {
-        if (Store::setEntityName($this->tablename, $this->id,  $newname) && $this->setChanged()) {
-            $this->name = $newname;
-            return true;
-        } else {
-            throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
-        }
+    public function setName()  {
+        throw new Exception (Helper::getLang(Errors::ERROR_UNKNOWN_REQUEST) . ' @ ' . __METHOD__);
     }
 
 }

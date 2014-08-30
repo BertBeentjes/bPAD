@@ -50,13 +50,13 @@ class ConfigSettingAdminFactory extends ConfigAdminFactory {
         // factor the settings
         $settings = Settings::getSettings();
         $section .= $this->factorListBox($baseid . '_settinglist', CommandFactory::configSetting($this->getObject(), $this->getMode(), $this->getContext()), $settings, $setting->getId(), Helper::getLang(AdminLabels::ADMIN_CONFIG_SETTINGS));
-        // add button
-        $section .= $this->factorButtonGroup($this->factorButton($baseid . '_add', CommandFactory::addSetting($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_ADD_SETTING)) . $this->factorCloseButton($baseid));
+        // no add button, settings can't be created by the user
+        $section .= $this->factorButtonGroup($this->factorCloseButton($baseid));
         $admin .= $this->factorSection($baseid . 'header', $section, Helper::getLang(AdminLabels::ADMIN_CONFIG_SETTINGS));
         // factor the default setting
         $content = '';
         // open the first setting
-        // $content = $this->factorConfigSettingContent($setting);
+        $content = $this->factorConfigSettingContent($setting);
         // add a detail panel
         $admin .= $this->factorConfigDetailPanel($baseid, $content);
         $this->setContent($admin);
@@ -73,16 +73,13 @@ class ConfigSettingAdminFactory extends ConfigAdminFactory {
         $section = '';
         $admin = '';
         // setting name
-        if ($setting->getIsBpadDefined()) {
-            $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editSettingName($setting), $setting->getName(), Helper::getLang(AdminLabels::ADMIN_SETTING_NAME), 'disabled');
-        } else {
-            $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editSettingName($setting), $setting->getName(), Helper::getLang(AdminLabels::ADMIN_SETTING_NAME));
-        }
-        // remove button 
-        if ($setting->isRemovable()) {
-            $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeSetting($this->getObject(), $setting, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_SETTING));
-        }
+        $section .= $this->factorTextInput($baseid . '_name', '', $setting->getName(), Helper::getLang(AdminLabels::ADMIN_SETTING_NAME), 'disabled');
+        // no remove button, settings can't be removed by the user
+        // add setting value
+        $section .= $this->factorTextInput($baseid . '_value', CommandFactory::editSettingValue($setting), $setting->getValue(), Helper::getLang(AdminLabels::ADMIN_SETTING_VALUE));
         $admin .= $this->factorSection($baseid . '_header', $section);
+        $section = '';
+        
         return $admin;
     }
 

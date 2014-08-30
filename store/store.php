@@ -1039,7 +1039,7 @@ class Store {
      * @return resultset id
      */
     public static function getSettings() {
-        return self::selectQuery("SELECT settings.id, settings.name FROM settings ORDER BY settings.name");
+        return self::selectQuery("SELECT settings.id, settings.name FROM settings ORDER BY settings.id");
     }
 
     /**

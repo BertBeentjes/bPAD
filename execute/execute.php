@@ -1106,6 +1106,33 @@ class Execute {
     }
 
     /**
+     * Execute a change in a setting
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param setting $setting
+     */
+    public static function changeSetting($setting) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::SETTING_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'settingvalue':
+                    Request::getCommand()->setOldValue($setting->getValue());
+                    // set the new value
+                    $setting->setValue(Request::getCommand()->getValue());
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+    
+    /**
      * Execute a change in an usergroup
      * Check for authorization
      * Validate the value if necessary

@@ -152,6 +152,11 @@ class Change extends Respond {
                         $permission = Permissions::getPermission($addressparts[0]);
                         Execute::changePermission($permission);
                         break;
+                    case 'setting':
+                        $addressparts = Request::getCommand()->getItemAddressParts();
+                        $setting = Settings::getSetting($addressparts[0]);
+                        Execute::changeSetting($setting);
+                        break;
                     case 'template':
                         $template = Templates::getTemplate(Request::getCommand()->getItemAddress());
                         Execute::changeTemplate($template);

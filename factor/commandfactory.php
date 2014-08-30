@@ -1428,6 +1428,16 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to edit the setting value
+     * 
+     * @param setting $setting
+     * @return string
+     */
+    public static function editSettingValue($setting) {
+        return 'setting,' . $setting->getId() . ',change.settingvalue';
+    }
+
+    /**
      * Compose the command to edit the user name
      * 
      * @param user $user
@@ -1512,16 +1522,6 @@ class CommandFactory {
     }
 
     /**
-     * Compose the command to edit the setting name
-     * 
-     * @param setting $setting
-     * @return string
-     */
-    public static function editSettingName($setting) {
-        return 'setting,' . $setting->getId() . ',change.settingname';
-    }
-
-    /**
      * Compose the command to edit the includefile name
      * 
      * @param includefile $includefile
@@ -1591,19 +1591,6 @@ class CommandFactory {
      */
     public static function removeRole($object, $role, $mode, $context) {
         return 'role,' . $role->getId() . ',change.roleremove' . '|' . self::configRoles($object, $mode, $context);
-    }
-
-    /**
-     * Compose the command to remove a setting 
-     * 
-     * @param object $object
-     * @param setting $setting
-     * @param mode $mode
-     * @param context $context
-     * @return string
-     */
-    public static function removeSetting($object, $setting, $mode, $context) {
-        return 'setting,' . $setting->getId() . ',change.settingremove' . '|' . self::configSettings($object, $mode, $context);
     }
 
     /**
@@ -1678,18 +1665,6 @@ class CommandFactory {
      */
     public static function addRole($object, $mode, $context) {
         return 'role,' . Role::DEFAULT_ROLE . ',change.roleadd' . '|' . self::configRoles($object, $mode, $context);
-    }
-
-    /**
-     * Compose the command to add a setting 
-     * 
-     * @param object $object
-     * @param mode $mode
-     * @param context $context
-     * @return string
-     */
-    public static function addSetting($object, $mode, $context) {
-        return 'setting,' . Setting::DEFAULT_SETTING . ',change.settingadd' . '|' . self::configSettings($object, $mode, $context);
     }
 
     /**

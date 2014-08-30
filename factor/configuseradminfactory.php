@@ -53,7 +53,7 @@ class ConfigUserAdminFactory extends ConfigAdminFactory {
         // add button
         $section .= $this->factorButtonGroup($this->factorButton($baseid . '_add', CommandFactory::addUser($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_ADD_USER)) . $this->factorCloseButton($baseid));
         $admin .= $this->factorSection($baseid . 'header', $section, Helper::getLang(AdminLabels::ADMIN_CONFIG_USERS));
-        // factor the default user
+        // factor the user
         $content = '';
         // open the first user
         $content = $this->factorConfigUserContent($user);
@@ -78,6 +78,8 @@ class ConfigUserAdminFactory extends ConfigAdminFactory {
         } else {
             $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editUserName($user), $user->getName(), Helper::getLang(AdminLabels::ADMIN_USER_NAME));
         }
+        // login counter reset
+        $section .= $this->factorButtonGroup($this->factorButton($baseid . '_logincounter', CommandFactory::editUserLoginCounter($this->getObject(), $user, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_USER_LOGIN_COUNTER) . $user->getLoginCounter()));
         // remove button 
         if ($user->isRemovable()) {
             $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeUser($this->getObject(), $user, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_USER));
@@ -89,8 +91,6 @@ class ConfigUserAdminFactory extends ConfigAdminFactory {
         $section .= $this->factorTextInput($baseid . '_password', CommandFactory::editUserPassword($user), '', Helper::getLang(AdminLabels::ADMIN_USER_PASSWORD));
         $section .= $this->factorTextInput($baseid . '_firstname', CommandFactory::editUserFirstName($user), $user->getFirstName(), Helper::getLang(AdminLabels::ADMIN_USER_FIRST_NAME));
         $section .= $this->factorTextInput($baseid . '_lastname', CommandFactory::editUserLastName($user), $user->getLastName(), Helper::getLang(AdminLabels::ADMIN_USER_LAST_NAME));
-        // login counter reset
-        $section .= $this->factorButton($baseid . '_logincounter', CommandFactory::editUserLoginCounter($this->getObject(), $user, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_USER_LOGIN_COUNTER) . $user->getLoginCounter());
         // insert usergroups the user is a member of
         $userusergroups = $user->getUserGroups();
         $usergroups = UserGroups::getUserGroups();

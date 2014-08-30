@@ -1665,7 +1665,7 @@ class CommandFactory {
      * @return string
      */
     public static function addUserGroup($object, $mode, $context) {
-        return 'usergroup,' . UserGroup::DEFAULT_USERGROUP . ',change.usergroiupadd' . '|' . self::configUserGroups($object, $mode, $context);
+        return 'usergroup,' . UserGroup::DEFAULT_USERGROUP . ',change.usergroupadd' . '|' . self::configUserGroups($object, $mode, $context);
     }
 
     /**
@@ -1874,6 +1874,17 @@ class CommandFactory {
      */
     public static function addPositionReferral($containerobject, $object, $number, $mode, $context) {
         return 'objectposition,' . $object->getId() . '.' . $number . ',change.positionreferraladd' . '|' . self::configTemplate($containerobject, $mode, $context);
+    }
+
+    /**
+     * Compose the command to edit a permission
+     * 
+     * @param permission $permission
+     * @param string $permissiontype
+     * @return string
+     */
+    public static function editPermission($permission, $permissiontype) {
+        return 'permission,' . $permission->getId() . ',change.' . $permissiontype;
     }
 
 }

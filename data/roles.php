@@ -56,4 +56,29 @@ class Roles {
         return Store::getRoles();
     }
     
+    /**
+     * Create a new role
+     * 
+     * @return type
+     */
+    public static function newRole() {
+        $roleid = Store::insertRole();
+        return true;
+    }
+
+    /**
+     * remove a role, you can only remove roles that aren't used
+     * 
+     * @param role $role
+     * @return type
+     */
+    public static function removeRole($role) {
+        if ($role->isRemovable()) {
+            Store::deleteRole($role->getId());
+            unset(self::$roles[$role->getId()]);
+            return true;
+        }
+        return false;
+    }
+    
 }

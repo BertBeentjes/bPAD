@@ -53,7 +53,7 @@ class ConfigUserGroupAdminFactory extends ConfigAdminFactory {
         // add button
         $section .= $this->factorButtonGroup($this->factorButton($baseid . '_add', CommandFactory::addUserGroup($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_ADD_USERGROUP)) . $this->factorCloseButton($baseid));
         $admin .= $this->factorSection($baseid . 'header', $section, Helper::getLang(AdminLabels::ADMIN_CONFIG_USERGROUPS));
-        // factor the default usergroup
+        // factor the usergroup
         $content = '';
         // open the first usergroup
         $content = $this->factorConfigUserGroupContent($usergroup);
@@ -79,8 +79,18 @@ class ConfigUserGroupAdminFactory extends ConfigAdminFactory {
             $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeUserGroup($this->getObject(), $usergroup, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_USERGROUP));
         }
         $admin .= $this->factorSection($baseid . '_header', $section);
-        // TODO: insert users that are member of the user group
-        
+        // insert users that are member of the user group
+        $users = Users::getUsers();
+        $section = '';
+        while ($row = $users->fetchObject()) {
+            $user = Users::getUser($row->id);
+            $hasusergroup = false;
+            if (array_key_exists($usergroup->getId(), $user->getUserGroups())) {
+                 $hasusergroup = true;
+            }
+            $section .= $this->factorCheckBox($baseid . '_uug' . $user->getId(), CommandFactory::editUserUserGroup($user, $usergroup), $hasusergroup, $user->getName());
+        }
+        $admin .= $this->factorSection($baseid . '_section', $section);
         return $admin;
     }
 

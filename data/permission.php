@@ -38,17 +38,19 @@ class Permission extends StoredEntity {
     private $frontendcreatoredit; // edit your own creations
     private $frontendcreatordeactivate; // deactivate your own creations
     
+    // site editor permissions
     private $frontendadd; // add content using the add menu
     private $frontendedit; // edit content
     private $frontenddeactivate; // deactivate content
-
-    // site manager permissions
     private $managecontent; // create, edit or delete objects, templates. Anything content.
+    
+    // site designer permissions
     private $managelayout; // create, edit or delete layouts
     private $managestyle; // create, edit or delete styles or style params
     private $managestructure; // create, edit or delete structures
     private $managetemplate; // create, edit or delete a template
 
+    // site administrator permissions
     private $managesystem; // create and edit sets, contexts, arguments
     private $managelanguage; // manage language strings
     private $managesetting; // manage system settings
@@ -60,6 +62,30 @@ class Permission extends StoredEntity {
     // technicalities
     private $showadminbar;
     private $flusharchive;
+
+    // permissions to change
+    const PERMISSION_MANAGE_CONTENT = 'permissionmanagecontent';
+    const PERMISSION_MANAGE_STYLE = 'permissionmanagestyle';
+    const PERMISSION_MANAGE_STRUCTURE = 'permissionmanagestructure';
+    const PERMISSION_MANAGE_TEMPLATE = 'permissionmanagetemplate';
+    const PERMISSION_FLUSH_ARCHIVE = 'permissionflusharchive';
+    const PERMISSION_VIEW_OBJECT = 'permissionviewobject';
+    const PERMISSION_FRONTEND_EDIT = 'permissionfrontendedit';
+    const PERMISSION_UPLOAD_FILE = 'permissionuploadfile';
+    const PERMISSION_FRONTEND_CREATOR_EDIT = 'permissionfrontendcreatoredit';
+    const PERMISSION_FRONTEND_ADD = 'permissionfrontendadd';
+    const PERMISSION_FRONTEND_CREATOR_DEACTIVATE = 'permissionfrontendcreatordeactivate';
+    const PERMISSION_FRONTEND_DEACTIVATE = 'permissionfrontenddeactivate';
+    const PERMISSION_SHOW_BAR = 'permissionshowbar';
+    const PERMISSION_FRONTENT_RESPOND = 'permissionfrontendrespond';
+    const PERMISSION_MANAGE_LSS_VERSION = 'permissionmanagelssversion';
+    const PERMISSION_MANAGE_LAYOUT = 'permissionmanagelayout';
+    const PERMISSION_MANAGE_SYSTEM = 'permissionmanagesystem';
+    const PERMISSION_MANAGE_LANGUAGE = 'permissionmanagelanguage';
+    const PERMISSION_MANAGE_SETTING = 'permissionmanagesetting';
+    const PERMISSION_MANAGE_USER = 'permissionmanageuser';
+    const PERMISSION_MANAGE_ROLE = 'permissionmanagerole';
+    const PERMISSION_MANAGE_AUTHORIZATION = 'permissionmanageauthorization';
 
     /**
      * Constructor for the permission 
@@ -431,6 +457,31 @@ class Permission extends StoredEntity {
     }
 
     /**
+     * get manage lss version
+     * 
+     * @return boolean managelssversion
+     */
+    public function getManageLSSVersion() {
+        return $this->managelssversion;
+    }
+    
+    /**
+     * set manage lss version
+     * 
+     * @param bool $bool
+     * @return boolean success if true 
+     * @throws Exception when update fails
+     */
+    public function setManageLSSVersion($bool) {
+        if (Store::setPermissionManageLSSVersion($this->id, $bool) && $this->setChanged()) {
+            $this->managelssversion = $bool;
+            return true;
+        } else {
+            throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
+    }
+
+    /**
      * get manage style
      * 
      * @return boolean managestyle
@@ -649,31 +700,6 @@ class Permission extends StoredEntity {
     public function setShowAdminBar($bool) {
         if (Store::setPermissionShowAdminBar($this->id, $bool) && $this->setChanged()) {
             $this->showadminbar = $bool;
-            return true;
-        } else {
-            throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
-        }
-    }
-
-    /**
-     * get lss version
-     * 
-     * @return boolean lssversion
-     */
-    public function getLSSVersion() {
-        return $this->lssversion;
-    }
-    
-    /**
-     * set lss version
-     *
-     * @param bool $bool
-     * @return boolean success if true 
-     * @throws Exception when update fails
-     */
-    public function setLSSVersion($bool) {
-        if (Store::setPermissionLSSVersion($this->id, $bool) && $this->setChanged()) {
-            $this->lssversion = $bool;
             return true;
         } else {
             throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);

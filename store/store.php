@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -905,6 +906,7 @@ class Store {
     public static function getTemplate($id) {
         return self::selectQuery("SELECT templates.name, templates.deleted, templates.fk_structure_id structureid, templates.fk_style_id styleid, templates.instanceallowed, templates.searchable, templates.fk_set_id setid, templates.isbpaddefined, templates.createdate, templates.fk_createuser_id createuserid, templates.changedate, templates.fk_changeuser_id changeuserid FROM templates WHERE templates.id=" . $id);
     }
+
     /**
      * get the root object for a template
      * 
@@ -914,7 +916,7 @@ class Store {
     public static function getTemplateRootObject($id) {
         return self::selectQuery("SELECT objects.id objectid FROM templates INNER JOIN objects ON templates.id=objects.fk_template_id WHERE objects.istemplate=1 AND objects.istemplateroot=1 AND templates.id=" . $id);
     }
-    
+
     /**
      * get the basic attributes for an object
      * 
@@ -2616,6 +2618,22 @@ class Store {
     }
 
     /**
+     * set manage lss version permission
+     * 
+     * @param int the id of the row to update
+     * @param boolean the new value for manage lss version
+     * @return boolean  if action query succeeds
+     */
+    public static function setPermissionManageLSSVersion($id, $bool) {
+        $intbool = (int) $bool;
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE permissions SET managelssversion=? WHERE id=?")) {
+            $stmt->bind_param("ii", $intbool, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
      * set manage style permission
      * 
      * @param int the id of the row to update
@@ -3475,7 +3493,7 @@ class Store {
      * @return int the new id
      */
     public static function insertObjectUserGroupRole($objectid, $usergroupid, $roleid, $inherit) {
-        $inheritint = (int)$inherit;
+        $inheritint = (int) $inherit;
         $stmt = self::$connection->stmt_init();
         // prevent doubles
         if ($result = self::selectQuery('SELECT id FROM objectusergrouprole WHERE fk_object_id=' . $objectid . ' AND fk_usergroup_id=' . $usergroupid . ' AND fk_role_id=' . $roleid)) {
@@ -3487,7 +3505,7 @@ class Store {
             return self::insertQuery($stmt);
         }
     }
-    
+
     /**
      * delete an object user group role from the Store
      * 
@@ -3500,7 +3518,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * insert a new user user group into the Store
      * 
@@ -3519,7 +3537,7 @@ class Store {
             return self::insertQuery($stmt);
         }
     }
-    
+
     /**
      * delete an user user group from the Store
      * 
@@ -3533,7 +3551,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the object user group roles for an object from the Store
      * 
@@ -3546,7 +3564,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the position objects for an object
      * 
@@ -3559,7 +3577,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the position instances for an object
      * 
@@ -3572,7 +3590,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the position referrals for an object
      * 
@@ -3585,7 +3603,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the position content items for an object
      * 
@@ -3598,7 +3616,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete an object from position content items as the root, as preparation for deleting the object
      * 
@@ -3612,7 +3630,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the positions for an object
      * 
@@ -3625,7 +3643,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the object versions for an object
      * 
@@ -3638,7 +3656,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the object 
      * 
@@ -3651,7 +3669,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete the object sessions
      * 
@@ -3664,7 +3682,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * insert a new object version into the Store
      * 
@@ -3750,7 +3768,7 @@ class Store {
             return self::insertQuery($stmt);
         }
     }
-    
+
     /**
      * Build the query to find objects that fullfill the conditions of the instance
      * and return the result set with these objects to the instance
@@ -3771,12 +3789,12 @@ class Store {
         if ($orderby > '') {
             switch ($orderby) {
                 // several object based order types 
-                case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC: 
-                case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC: 
+                case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC:
+                case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC:
                     $query .= ", DATE_FORMAT(objectversions.changedate, '" . Helper::getDateFormatStore() . "') groupvalue ";
                     break;
-                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC: 
-                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC: 
+                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC:
+                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
                     $query .= ", DATE_FORMAT(objectversions.createdate, '" . Helper::getDateFormatStore() . "') groupvalue ";
                     break;
                 default:
@@ -3870,16 +3888,16 @@ class Store {
         if ($orderby > '') {
             switch ($orderby) {
                 // several object based order types 
-                case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC: 
+                case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC:
                     $query .= "INNER JOIN objectversions ON matches.objectid=objectversions.fk_object_id WHERE objectversions.fk_mode_id=" . $modeid . " ORDER BY objectversions.changedate ASC ";
                     break;
-                case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC: 
+                case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC:
                     $query .= "INNER JOIN objectversions ON matches.objectid=objectversions.fk_object_id WHERE objectversions.fk_mode_id=" . $modeid . " ORDER BY objectversions.changedate DESC ";
                     break;
-                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC: 
+                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC:
                     $query .= "INNER JOIN objectversions ON matches.objectid=objectversions.fk_object_id WHERE objectversions.fk_mode_id=" . $modeid . " ORDER BY objectversions.createdate ASC ";
                     break;
-                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC: 
+                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
                     $query .= "INNER JOIN objectversions ON matches.objectid=objectversions.fk_object_id WHERE objectversions.fk_mode_id=" . $modeid . " ORDER BY objectversions.createdate DESC ";
                     break;
                 default:
@@ -3890,7 +3908,7 @@ class Store {
         }
         return self::selectQuery($query);
     }
-    
+
     /**
      * get a record where the layout is used
      * 
@@ -3938,7 +3956,17 @@ class Store {
      * @return resultset id
      */
     public static function getUserGroupUsed($usergroupid) {
-        return self::selectQuery("SELECT id FROM userusergroup WHERE fk_usergroup_id=" . $usergroupid . " LIMIT 0,1");
+        return self::selectQuery("SELECT id FROM userusergroup WHERE fk_usergroup_id=" . $usergroupid . " LIMIT 0,1 UNION SELECT id FROM objectusergrouprole WHERE fk_usergroup_id=" . $usergroupid . " LIMIT 0,1");
+    }
+
+    /**
+     * get a record where the role is used
+     * 
+     * @param int $id
+     * @return resultset id
+     */
+    public static function getRoleUsed($roleid) {
+        return self::selectQuery("SELECT id FROM objectusergrouprole WHERE fk_role_id=" . $roleid . " LIMIT 0,1");
     }
 
     /**
@@ -4092,7 +4120,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * insert a new style into the Store
      * 
@@ -4206,7 +4234,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete a style param from the Store
      * 
@@ -4234,7 +4262,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * insert a new set into the Store
      * 
@@ -4261,7 +4289,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * insert a new user into the Store
      * 
@@ -4288,7 +4316,72 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
+    /**
+     * insert a new user group into the Store
+     * 
+     * @return int the new id
+     */
+    public static function insertUserGroup() {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO usergroups (createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("ii", Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * delete a usergroup from the Store
+     * 
+     * @param int $usergroupid the set to delete
+     * @return boolean true if success
+     */
+    public static function deleteUserGroup($usergroupid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM usergroups WHERE id=?")) {
+            $stmt->bind_param("i", $usergroupid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new user group into the Store, a role always has a corresponding record in permissions
+     * 
+     * @return int the new id
+     */
+    public static function insertRole() {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO roles (createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("ii", Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            $id = self::insertQuery($stmt);
+            $stmt = self::$connection->stmt_init();
+            if ($stmt->prepare("INSERT INTO permissions (fk_role_id, createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (?, NOW(), ?, NOW(), ?)")) {
+                $stmt->bind_param("iii", $id, Authentication::getUser()->getId(), Authentication::getUser()->getId());
+                self::insertQuery($stmt);
+                return $id;
+            }
+        }
+    }
+
+    /**
+     * delete a role from the Store
+     * 
+     * @param int $roleid the set to delete
+     * @return boolean true if success
+     */
+    public static function deleteRole($roleid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM permissions WHERE fk_role_id=?")) {
+            $stmt->bind_param("i", $roleid);
+            self::actionQuery($stmt);
+            $stmt = self::$connection->stmt_init();
+            if ($stmt->prepare("DELETE FROM roles WHERE id=?")) {
+                $stmt->bind_param("i", $roleid);
+                return self::actionQuery($stmt);
+            }
+        }
+    }
+
     /**
      * insert a new template into the Store
      * 
@@ -4385,7 +4478,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete an object from the object cache
      * 
@@ -4399,7 +4492,7 @@ class Store {
             return self::actionQuery($stmt);
         }
     }
-    
+
     /**
      * delete an object from the object addressable parent cache
      * 
@@ -4423,5 +4516,5 @@ class Store {
     public static function getTargetObjectsBySet($setid) {
         return self::selectQuery("SELECT id FROM objects WHERE fk_set_id=" . $setid);
     }
-    
+
 }

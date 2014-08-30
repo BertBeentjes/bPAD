@@ -1106,6 +1106,180 @@ class Execute {
     }
 
     /**
+     * Execute a change in an usergroup
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param usergroup $usergroup
+     */
+    public static function changeUserGroup($usergroup) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::USER_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'usergroupname':
+                    // validate
+                    if (Validator::isName(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($usergroup->getName());
+                        // set the new value
+                        $usergroup->setName(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'usergroupadd':
+                    // store the success value in the command
+                    // add a new usergroup
+                    Request::getCommand()->setOldValue(UserGroups::newUserGroup());
+                    break;
+                case 'usergroupremove':
+                    // store the success value in the command
+                    // remove the specified usergroup
+                    Request::getCommand()->setOldValue(UserGroups::removeUserGroup($usergroup));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
+     * Execute a change in a role
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param role $role
+     */
+    public static function changeRole($role) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::ROLE_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'rolename':
+                    // validate
+                    if (Validator::isName(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($role->getName());
+                        // set the new value
+                        $role->setName(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'roleadd':
+                    // store the success value in the command
+                    // add a new role
+                    Request::getCommand()->setOldValue(Roles::newRole());
+                    break;
+                case 'roleremove':
+                    // store the success value in the command
+                    // remove the specified role
+                    Request::getCommand()->setOldValue(Roles::removeRole($role));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
+     * Execute a change in a permission
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param permission $permission
+     */
+    public static function changePermission($permission) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::ROLE_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case Permission::PERMISSION_FLUSH_ARCHIVE:
+                    Request::getCommand()->setOldValue($permission->setFlushArchive(!$permission->getFlushArchive()));
+                    break;
+                case Permission::PERMISSION_FRONTEND_ADD:
+                    Request::getCommand()->setOldValue($permission->setFrontendAdd(!$permission->getFrontendAdd()));
+                    break;
+                case Permission::PERMISSION_FRONTEND_CREATOR_DEACTIVATE:
+                    Request::getCommand()->setOldValue($permission->setFrontendCreatorDeactivate(!$permission->getFrontendCreatorDeactivate()));
+                    break;
+                case Permission::PERMISSION_FRONTEND_CREATOR_EDIT:
+                    Request::getCommand()->setOldValue($permission->setFrontendCreatorEdit(!$permission->getFrontendCreatorEdit()));
+                    break;
+                case Permission::PERMISSION_FRONTEND_DEACTIVATE:
+                    Request::getCommand()->setOldValue($permission->setFrontendDeactivate(!$permission->getFrontendDeactivate()));
+                    break;
+                case Permission::PERMISSION_FRONTEND_EDIT:
+                    Request::getCommand()->setOldValue($permission->setFrontendEdit(!$permission->getFrontendEdit()));
+                    break;
+                case Permission::PERMISSION_FRONTENT_RESPOND:
+                    Request::getCommand()->setOldValue($permission->setFrontendRespond(!$permission->getFrontendRespond()));
+                    break;
+                case Permission::PERMISSION_MANAGE_AUTHORIZATION:
+                    Request::getCommand()->setOldValue($permission->setManageAuthorization(!$permission->getManageAuthorization()));
+                    break;
+                case Permission::PERMISSION_MANAGE_CONTENT:
+                    Request::getCommand()->setOldValue($permission->setManageContent(!$permission->getManageContent()));
+                    break;
+                case Permission::PERMISSION_MANAGE_LANGUAGE:
+                    Request::getCommand()->setOldValue($permission->setManageLanguage(!$permission->getManageLanguage()));
+                    break;
+                case Permission::PERMISSION_MANAGE_LAYOUT:
+                    Request::getCommand()->setOldValue($permission->setManageLayout(!$permission->getManageLayout()));
+                    break;
+                case Permission::PERMISSION_MANAGE_LSS_VERSION:
+                    Request::getCommand()->setOldValue($permission->setManageLSSVersion(!$permission->getManageLSSVersion()));
+                    break;
+                case Permission::PERMISSION_MANAGE_ROLE:
+                    Request::getCommand()->setOldValue($permission->setManageRole(!$permission->getManageRole()));
+                    break;
+                case Permission::PERMISSION_MANAGE_SETTING:
+                    Request::getCommand()->setOldValue($permission->setManageSetting(!$permission->getManageSetting()));
+                    break;
+                case Permission::PERMISSION_MANAGE_STRUCTURE:
+                    Request::getCommand()->setOldValue($permission->setManageStructure(!$permission->getManageStructure()));
+                    break;
+                case Permission::PERMISSION_MANAGE_STYLE:
+                    Request::getCommand()->setOldValue($permission->setManageStyle(!$permission->getManageStyle()));
+                    break;
+                case Permission::PERMISSION_MANAGE_SYSTEM:
+                    Request::getCommand()->setOldValue($permission->setManageSystem(!$permission->getManageSystem()));
+                    break;
+                case Permission::PERMISSION_MANAGE_TEMPLATE:
+                    Request::getCommand()->setOldValue($permission->setManageTemplate(!$permission->getManageTemplate()));
+                    break;
+                case Permission::PERMISSION_MANAGE_USER:
+                    Request::getCommand()->setOldValue($permission->setManageUser(!$permission->getManageUser()));
+                    break;
+                case Permission::PERMISSION_SHOW_BAR:
+                    Request::getCommand()->setOldValue($permission->setShowAdminBar(!$permission->getShowAdminBar()));
+                    break;
+                case Permission::PERMISSION_UPLOAD_FILE:
+                    Request::getCommand()->setOldValue($permission->setUploadFile(!$permission->getUploadFile()));
+                    break;
+                case Permission::PERMISSION_VIEW_OBJECT:
+                    Request::getCommand()->setOldValue($permission->setViewObject(!$permission->getViewObject()));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
      * Execute a change in an user
      * Check for authorization
      * Validate the value if necessary
@@ -1133,7 +1307,7 @@ class Execute {
                     // store the old value in the command
                     Request::getCommand()->setOldValue($user->getPassword());
                     // set the new value
-                    $user->setFirstName(Authentication::middleSalt(Request::getCommand()->getValue()));
+                    $user->setPassword(Authentication::middleSalt(Request::getCommand()->getValue()));
                     break;
                 case 'userfirstname':
                     // store the old value in the command

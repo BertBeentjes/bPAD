@@ -30,7 +30,7 @@ class Role extends NamedEntity{
     
     const DEFAULT_ROLE = 1;
 
-    private $permissions = array(); // contains the permissions for this role
+    private $permissions; 
     private $permissionsloaded = false; // are the permissions loaded?
 
     /**
@@ -74,7 +74,7 @@ class Role extends NamedEntity{
             if ($result = Store::getRolePermissions($this->id)) {
                 while ($attr = $result->fetchObject()) {
                     // load the permissions with the generic loader
-                    $this->permissions[$attr->id] = Permissions::getPermission($attr->id);
+                    $this->permissions = Permissions::getPermission($attr->id);
                 }
             }
             $this->permissionsloaded = true;
@@ -82,4 +82,25 @@ class Role extends NamedEntity{
         }
     }
 
+    /**
+     * Is the role used somewhere?
+     * 
+     * @return boolean true if used
+     */
+    public function isUsed() {
+        if ($result = Store::getRoleUsed($this->getId())) {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Is the role removable?
+     * 
+     * @return boolean true if removable
+     */
+    public function isRemovable() {
+        return !$this->isUsed();
+    }
+    
 }

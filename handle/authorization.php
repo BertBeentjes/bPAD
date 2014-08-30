@@ -70,119 +70,117 @@ class Authorization {
                 // if the user is in a group assigned to this object
                 if ($objectusergrouprole->getUserGroup()->getId() == $usergroup->getId()) {
                     // get the permissions for the role
-                    $permissions = $objectusergrouprole->getRole()->getPermissions();
-                    foreach ($permissions as $permission) {
-                        switch ($permissiontype) {
-                            case self::PAGE_VIEW:
-                                if ($permission->getViewObject()) {
-                                    return true;
-                                }
-                                break;
-                            case self::OBJECT_VIEW:
-                                // true if you have view permission, or when the object is part of a template when you have manage template permission
-                                // also true if you are the creator of the object, or have edit or manage permissions
-                                // TODO: frontend creator permissions can be based upon user id (as is now), OR for public users on session id (not covered yet!)
-                                // -> create a function to decide whether the current user OR session is the creator of the object
-                                if ((($permission->getViewObject() || $permission->getManageContent() || $permission->getFrontendEdit() || ($permission->getFrontendCreatorEdit() && $object->getCreateUser()->getId() == Authentication::getUser()->getId())) && $object->getIsTemplate() == false) || ($this->getPagePermission(self::TEMPLATE_MANAGE) == true && $object->getIsTemplate() == true)) {
-                                    return true;
-                                }
-                                break;
-                            case self::OBJECT_FRONTEND_RESPOND:
-                                if ($permission->getFrontendRespond() && !$object->getIsTemplate()) {
-                                    return true;
-                                }
-                                break;
-                            case self::OBJECT_FRONTEND_CREATOR_EDIT:
-                                if ($permission->getFrontendCreatorEdit() && $object->getCreateUser()->getId() == Authentication::getUser()->getId() && !$object->getIsTemplate()) {
-                                    return true;
-                                }
-                                break;
-                            case self::OBJECT_FRONTEND_CREATOR_DEACTIVATE:
-                                if ($permission->getFrontendCreatorDeactivate() && $object->getCreateUser()->getId() == Authentication::getUser()->getId() && !$object->getIsTemplate()) {
-                                    return true;
-                                }
-                                break;
-                            case self::OBJECT_FRONTEND_ADD:
-                                if ($permission->getFrontendAdd() && !$object->getIsTemplate()) {
-                                    return true;
-                                }
-                                break;
-                            case self::OBJECT_FRONTEND_EDIT:
-                                if ($permission->getFrontendEdit() && !$object->getIsTemplate()) {
-                                    return true;
-                                }
-                                break;
-                            case self::OBJECT_FRONTEND_DEACTIVATE:
-                                if ($permission->getFrontendDeactivate() && !$object->getIsTemplate()) {
-                                    return true;
-                                }
-                                break;
-                            case self::OBJECT_MANAGE:
-                                // true if you have manage permission, or when the object is part of a template when you have manage template permission
-                                if (($permission->getManageContent() && !$object->getIsTemplate()) || (self::getPagePermission(self::TEMPLATE_MANAGE) && $object->getIsTemplate())) {
-                                    return true;
-                                }
-                                break;
-                        }
-                        // page permissions are checked on the site root
-                        if ($object->isSiteRoot()) {
-                            switch ($permissiontype) {
-                                case self::AUTHORIZATION_MANAGE:
-                                    if ($permission->getManageAuthorization()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::LAYOUT_MANAGE:
-                                    if ($permission->getManageLayout()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::STYLE_MANAGE:
-                                    if ($permission->getManageStyle()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::STRUCTURE_MANAGE:
-                                    if ($permission->getManageStructure()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::LANGUAGE_MANAGE:
-                                    if ($permission->getManageLanguage()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::ROLE_MANAGE:
-                                    if ($permission->getManageRole()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::SYSTEM_MANAGE:
-                                    if ($permission->getManageSystem()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::TEMPLATE_MANAGE:
-                                    if ($permission->getManageTemplate()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::USER_FLUSH_ARCHIVE:
-                                    if ($permission->getFlushArchive()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::USER_MANAGE:
-                                    if ($permission->getManageUser()) {
-                                        return true;
-                                    }
-                                    break;
-                                case self::SETTING_MANAGE:
-                                    if ($permission->getManageSetting()) {
-                                        return true;
-                                    }
-                                    break;
+                    $permission = $objectusergrouprole->getRole()->getPermissions();
+                    switch ($permissiontype) {
+                        case self::PAGE_VIEW:
+                            if ($permission->getViewObject()) {
+                                return true;
                             }
+                            break;
+                        case self::OBJECT_VIEW:
+                            // true if you have view permission, or when the object is part of a template when you have manage template permission
+                            // also true if you are the creator of the object, or have edit or manage permissions
+                            // TODO: frontend creator permissions can be based upon user id (as is now), OR for public users on session id (not covered yet!)
+                            // -> create a function to decide whether the current user OR session is the creator of the object
+                            if ((($permission->getViewObject() || $permission->getManageContent() || $permission->getFrontendEdit() || ($permission->getFrontendCreatorEdit() && $object->getCreateUser()->getId() == Authentication::getUser()->getId())) && $object->getIsTemplate() == false) || ($this->getPagePermission(self::TEMPLATE_MANAGE) == true && $object->getIsTemplate() == true)) {
+                                return true;
+                            }
+                            break;
+                        case self::OBJECT_FRONTEND_RESPOND:
+                            if ($permission->getFrontendRespond() && !$object->getIsTemplate()) {
+                                return true;
+                            }
+                            break;
+                        case self::OBJECT_FRONTEND_CREATOR_EDIT:
+                            if ($permission->getFrontendCreatorEdit() && $object->getCreateUser()->getId() == Authentication::getUser()->getId() && !$object->getIsTemplate()) {
+                                return true;
+                            }
+                            break;
+                        case self::OBJECT_FRONTEND_CREATOR_DEACTIVATE:
+                            if ($permission->getFrontendCreatorDeactivate() && $object->getCreateUser()->getId() == Authentication::getUser()->getId() && !$object->getIsTemplate()) {
+                                return true;
+                            }
+                            break;
+                        case self::OBJECT_FRONTEND_ADD:
+                            if ($permission->getFrontendAdd() && !$object->getIsTemplate()) {
+                                return true;
+                            }
+                            break;
+                        case self::OBJECT_FRONTEND_EDIT:
+                            if ($permission->getFrontendEdit() && !$object->getIsTemplate()) {
+                                return true;
+                            }
+                            break;
+                        case self::OBJECT_FRONTEND_DEACTIVATE:
+                            if ($permission->getFrontendDeactivate() && !$object->getIsTemplate()) {
+                                return true;
+                            }
+                            break;
+                        case self::OBJECT_MANAGE:
+                            // true if you have manage permission, or when the object is part of a template when you have manage template permission
+                            if (($permission->getManageContent() && !$object->getIsTemplate()) || (self::getPagePermission(self::TEMPLATE_MANAGE) && $object->getIsTemplate())) {
+                                return true;
+                            }
+                            break;
+                    }
+                    // page permissions are checked on the site root
+                    if ($object->isSiteRoot()) {
+                        switch ($permissiontype) {
+                            case self::AUTHORIZATION_MANAGE:
+                                if ($permission->getManageAuthorization()) {
+                                    return true;
+                                }
+                                break;
+                            case self::LAYOUT_MANAGE:
+                                if ($permission->getManageLayout()) {
+                                    return true;
+                                }
+                                break;
+                            case self::STYLE_MANAGE:
+                                if ($permission->getManageStyle()) {
+                                    return true;
+                                }
+                                break;
+                            case self::STRUCTURE_MANAGE:
+                                if ($permission->getManageStructure()) {
+                                    return true;
+                                }
+                                break;
+                            case self::LANGUAGE_MANAGE:
+                                if ($permission->getManageLanguage()) {
+                                    return true;
+                                }
+                                break;
+                            case self::ROLE_MANAGE:
+                                if ($permission->getManageRole()) {
+                                    return true;
+                                }
+                                break;
+                            case self::SYSTEM_MANAGE:
+                                if ($permission->getManageSystem()) {
+                                    return true;
+                                }
+                                break;
+                            case self::TEMPLATE_MANAGE:
+                                if ($permission->getManageTemplate()) {
+                                    return true;
+                                }
+                                break;
+                            case self::USER_FLUSH_ARCHIVE:
+                                if ($permission->getFlushArchive()) {
+                                    return true;
+                                }
+                                break;
+                            case self::USER_MANAGE:
+                                if ($permission->getManageUser()) {
+                                    return true;
+                                }
+                                break;
+                            case self::SETTING_MANAGE:
+                                if ($permission->getManageSetting()) {
+                                    return true;
+                                }
+                                break;
                         }
                     }
                 }

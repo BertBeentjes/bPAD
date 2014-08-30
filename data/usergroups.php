@@ -55,4 +55,30 @@ class UserGroups {
     public static function getUserGroups () {
         return Store::getUserGroups();
     }
+
+    /**
+     * Create a new usergroup
+     * 
+     * @return type
+     */
+    public static function newUserGroup() {
+        $usergroupid = Store::insertUserGroup();
+        return true;
+    }
+
+    /**
+     * remove a usergroup, you can only remove usergroups that aren't used
+     * 
+     * @param usergroup $usergroup
+     * @return type
+     */
+    public static function removeUserGroup($usergroup) {
+        if ($usergroup->isRemovable()) {
+            Store::deleteUserGroup($usergroup->getId());
+            unset(self::$usergroups[$usergroup->getId()]);
+            return true;
+        }
+        return false;
+    }
+    
 }

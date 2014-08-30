@@ -137,6 +137,21 @@ class Change extends Respond {
                             Execute::changeUser($user);
                         }
                         break;
+                    case 'usergroup':
+                        $addressparts = Request::getCommand()->getItemAddressParts();
+                        $usergroup = UserGroups::getUserGroup($addressparts[0]);
+                        Execute::changeUserGroup($usergroup);
+                        break;
+                    case 'role':
+                        $addressparts = Request::getCommand()->getItemAddressParts();
+                        $role = Roles::getRole($addressparts[0]);
+                        Execute::changeRole($role);
+                        break;
+                    case 'permission':
+                        $addressparts = Request::getCommand()->getItemAddressParts();
+                        $permission = Permissions::getPermission($addressparts[0]);
+                        Execute::changePermission($permission);
+                        break;
                     case 'template':
                         $template = Templates::getTemplate(Request::getCommand()->getItemAddress());
                         Execute::changeTemplate($template);

@@ -112,6 +112,6 @@ class UserGroup extends NamedEntity{
             // the user isn't there, can't be deleted
             return false;
         }
-    }    
-        
+    }
+    
 }

@@ -222,6 +222,7 @@ $lang[LSSNames::STRUCTURE_TITLE_H2] = 'Titel H2';
 $lang[LSSNames::STRUCTURE_TITLE_H3] = 'Titel H3';
 $lang[LSSNames::STRUCTURE_BANNER_TEXT] = 'Banner tekst';
 $lang[LSSNames::STRUCTURE_HTML] = 'HTML';
+$lang[LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR] = 'Object ongepubliceerde aanpassingen';
 
 $lang[LSSNames::LAYOUT_AD] = 'Advertentie';
 $lang[LSSNames::LAYOUT_ARTICLE_IMG_TITLE_TEXT] = 'Artikel beeld - titel - tekst';

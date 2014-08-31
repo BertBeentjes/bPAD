@@ -62,8 +62,19 @@ class StyleFactory extends Factory {
                 // first replace the class suffix (has to be done now, because each style version has it's own context)
                 $styleversionbody =  $this->replaceTermInString($styleversion->getBody(), Terms::CLASS_SUFFIX, $styleversion->getContainer()->getClassSuffix() . "_" . $styleversion->getContext()->getContextGroup()->getShortName() . '_' . $styleversion->getContext()->getShortName());
                 // replace the style parameters by their values for the specific context of the style version
-                foreach ($styleparams as $styleparam) {
-                    $styleversionbody = str_replace(Terms::styleparam_placeholder($styleparam), $styleparam->getVersion($this->getMode(), $styleversion->getContext())->getBody(), $styleversionbody);
+                // use a maxed loop to replace style paramaters used within style parameters (for colours, fonts, etc)
+                // TODO: use recursion with loop detection, on a rainy afternoon
+                $styleparamfound = true;
+                $level = 0;
+                while ($styleparamfound && $level < 100) {
+                    $styleparamfound = false;
+                    $level = $level + 1;
+                    foreach ($styleparams as $styleparam) {
+                        if (strstr($styleversionbody, Terms::styleparam_placeholder($styleparam))) {
+                            $styleparamfound = true;
+                            $styleversionbody = str_replace(Terms::styleparam_placeholder($styleparam), $styleparam->getVersion($this->getMode(), $styleversion->getContext())->getBody(), $styleversionbody);
+                        }
+                    }
                 }
                 $showstyleparams = '*/' . PHP_EOL . PHP_EOL;
                 // add the styleversionbody to the content

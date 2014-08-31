@@ -284,12 +284,12 @@ class Object extends SettedEntity {
     }
 
     /**
-     * check whether this object is template based and isn't the root, or is part of a template and isn't the root
+     * check whether this object is template based and isn't the root or is searchable, or is part of a template and isn't the root
      * 
      * @return boolean true if the object has a parent or false
      */
     public function hasTemplateParent() {
-        return !$this->template->isDefault() && !$this->getIsObjectTemplateRoot() && !$this->getIsTemplateRoot();
+        return !$this->getTemplate()->isDefault() && !$this->getIsTemplateRoot() && (!$this->getIsObjectTemplateRoot() || $this->getTemplate()->getSearchable());
     }
 
     /**

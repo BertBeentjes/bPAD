@@ -223,6 +223,7 @@ $lang[LSSNames::STRUCTURE_TITLE_H2] = 'Title H2';
 $lang[LSSNames::STRUCTURE_TITLE_H3] = 'Title H3';
 $lang[LSSNames::STRUCTURE_BANNER_TEXT] = 'Banner text';
 $lang[LSSNames::STRUCTURE_HTML] = 'HTML';
+$lang[LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR] = 'Object unpublished changes';
 
 $lang[LSSNames::LAYOUT_AD] = 'Ad';
 $lang[LSSNames::LAYOUT_ARTICLE_IMG_TITLE_TEXT] = 'Article image - title - text';

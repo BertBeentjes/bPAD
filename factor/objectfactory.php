@@ -513,8 +513,15 @@ class ObjectFactory extends Factory {
     private function factorMenu() {
         $menu = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_MENU)->getVersion($this->getMode(), $this->getContext())->getBody();
         $menuitem = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_MENU_ITEM)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $objectunpublished = Structures::getStructureByName(LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR)->getVersion($this->getMode(), $this->getContext())->getBody();
         // add the object name
         $menu = str_replace(Terms::OBJECT_ROOT_NAME, $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getName(), $menu);
+        // add the unpublished indicator
+        if ($this->getObject()->getChangeDate() > $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate()) {
+            $menu = str_replace(Terms::OBJECT_UNPUBLISHED_INDICATOR, $objectunpublished, $menu);
+        } 
+        // remove the indicator when it isn't used
+        $menu = str_replace(Terms::OBJECT_UNPUBLISHED_INDICATOR, "", $menu);            
         // add the menu items
         $edit = '';
         $add = '';
@@ -546,6 +553,12 @@ class ObjectFactory extends Factory {
         $edit = Structures::getStructureByName(LSSNames::STRUCTURE_EDIT_BUTTON)->getVersion($this->getMode(), $this->getContext())->getBody();
         $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_EDIT_BUTTON), $edit);
         $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::editObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $edit);
+        // add the unpublished indicator
+        if ($this->getObject()->getChangeDate() > $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate()) {
+            $edit = str_replace(Terms::OBJECT_UNPUBLISHED_INDICATOR, $objectunpublished, $edit);
+        } 
+        // remove the indicator when it isn't used
+        $edit = str_replace(Terms::OBJECT_UNPUBLISHED_INDICATOR, "", $edit);            
         return $edit;
     }
 
@@ -641,13 +654,11 @@ class ObjectFactory extends Factory {
     private function factorConfigButton() {
         $config = Structures::getStructureByName(LSSNames::STRUCTURE_CONFIG_BUTTON)->getVersion($this->getMode(), $this->getContext())->getBody();
         $config = str_replace(Terms::ADMIN_VALUE, Helper::getLang(LSSNames::STRUCTURE_CONFIG_BUTTON), $config);
-        // the command is replaced by a drop down menu
-        //$config = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::configSite($this->getObject(), $this->getMode(), $this->getContext()), $config);
+        // factor the config panel
         $configadminfactory = new ConfigAdminFactory;
         $configadminfactory->setContext($this->getContext());
         $configadminfactory->setMode($this->getMode());
         $configadminfactory->setObject($this->getObject());
-        // factor the config panel
         $configadminfactory->factor();
         $config = str_replace(Terms::OBJECT_ITEM_CONTENT, $configadminfactory->getContent(), $config);
         return $config;

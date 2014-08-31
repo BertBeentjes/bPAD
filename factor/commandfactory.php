@@ -1572,6 +1572,46 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to edit the snippet name
+     * 
+     * @param snippet $snippet
+     * @return string
+     */
+    public static function editSnippetMimeType($snippet) {
+        return 'snippet,' . $snippet->getId() . ',change.snippetmimetype';
+    }
+
+    /**
+     * Compose the command to edit the snippet context group
+     * 
+     * @param snippet $snippet
+     * @return string
+     */
+    public static function editSnippetContextGroup($snippet) {
+        return 'snippet,' . $snippet->getId() . ',change.snippetcontextgroup';
+    }
+
+    /**
+     * Compose the command to edit the snippet version body
+     * 
+     * @param snippet $snippet
+     * @return string
+     */
+    public static function editSnippetVersionBody($snippet) {
+        return 'snippet,' . $snippet->getId() . ',change.snippetversionbody';
+    }
+
+    /**
+     * Compose the command to edit the snippet mime type
+     * 
+     * @param snippet $snippet
+     * @return string
+     */
+    public static function publishSnippetVersion($snippet) {
+        return 'snippet,' . $snippet->getId() . ',change.snippetversionpublish';
+    }
+
+    /**
      * Compose the command to remove a set 
      * 
      * @param object $object

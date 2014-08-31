@@ -1550,4 +1550,79 @@ class Execute {
         }
     }
     
+    /**
+     * Execute a change in a snippet
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param snippet $snippet
+     */
+    public static function changeSnippet($snippet) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'snippetname':
+                    // validate
+                    if (Validator::isName(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($snippet->getName());
+                        // set the new value
+                        $snippet->setName(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'snippetmimetype':
+                    // validate
+                    if (Validator::isMimeType(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($snippet->getMimeType());
+                        // set the new value
+                        $snippet->setMimeType(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'snippetcontextgroup':
+                    // validate
+                    if (Validator::validContextGroup(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($snippet->getContextGroup()->getId());
+                        // set the new value
+                        $snippet->setContextGroup(ContextGroups::getContextGroup(Request::getCommand()->getValue()));
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'snippetversionbody':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($snippet->getVersion(Modes::getMode(Mode::EDITMODE))->getBody());
+                    // set the new value
+                    $snippet->getVersion(Modes::getMode(Mode::EDITMODE))->setBody(Request::getCommand()->getValue());
+                    break;
+                case 'snippetversionpublish':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($snippet->publishVersion());
+                    break;
+                case 'snippetadd':
+                    // store the success value in the command
+                    // add a new template
+                    Request::getCommand()->setOldValue(Snippets::newSnippet());
+                    break;
+                case 'snippetremove':
+                    // store the success value in the command
+                    // remove the specified template
+                    Request::getCommand()->setOldValue(Snippets::removeSnippet($snippet));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+    
 }

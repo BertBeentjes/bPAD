@@ -294,6 +294,22 @@ Class Validator {
     }
 
     /**
+     * validate the contextgroup id
+     * 
+     * @param int contextgroupid the id to validate
+     * @return boolean  if valid
+     * @throws exception when store not available
+     */
+    public static function validContextGroup($contextgroupid) {
+        if (self::isNumeric($contextgroupid)) {
+            if (Store::getContextGroup($contextgroupid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
      * validate the mode id, valid if a mode with this id exists in the store
      * 
      * @param modeid the id to validate

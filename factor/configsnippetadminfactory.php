@@ -56,7 +56,7 @@ class ConfigSnippetAdminFactory extends ConfigAdminFactory {
         // factor the default snippet
         $content = '';
         // open the first snippet
-        // $content = $this->factorConfigSnippetContent($snippet);
+        $content = $this->factorConfigSnippetContent($snippet);
         // add a detail panel
         $admin .= $this->factorConfigDetailPanel($baseid, $content);
         $this->setContent($admin);
@@ -73,16 +73,24 @@ class ConfigSnippetAdminFactory extends ConfigAdminFactory {
         $section = '';
         $admin = '';
         // snippet name
-        if ($snippet->getIsBpadDefined()) {
-            $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editSnippetName($snippet), $snippet->getName(), Helper::getLang(AdminLabels::ADMIN_SNIPPET_NAME), 'disabled');
-        } else {
-            $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editSnippetName($snippet), $snippet->getName(), Helper::getLang(AdminLabels::ADMIN_SNIPPET_NAME));
-        }
+        $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editSnippetName($snippet), $snippet->getName(), Helper::getLang(AdminLabels::ADMIN_SNIPPET_NAME));
+        // add the text input for the mime type
+        $section .= $this->factorTextInput($baseid . '_mime', CommandFactory::editSnippetMimeType($snippet), $snippet->getMimeType(), Helper::getLang(AdminLabels::ADMIN_SNIPPET_MIME_TYPE));
+        // TODO: add context group selector
+        $contextgroups = ContextGroups::getContextGroups();
+        $section .= $this->factorListBox($baseid . '_contextgrouplist', CommandFactory::editSnippetContextGroup($snippet), $contextgroups, $snippet->getContextGroup()->getId(), Helper::getLang(AdminLabels::ADMIN_SNIPPET_CONTEXT_GROUP));
         // remove button 
-        if ($snippet->isRemovable()) {
-            $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeSnippet($this->getObject(), $snippet, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_SNIPPET));
-        }
+        $section .= $this->factorButtonGroup($this->factorButton($baseid . '_remove', CommandFactory::removeSnippet($this->getObject(), $snippet, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_SNIPPET)));
         $admin .= $this->factorSection($baseid . '_header', $section);
+        $section = '';        
+        // add publish button above
+        $section .= $this->factorButtonGroup($this->factorButton($baseid . '_publish', CommandFactory::publishSnippetVersion($snippet), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH_SNIPPETVERSION)));
+        // add the text area for editing the file
+        $snippetversion = $snippet->getVersion(Modes::getMode(Mode::EDITMODE));
+        $section .= $this->factorTextArea($baseid . '_body' . $snippetversion->getId(), CommandFactory::editSnippetVersionBody($snippet), $snippetversion->getBody(), $snippet->getName());
+        // add publish button below
+        $section .= $this->factorButtonGroup($this->factorButton($baseid . '_publish', CommandFactory::publishSnippetVersion($snippet), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH_SNIPPETVERSION)));
+        $admin .= $this->factorSection($baseid . '_header', $section);       
         return $admin;
     }
 

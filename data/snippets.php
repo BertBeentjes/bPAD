@@ -70,4 +70,31 @@ class Snippets {
         return Store::getSnippets();
     }
     
+    /**
+     * Create a new snippet
+     * 
+     * @return type
+     */
+    public static function newSnippet() {
+        $snippetid = Store::insertSnippet();
+        // a snippet must always have an edit and view version
+        Store::insertSnippetVersion($snippetid, Mode::VIEWMODE);
+        Store::insertSnippetVersion($snippetid, Mode::EDITMODE);
+
+        return true;
+    }
+
+    /**
+     * remove a snippet
+     * 
+     * @param snippet $snippet
+     * @return type
+     */
+    public static function removeSnippet($snippet) {
+        Store::deleteSnippetVersions($snippet->getId());
+        Store::deleteSnippet($snippet->getId());
+        unset(self::$snippets[$snippet->getId()]);
+        return true;
+    }
+
 }

@@ -39,7 +39,7 @@ class Helper {
      * @return string the resulting string with the escaped hash
      */
     public static function escapeContentHash($content) {
-            return str_replace("#", "/#/", $content);
+            return str_replace("#", "//#//", $content);
     }
 
     /**
@@ -53,7 +53,7 @@ class Helper {
      * @return string the resulting string with the de-escaped hash
      */
     public static function deEscapeContentHash($content) {
-            return str_replace("/#/", "#", $content);
+            return str_replace("//#//", "#", $content);
     }
 
     /**

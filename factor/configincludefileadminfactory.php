@@ -84,7 +84,7 @@ class ConfigIncludeFileAdminFactory extends ConfigAdminFactory {
         $section .= $this->factorButtonGroup($this->factorButton($baseid . '_publish', CommandFactory::publishIncludeFileVersion($includefile), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH_FILEINCLUDEVERSION)));
         // add the text area for editing the file
         $includefileversion = $includefile->getVersion(Modes::getMode(Mode::EDITMODE));
-        $section .= $this->factorTextArea($baseid . '_body' . $includefileversion->getId(), CommandFactory::editIncludeFileVersionBody($includefile, Modes::getMode(Mode::EDITMODE), $context), $includefileversion->getBody(), $includefile->getName());
+        $section .= $this->factorTextArea($baseid . '_body' . $includefileversion->getId(), CommandFactory::editIncludeFileVersionBody($includefile), $includefileversion->getBody(), $includefile->getName());
         // add publish button below
         $section .= $this->factorButtonGroup($this->factorButton($baseid . '_publish', CommandFactory::publishIncludeFileVersion($includefile), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH_FILEINCLUDEVERSION)));
         $admin .= $this->factorSection($baseid . '_header', $section);       

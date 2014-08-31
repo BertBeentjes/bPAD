@@ -540,6 +540,7 @@ $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_STRUCTUREVERSION] = 'Publish version';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_STYLEVERSION] = 'Publish version';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_STYLEPARAMVERSION] = 'Publish version';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_FILEINCLUDEVERSION] = 'Publish version';
+$lang[AdminLabels::ADMIN_BUTTON_PUBLISH_SNIPPETVERSION] = 'Publish version';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_TEMPLATE] = 'Publish template';
 $lang[AdminLabels::ADMIN_BUTTON_CANCEL_LAYOUTVERSION] = 'Cancel version';
 $lang[AdminLabels::ADMIN_BUTTON_CANCEL_STRUCTUREVERSION] = 'Cancel version';
@@ -590,6 +591,8 @@ $lang[AdminLabels::ADMIN_SETTING_VALUE] = 'Value';
 $lang[AdminLabels::ADMIN_INCLUDE_FILE_NAME] = 'Name';
 $lang[AdminLabels::ADMIN_INCLUDE_FILE_MIME_TYPE] = 'Mime type';
 $lang[AdminLabels::ADMIN_SNIPPET_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_SNIPPET_MIME_TYPE] = 'Mime type';
+$lang[AdminLabels::ADMIN_SNIPPET_CONTEXT_GROUP] = 'Context group';
 $lang[AdminLabels::ADMIN_PROCESSING] = 'Processing...';
 
 $lang[AdminLabels::ADMIN_PERMISSIONS_MANAGE_CONTENT] = 'Manage content';

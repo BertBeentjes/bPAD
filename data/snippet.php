@@ -45,7 +45,7 @@ class Snippet extends NamedEntity {
         $this->tablename = Store::getTableSnippets();
         $this->loadAttributes();
     }
-    
+
     /**
      * Load the attributes
      * 
@@ -78,14 +78,14 @@ class Snippet extends NamedEntity {
      * getter for the snippet version, depending on mode 
      * 
      * @param mode $mode
-     * @return type
+     * @return ModedVersion
      */
     public function getVersion($mode) {
-        if (isset($this->snippet[$mode->getId()])) {
-            return $this->snippet[$mode->getId()];
+        if (isset($this->snippetversions[$mode->getId()])) {
+            return $this->snippetversions[$mode->getId()];
         } else {
-            $this->snippet[$mode->getId()] = new ModedVersion($this, ModedVersion::SNIPPET, $mode);
-            return $this->snippet[$mode->getId()];
+            $this->snippetversions[$mode->getId()] = new ModedVersion($this, ModedVersion::SNIPPET, $mode);
+            return $this->snippetversions[$mode->getId()];
         }
     }
 
@@ -139,4 +139,26 @@ class Snippet extends NamedEntity {
         }
     }
 
+    /**
+     * Publish the edit version to the view version
+     * 
+     * @return boolean success or not
+     */
+    public function publishVersion() {
+        // move viewmode to archive
+        $this->getVersion(Modes::getMode(Mode::VIEWMODE))->setMode(Modes::getMode(Mode::ARCHIVEMODE));
+        // move editmode to view
+        $this->getVersion(Modes::getMode(Mode::EDITMODE))->setMode(Modes::getMode(Mode::VIEWMODE));        
+        // create new edit mode version
+        $newversionid = Store::insertSnippetVersion($this->getId(), Mode::EDITMODE);
+        // reset the version cache
+        unset($this->snippetversions[Mode::VIEWMODE]);
+        unset($this->snippetversions[Mode::EDITMODE]);        
+        // copy view mode attributes to edit mode
+        $this->getVersion(Modes::getMode(Mode::EDITMODE))->setBody($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getBody());
+        // set changed
+        $this->setChanged();
+        return true;
+    }
+    
 }

@@ -1360,6 +1360,15 @@ class Store {
     }
 
     /**
+     * get all context groups for use in a list box
+     * 
+     * @return resultset id, name
+     */
+    public static function getContextGroups() {
+        return self::selectQuery("SELECT contextgroups.id, contextgroups.name FROM contextgroups ORDER BY contextgroups.name");
+    }
+
+    /**
      * get all layouts from a certain set for use in a list box
      * 
      * @param int setid the id of the set
@@ -3331,7 +3340,7 @@ class Store {
      */
     public static function setSnippetContextGroupId($id, $newcontextgroup) {
         $stmt = self::$connection->stmt_init();
-        if ($stmt->prepare("UPDATE fileincludes SET fk_contextgroup_id=? WHERE id=?")) {
+        if ($stmt->prepare("UPDATE snippets SET fk_contextgroup_id=? WHERE id=?")) {
             $stmt->bind_param("ii", $newcontextgroup, $id);
             return self::actionQuery($stmt);
         }
@@ -3346,7 +3355,7 @@ class Store {
      */
     public static function setSnippetMimeType($id, $newmimetype) {
         $stmt = self::$connection->stmt_init();
-        if ($stmt->prepare("UPDATE fileincludes SET mimetype=? WHERE id=?")) {
+        if ($stmt->prepare("UPDATE snippets SET mimetype=? WHERE id=?")) {
             $stmt->bind_param("si", $newmimetype, $id);
             return self::actionQuery($stmt);
         }
@@ -4585,6 +4594,62 @@ class Store {
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("INSERT INTO fileincludeversions (fk_fileinclude_id, fk_mode_id, createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (?, ?, NOW(), ?, NOW(), ?)")) {
             $stmt->bind_param("iiii", $fileincludeid, $modeid, Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * delete a snippet  from the Store
+     * 
+     * @param int $snippetid the snippet to delete
+     * @return boolean true if success
+     */
+    public static function deleteSnippet($snippetid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM snippets WHERE id=?")) {
+            $stmt->bind_param("i", $snippetid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * delete all snippet versions from the Store
+     * 
+     * @param int $snippetid the snippet to delete the versions from
+     * @return boolean true if success
+     */
+    public static function deleteSnippetVersions($snippetid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM snippetversions WHERE fk_snippet_id=?")) {
+            $stmt->bind_param("i", $snippetid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new snippet into the Store
+     * 
+     * @return int the new id
+     */
+    public static function insertSnippet() {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO snippets (createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("ii", Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new snippet version into the Store
+     * 
+     * @param int $snippetid the snippet
+     * @param int $modeid the mode
+     * @return int the new id
+     */
+    public static function insertSnippetVersion($snippetid, $modeid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO snippetversions (fk_snippet_id, fk_mode_id, createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (?, ?, NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("iiii", $snippetid, $modeid, Authentication::getUser()->getId(), Authentication::getUser()->getId());
             return self::insertQuery($stmt);
         }
     }

@@ -47,4 +47,15 @@ class ContextGroups {
             return self::$contextgroups[$contextgroupid];
         }
     }
+
+    /**
+     * get all context groups for use in a listbox
+     * 
+     * @return resultset
+     */
+    public static function getContextGroups() {
+        // return a resultset
+        return Store::getContextGroups();
+    }
+
 }

@@ -76,7 +76,7 @@ class ConfigRoleAdminFactory extends ConfigAdminFactory {
         $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editRoleName($role), $role->getName(), Helper::getLang(AdminLabels::ADMIN_ROLE_NAME));
         // remove button 
         if ($role->isRemovable()) {
-            $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeRole($this->getObject(), $role, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_ROLE));
+            $section .= $this->factorButtonGroup($this->factorButton($baseid . '_remove', CommandFactory::removeRole($this->getObject(), $role, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_ROLE)));
         }
         $admin .= $this->factorSection($baseid . '_header', $section);
         $section = '';

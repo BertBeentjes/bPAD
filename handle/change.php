@@ -161,6 +161,14 @@ class Change extends Respond {
                         $template = Templates::getTemplate(Request::getCommand()->getItemAddress());
                         Execute::changeTemplate($template);
                         break;
+                    case 'includefile':
+                        $includefile = FileIncludes::getFileInclude(Request::getCommand()->getItemAddress());
+                        Execute::changeFileInclude($includefile);
+                        break;
+                    case 'snippet':
+                        $snippet = Snippets::getSnippet(Request::getCommand()->getItemAddress());
+                        Execute::changeSnippet($snippet);
+                        break;
                     default:
                         Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
                         break;

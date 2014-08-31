@@ -76,7 +76,7 @@ class ConfigUserGroupAdminFactory extends ConfigAdminFactory {
         $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editUserGroupName($usergroup), $usergroup->getName(), Helper::getLang(AdminLabels::ADMIN_USERGROUP_NAME));
         // remove button 
         if ($usergroup->isRemovable()) {
-            $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeUserGroup($this->getObject(), $usergroup, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_USERGROUP));
+            $section .= $this->factorButtonGroup($this->factorButton($baseid . '_remove', CommandFactory::removeUserGroup($this->getObject(), $usergroup, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_USERGROUP)));
         }
         $admin .= $this->factorSection($baseid . '_header', $section);
         // insert users that are member of the user group

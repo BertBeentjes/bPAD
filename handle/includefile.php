@@ -38,7 +38,7 @@ class IncludeFile extends Respond {
         // set the mode, pages always start in view mode
         $this->setMode(Modes::getMode(Mode::VIEWMODE));
         // initialize response
-        $fileinclude = $this->getFileIncludeByName(Request::getURL()->getFileName() . '.' . Request::getURL()->getExtension());
+        $fileinclude = FileIncludes::getFileIncludeByName(Request::getURL()->getFileName() . '.' . Request::getURL()->getExtension());
         $this->setResponse(new Response());
         $this->getResponse()->setType($fileinclude->getMimeType());
         $this->getResponse()->setContent($fileinclude->getVersion(Modes::getMode(Mode::VIEWMODE))->getBody());
@@ -47,20 +47,8 @@ class IncludeFile extends Respond {
     }
 
     /**
-     * Get the requested file include 
-     * 
-
-     * @param string $filename
-     * @return fileinclude
-     */
-    private function getFileIncludeByName($filename) {
-        return FileIncludes::getFileIncludeByName($filename);
-    }
-
-    /**
      * Set the context group to use when formatting the content
      * 
-
      */
     protected function chooseContextGroup() {
         $mobiledetect = new Mobile_Detect();
@@ -74,7 +62,6 @@ class IncludeFile extends Respond {
     /**
      * factor bPAD terms in the file include
      * 
-
      */
     protected function factorResponse() {
         // initialize the factory

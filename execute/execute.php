@@ -1486,4 +1486,68 @@ class Execute {
         }
     }
 
+    /**
+     * Execute a change in a includefile
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param fileinclude $includefile
+     */
+    public static function changeFileInclude($includefile) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'includefilename':
+                    // validate
+                    if (Validator::isFileName(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($includefile->getName());
+                        // set the new value
+                        $includefile->setName(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'includefilemimetype':
+                    // validate
+                    if (Validator::isMimeType(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($includefile->getMimeType());
+                        // set the new value
+                        $includefile->setMimeType(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'includefileversionbody':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($includefile->getVersion(Modes::getMode(Mode::EDITMODE))->getBody());
+                    // set the new value
+                    $includefile->getVersion(Modes::getMode(Mode::EDITMODE))->setBody(Request::getCommand()->getValue());
+                    break;
+                case 'includefileversionpublish':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($includefile->publishVersion());
+                    break;
+                case 'includefileadd':
+                    // store the success value in the command
+                    // add a new template
+                    Request::getCommand()->setOldValue(FileIncludes::newFileInclude());
+                    break;
+                case 'includefileremove':
+                    // store the success value in the command
+                    // remove the specified template
+                    Request::getCommand()->setOldValue(FileIncludes::removeFileInclude($includefile));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+    
 }

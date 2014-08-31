@@ -178,4 +178,12 @@ class Setting extends NamedEntity {
         }
     }    
         
+    /**
+     * the name of a setting can't be changed
+     * 
+     * @throws exception 
+     */
+    public function setName($newname) {
+        throw new Exception(Helper::getLang(Errors::ERROR_UNKNOWN_REQUEST) . ' @ ' . __METHOD__);
+    }
 }

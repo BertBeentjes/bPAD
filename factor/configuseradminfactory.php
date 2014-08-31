@@ -82,7 +82,7 @@ class ConfigUserAdminFactory extends ConfigAdminFactory {
         $section .= $this->factorButtonGroup($this->factorButton($baseid . '_logincounter', CommandFactory::editUserLoginCounter($this->getObject(), $user, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_USER_LOGIN_COUNTER) . $user->getLoginCounter()));
         // remove button 
         if ($user->isRemovable()) {
-            $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeUser($this->getObject(), $user, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_USER));
+            $section .= $this->factorButtonGroup($this->factorButton($baseid . '_remove', CommandFactory::removeUser($this->getObject(), $user, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_USER)));
         }
         $admin .= $this->factorSection($baseid . '_header', $section);
         $section = '';

@@ -2214,6 +2214,22 @@ class Store {
     }
 
     /**
+     * set moded entity mode
+     * 
+     * @param int $id the id of the row to update
+     * @param int $newmodeid the new mode id
+     * @param string $tablename the name of the table
+     * @return boolean true if action query succeeds
+     */
+    public static function setModedVersionMode($id, $newmodeid, $tablename) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE " . $tablename . " SET fk_mode_id=? WHERE id=?")) {
+            $stmt->bind_param("ii", $newmodeid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
      * set moded entity body, a moded item for example is a version of a file include or a snippet
      * 
      * @param int id the id of the row to update
@@ -4515,6 +4531,62 @@ class Store {
      */
     public static function getTargetObjectsBySet($setid) {
         return self::selectQuery("SELECT id FROM objects WHERE fk_set_id=" . $setid);
+    }
+
+    /**
+     * delete a fileinclude  from the Store
+     * 
+     * @param int $fileincludeid the fileinclude to delete
+     * @return boolean true if success
+     */
+    public static function deleteFileInclude($fileincludeid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM fileincludes WHERE id=?")) {
+            $stmt->bind_param("i", $fileincludeid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * delete all fileinclude versions from the Store
+     * 
+     * @param int $fileincludeid the fileinclude to delete the versions from
+     * @return boolean true if success
+     */
+    public static function deleteFileIncludeVersions($fileincludeid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM fileincludeversions WHERE fk_fileinclude_id=?")) {
+            $stmt->bind_param("i", $fileincludeid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new fileinclude into the Store
+     * 
+     * @return int the new id
+     */
+    public static function insertFileInclude() {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO fileincludes (createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("ii", Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new fileinclude version into the Store
+     * 
+     * @param int $fileincludeid the fileinclude
+     * @param int $modeid the mode
+     * @return int the new id
+     */
+    public static function insertFileIncludeVersion($fileincludeid, $modeid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO fileincludeversions (fk_fileinclude_id, fk_mode_id, createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (?, ?, NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("iiii", $fileincludeid, $modeid, Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
     }
 
 }

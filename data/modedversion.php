@@ -101,4 +101,26 @@ class ModedVersion extends StoredEntity {
         }
     }
     
+    /**
+     * setter for the mode, used for archiving and publishing
+     * 
+     * @param mode $mode
+     * @return boolean true if success
+     */
+    public function setMode($mode) {
+        if (Store::setModedVersionMode($this->id, $mode->getId(), $this->tablename) && $this->setChanged()) {
+            $this->mode = $mode;
+            return true;
+        }
+    }
+    
+    /**
+     * getter for the mode
+     * 
+     * @return mode
+     */
+    public function getMode() {
+        return $this->mode;
+    }
+    
 }

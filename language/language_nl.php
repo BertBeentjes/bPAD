@@ -540,6 +540,7 @@ $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_STRUCTUREVERSION] = 'Publiceer versie';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_STYLEVERSION] = 'Publiceer versie';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_STYLEPARAMVERSION] = 'Publiceer versie';
 $lang[AdminLabels::ADMIN_BUTTON_PUBLISH_TEMPLATE] = 'Publiceer sjabloon';
+$lang[AdminLabels::ADMIN_BUTTON_PUBLISH_FILEINCLUDEVERSION] = 'Publiceer versie';
 $lang[AdminLabels::ADMIN_BUTTON_CANCEL_LAYOUTVERSION] = 'Annuleer versie';
 $lang[AdminLabels::ADMIN_BUTTON_CANCEL_STRUCTUREVERSION] = 'Annuleer versie';
 $lang[AdminLabels::ADMIN_BUTTON_CANCEL_STYLEVERSION] = 'Annuleer versie';
@@ -587,6 +588,7 @@ $lang[AdminLabels::ADMIN_ROLE_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_SETTING_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_SETTING_VALUE] = 'Waarde';
 $lang[AdminLabels::ADMIN_INCLUDE_FILE_NAME] = 'Naam';
+$lang[AdminLabels::ADMIN_INCLUDE_FILE_MIME_TYPE] = 'Mimetype';
 $lang[AdminLabels::ADMIN_SNIPPET_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_PROCESSING] = 'Verwerken...';
 

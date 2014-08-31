@@ -1524,11 +1524,41 @@ class CommandFactory {
     /**
      * Compose the command to edit the includefile name
      * 
-     * @param includefile $includefile
+     * @param fileinclude $includefile
      * @return string
      */
     public static function editIncludeFileName($includefile) {
         return 'includefile,' . $includefile->getId() . ',change.includefilename';
+    }
+
+    /**
+     * Compose the command to edit the includefile name
+     * 
+     * @param fileinclude $includefile
+     * @return string
+     */
+    public static function editIncludeFileMimeType($includefile) {
+        return 'includefile,' . $includefile->getId() . ',change.includefilemimetype';
+    }
+
+    /**
+     * Compose the command to edit the includefile version body
+     * 
+     * @param fileinclude $includefile
+     * @return string
+     */
+    public static function editIncludeFileVersionBody($includefile) {
+        return 'includefile,' . $includefile->getId() . ',change.includefileversionbody';
+    }
+
+    /**
+     * Compose the command to edit the includefile mime type
+     * 
+     * @param fileinclude $includefile
+     * @return string
+     */
+    public static function publishIncludeFileVersion($includefile) {
+        return 'includefile,' . $includefile->getId() . ',change.includefileversionpublish';
     }
 
     /**

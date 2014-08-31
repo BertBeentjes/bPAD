@@ -80,7 +80,7 @@ class ConfigSetAdminFactory extends ConfigAdminFactory {
         }
         // remove button 
         if ($set->isRemovable()) {
-            $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeSet($this->getObject(), $set, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_SET));
+            $section .= $this->factorButtonGroup($this->factorButton($baseid . '_remove', CommandFactory::removeSet($this->getObject(), $set, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_SET)));
         }
         $admin .= $this->factorSection($baseid . '_header', $section);
         return $admin;

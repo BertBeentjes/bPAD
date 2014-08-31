@@ -56,7 +56,7 @@ class ConfigIncludeFileAdminFactory extends ConfigAdminFactory {
         // factor the default includefile
         $content = '';
         // open the first includefile
-        // $content = $this->factorConfigIncludeFileContent($includefile);
+        $content = $this->factorConfigIncludeFileContent($includefile);
         // add a detail panel
         $admin .= $this->factorConfigDetailPanel($baseid, $content);
         $this->setContent($admin);
@@ -65,7 +65,7 @@ class ConfigIncludeFileAdminFactory extends ConfigAdminFactory {
     /**
      * Get the includefile config edit content 
      * 
-     * @param includefile $includefile
+     * @param fileinclude $includefile
      * @return string
      */
     private function factorConfigIncludeFileContent($includefile) {
@@ -73,16 +73,21 @@ class ConfigIncludeFileAdminFactory extends ConfigAdminFactory {
         $section = '';
         $admin = '';
         // includefile name
-        if ($includefile->getIsBpadDefined()) {
-            $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editIncludeFileName($includefile), $includefile->getName(), Helper::getLang(AdminLabels::ADMIN_INCLUDE_FILE_NAME), 'disabled');
-        } else {
-            $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editIncludeFileName($includefile), $includefile->getName(), Helper::getLang(AdminLabels::ADMIN_INCLUDE_FILE_NAME));
-        }
+        $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editIncludeFileName($includefile), $includefile->getName(), Helper::getLang(AdminLabels::ADMIN_INCLUDE_FILE_NAME));
+        // add the text input for the mime type
+        $section .= $this->factorTextInput($baseid . '_mime', CommandFactory::editIncludeFileMimeType($includefile), $includefile->getMimeType(), Helper::getLang(AdminLabels::ADMIN_INCLUDE_FILE_MIME_TYPE));
         // remove button 
-        if ($includefile->isRemovable()) {
-            $section .= $this->factorButton($baseid . '_remove', CommandFactory::removeIncludeFile($this->getObject(), $includefile, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_INCLUDE_FILE));
-        }
+        $section .= $this->factorButtonGroup($this->factorButton($baseid . '_remove', CommandFactory::removeIncludeFile($this->getObject(), $includefile, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_INCLUDE_FILE)));
         $admin .= $this->factorSection($baseid . '_header', $section);
+        $section = '';        
+        // add publish button above
+        $section .= $this->factorButtonGroup($this->factorButton($baseid . '_publish', CommandFactory::publishIncludeFileVersion($includefile), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH_FILEINCLUDEVERSION)));
+        // add the text area for editing the file
+        $includefileversion = $includefile->getVersion(Modes::getMode(Mode::EDITMODE));
+        $section .= $this->factorTextArea($baseid . '_body' . $includefileversion->getId(), CommandFactory::editIncludeFileVersionBody($includefile, Modes::getMode(Mode::EDITMODE), $context), $includefileversion->getBody(), $includefile->getName());
+        // add publish button below
+        $section .= $this->factorButtonGroup($this->factorButton($baseid . '_publish', CommandFactory::publishIncludeFileVersion($includefile), Helper::getLang(AdminLabels::ADMIN_BUTTON_PUBLISH_FILEINCLUDEVERSION)));
+        $admin .= $this->factorSection($baseid . '_header', $section);       
         return $admin;
     }
 

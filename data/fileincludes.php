@@ -71,4 +71,31 @@ class FileIncludes {
         return Store::getFileIncludes();
     }
     
+    /**
+     * Create a new fileinclude
+     * 
+     * @return type
+     */
+    public static function newFileInclude() {
+        $fileincludeid = Store::insertFileInclude();
+        // a fileinclude must always have an edit and view version
+        Store::insertFileIncludeVersion($fileincludeid, Mode::VIEWMODE);
+        Store::insertFileIncludeVersion($fileincludeid, Mode::EDITMODE);
+
+        return true;
+    }
+
+    /**
+     * remove a fileinclude
+     * 
+     * @param fileinclude $fileinclude
+     * @return type
+     */
+    public static function removeFileInclude($fileinclude) {
+        Store::deleteFileIncludeVersions($fileinclude->getId());
+        Store::deleteFileInclude($fileinclude->getId());
+        unset(self::$fileincludes[$fileinclude->getId()]);
+        return true;
+    }
+
 }

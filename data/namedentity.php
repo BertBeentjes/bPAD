@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application: bPAD
  * Author: Bert Beentjes
@@ -27,16 +28,17 @@
  * @since 0.4.0
  */
 abstract class NamedEntity extends StoredEntity {
+
     protected $name;
-    
+
     /**
      * init the name
      * 
      * @param type $attr
      * @return boolean true if success
      */
-    protected function initAttributes ($attr) {
-        $this->name =  $attr->name;
+    protected function initAttributes($attr) {
+        $this->name = $attr->name;
         parent::initAttributes($attr);
         return true;
     }
@@ -52,12 +54,19 @@ abstract class NamedEntity extends StoredEntity {
     }
 
     /**
-     * the name of a setting can't be changed
+     * setter for the name
      * 
-     * @throws exception 
+     * @param newname the name
+     * @return boolean  if success
+     * @throws exception if the update in the store fails
      */
-    public function setName()  {
-        throw new Exception (Helper::getLang(Errors::ERROR_UNKNOWN_REQUEST) . ' @ ' . __METHOD__);
+    public function setName($newname) {
+        if (Store::setEntityName($this->tablename, $this->id, $newname) && $this->setChanged()) {
+            $this->name = $newname;
+            return true;
+        } else {
+            throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
     }
 
 }

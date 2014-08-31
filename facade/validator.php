@@ -464,14 +464,33 @@ Class Validator {
     }
 
     /**
+     * Check whether a string contains a mimetype, with only lower case letters and slashes
+     * 
+     * @param string $str
+     */
+    public static function isMimeType($str) {
+        return preg_match('/^[a-z\/]+$/', $str);
+    }
+
+    /**
      * Check whether a the urlparts are ok for a file:
      * /media/##/##/object####/##/##/file.ext
      * media - millions - thousands - object objectid - mode - positionnumber - filename.extension
      * 
-     * @param array()
+     * @param array() $urlparts
      */
     public static function isFileURL($urlparts) {
         return count($urlparts) === 7 && $urlparts[1] === 'media' && Validator::isNumeric($urlparts[2]) && Validator::isNumeric($urlparts[3]) && substr($urlparts[4], 0, 6) === 'object' && Validator::isNumeric(substr($urlparts[4], 6)) && Validator::isNumeric($urlparts[5]);
+    }
+
+    /**
+     * Check whether this is a file name:
+     * file-1.2.3.ext
+     * 
+     * @param string $str
+     */
+    public static function isFileName($str) {
+        return preg_match('/^[a-zA-Z0-9\-\.]+$/', $str);
     }
 
     /**

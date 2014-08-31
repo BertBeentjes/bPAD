@@ -111,4 +111,26 @@ class FileInclude extends NamedEntity {
         }
     }
 
+    /**
+     * Publish the edit version to the view version
+     * 
+     * @return boolean success or not
+     */
+    public function publishVersion() {
+        // move viewmode to archive
+        $this->getVersion(Modes::getMode(Mode::VIEWMODE))->setMode(Modes::getMode(Mode::ARCHIVEMODE));
+        // move editmode to view
+        $this->getVersion(Modes::getMode(Mode::EDITMODE))->setMode(Modes::getMode(Mode::VIEWMODE));        
+        // create new edit mode version
+        $newversionid = Store::insertFileIncludeVersion($this->getId(), Mode::EDITMODE);
+        // reset the version cache
+        unset($this->fileincludeversions[Mode::VIEWMODE]);
+        unset($this->fileincludeversions[Mode::EDITMODE]);        
+        // copy view mode attributes to edit mode
+        $this->getVersion(Modes::getMode(Mode::EDITMODE))->setBody($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getBody());
+        // set changed
+        $this->setChanged();
+        return true;
+    }
+    
 }

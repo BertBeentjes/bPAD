@@ -88,7 +88,12 @@ class Initializer {
             $success = self::getUpdateFile($_SERVER['DOCUMENT_ROOT'] . Settings::getSetting(Setting::SITE_ROOTFOLDER)->getValue() . 'update_0_4_0/updatescript_0_4_1');
             $version = Versions::getLatestVersion();
         }
-        // after 0.4.1, updates are done with file downloads instead of files in the file system
+        if ($version->getVersion() == '0.4.1') {
+            // TODO: fix file update for dev setup
+            $success = self::getUpdateFile($_SERVER['DOCUMENT_ROOT'] . Settings::getSetting(Setting::SITE_ROOTFOLDER)->getValue() . 'update_0_4_0/updatescript_0_4_2');
+            $version = Versions::getLatestVersion();
+        }
+        // starting 0.5.0, updates are done with file downloads instead of files in the file system
         return $success;
     }
 

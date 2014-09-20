@@ -262,9 +262,9 @@ class Object extends SettedEntity {
             CacheObjects::outdateObject($this);
             CacheObjects::outdateObject($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectParent());
             CacheObjects::outdateObject($this->getVersion(Modes::getMode(Mode::EDITMODE))->getObjectParent());
-            CacheObjects::outdateInstances();
             CacheObjects::outdateReferrals($this);
             CacheObjects::outdateLinkedContentItems();
+            CachePositionInstances::outdateInstances();
         }
         // set the change date and user once
         $thischanged = parent::setChanged(); // call the overridden function to set the change user/date

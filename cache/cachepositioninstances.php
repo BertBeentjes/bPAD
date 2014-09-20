@@ -109,4 +109,14 @@ class CachePositionInstances {
             return $objects;
         }
     }
+    
+    /**
+     * outdate instances after an object that is possibly in an instance
+     * has been changed 
+     */
+    public static function outdateInstances() {
+        // outdate all instances, any update can result in an item getting in- or out of any instance.
+        Store::outdateInstances();
+    }
+    
 }

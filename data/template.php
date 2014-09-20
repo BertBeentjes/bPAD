@@ -230,6 +230,8 @@ class Template extends SettedEntity {
     public function setInstanceAllowed($newbool) {
         if (Store::setTemplateInstanceAllowed($this->id, $newbool) && $this->setChanged()) {
             $this->instanceallowed = $newbool;
+            // if this boolean is changed, the instances are outdated
+            CachePositionInstances::outdateInstances();
             return true;
         } else {
             throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
@@ -256,7 +258,9 @@ class Template extends SettedEntity {
      */
     public function setSearchable($newbool) {
         if (Store::setTemplateSearchable($this->id, $newbool) && $this->setChanged()) {
-            $this->searchable = $newbool;
+            $this->searchable = $newbool;            
+            // if this boolean is changed, the instances are outdated
+            CachePositionInstances::outdateInstances();
             return true;
         } else {
             throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);

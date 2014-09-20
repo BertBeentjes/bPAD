@@ -441,6 +441,7 @@ $lang[LSSNames::TEMPLATE_WHITESPACE] = 'Whitespace';
 $lang[LSSNames::TEMPLATE_DEFAULT] = 'No template';
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_OBJECT_TEMPLATE_NAME] = 'Based upon template';
 $lang[AdminLabels::ADMIN_OBJECT_INTERNAL_LINK] = 'Link to this item';
 $lang[AdminLabels::ADMIN_OBJECT_DEEP_LINK] = 'Deep link to this item';
 $lang[AdminLabels::ADMIN_OBJECT_ACTIVE] = 'Active';

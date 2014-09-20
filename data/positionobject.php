@@ -74,7 +74,7 @@ class PositionObject extends StoredEntity implements PositionContent {
     public function setObject($object) {
         if (Store::setPositionObjectObject($this->id, $object->getId()) && $this->setChanged()) {
             $this->object = $object;            
-            // set the new parent object in the child object
+            // set the new parent position and parent object in the child object
             $object->getVersion($this->getContainer()->getContainer()->getMode())->setObjectParent($this->getContainer());
             return true;
         }

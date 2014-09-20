@@ -136,7 +136,7 @@ abstract class StoredEntity {
                     $this->changed = true;
                     // propagate the change to the container for this item
                     if (isset($this->container)) {
-                        $this->container->setChanged();
+                        $this->container->setChanged($force);
                         return true;
                     }
                     return true;

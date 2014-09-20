@@ -39,8 +39,8 @@ class Execute {
             // check set 
             if ($object->getSet()->isDefault() || $object->getSet()->getId() == $template->getSet()->getId()) {
                 // create a new position and position object to put the copy of the template in
-                $positionobject = $object->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($template, $number);
                 $viewpositionobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->newTemplateObjectPosition($template, $number);
+                $positionobject = $object->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($template, $number);
                 // get the template root object
                 $source = $template->getRootObject();
                 // copy the object
@@ -55,8 +55,8 @@ class Execute {
             // check default template 
             if ($object->getTemplate()->getId() == $template->getId()) {
                 // create a new position and position object to put the copy of the template in
-                $positionobject = $object->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($template, $number);
                 $viewpositionobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->newTemplateObjectPosition($template, $number);
+                $positionobject = $object->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($template, $number);
                 // get the template root object
                 $source = $template->getRootObject();
                 // copy the object

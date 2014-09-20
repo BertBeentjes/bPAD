@@ -440,6 +440,7 @@ $lang[LSSNames::TEMPLATE_WHITESPACE] = 'Witruimte';
 $lang[LSSNames::TEMPLATE_DEFAULT] = 'Geen template';
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Naam';
+$lang[AdminLabels::ADMIN_OBJECT_TEMPLATE_NAME] = 'Gebaseerd op sjabloon';
 $lang[AdminLabels::ADMIN_OBJECT_INTERNAL_LINK] = 'Link naar dit item';
 $lang[AdminLabels::ADMIN_OBJECT_DEEP_LINK] = 'Diepe link naar dit item';
 $lang[AdminLabels::ADMIN_OBJECT_ACTIVE] = 'Actief';

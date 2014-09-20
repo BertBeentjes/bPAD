@@ -165,21 +165,21 @@ class ExecuteObjectAction {
     public function moveObject($target, $mode) {
         // remove object from current parent
         $this->getObject()->removeFromParent(false);
-        // attach object to new parent in edit mode
-        if ($this->getObject()->getIsObjectTemplateRoot()) {
-            $newpositionobject = $target->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($this->getObject()->getTemplate());
-            $newposition = $newpositionobject->getContainer();
-        } else {
-            $newposition = $target->getVersion(Modes::getMode(Mode::EDITMODE))->newPosition();
-            $newpositionobject = $newposition->newPositionObject(false);
-        }
-        $newpositionobject->setObject($this->getObject());
         // attach object to new parent in view mode
         if ($this->getObject()->getIsObjectTemplateRoot()) {
             $newpositionobject = $target->getVersion(Modes::getMode(Mode::VIEWMODE))->newTemplateObjectPosition($this->getObject()->getTemplate());
             $newposition = $newpositionobject->getContainer();
         } else {
             $newposition = $target->getVersion(Modes::getMode(Mode::VIEWMODE))->newPosition();
+            $newpositionobject = $newposition->newPositionObject(false);
+        }
+        $newpositionobject->setObject($this->getObject());
+        // attach object to new parent in edit mode
+        if ($this->getObject()->getIsObjectTemplateRoot()) {
+            $newpositionobject = $target->getVersion(Modes::getMode(Mode::EDITMODE))->newTemplateObjectPosition($this->getObject()->getTemplate());
+            $newposition = $newpositionobject->getContainer();
+        } else {
+            $newposition = $target->getVersion(Modes::getMode(Mode::EDITMODE))->newPosition();
             $newpositionobject = $newposition->newPositionObject(false);
         }
         $newpositionobject->setObject($this->getObject());

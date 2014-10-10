@@ -45,7 +45,7 @@ class ConfigStyleAdminFactory extends ConfigAdminFactory {
             $style = Styles::getStyle($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the styles
         $styles = Styles::getStyles();

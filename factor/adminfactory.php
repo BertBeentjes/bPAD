@@ -299,6 +299,16 @@ class AdminFactory extends Factory {
     }
 
     /**
+     * factor an admin error message box
+     * 
+     * @return string the error message box
+     */
+    protected function factorErrorMessage() {
+        $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_ERROR_MESSAGE)->getVersion($this->getMode(), $this->getContext())->getBody();
+        return $structure;
+    }
+
+    /**
      * factor an admin section
      * 
      * @param string $id the id to use

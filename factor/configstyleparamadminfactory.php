@@ -46,7 +46,7 @@ class ConfigStyleParamAdminFactory extends ConfigAdminFactory {
             $styleparam = StyleParams::getStyleParam($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the style params
         $styleparams = StyleParams::getStyleParamList();

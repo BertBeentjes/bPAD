@@ -192,6 +192,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_COMBOBOX] = 'Administrator - combobox';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX] = 'Administrator - listbox';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX_LSS] = 'Administrator - listbox layout items';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX_OPTION] = 'Administrator - listbox option';
+$lang[LSSNames::STRUCTURE_ADMIN_ERROR_MESSAGE] = 'Administrator - error message';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION] = 'Administrator - section';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION_COLLAPSED] = 'Administrator - section collapsed';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION_ADD] = 'Administrator - section add';

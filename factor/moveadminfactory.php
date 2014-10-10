@@ -37,7 +37,7 @@ class MoveAdminFactory extends AdminFactory {
 
     public function factor() {
         $section = '';
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_CREATOR_EDIT) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_EDIT)) {
             // only template based root objects that aren't part of a larger structure (template is searchable) are moveable
             // --> these checks are also done in execute!

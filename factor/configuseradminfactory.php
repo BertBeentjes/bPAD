@@ -45,7 +45,7 @@ class ConfigUserAdminFactory extends ConfigAdminFactory {
             $user = Users::getUser($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the users
         $users = Users::getUsers();

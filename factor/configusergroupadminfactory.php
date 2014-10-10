@@ -45,7 +45,7 @@ class ConfigUserGroupAdminFactory extends ConfigAdminFactory {
             $usergroup = UserGroups::getUserGroup($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the usergroups
         $usergroups = UserGroups::getUserGroups();

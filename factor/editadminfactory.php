@@ -121,6 +121,7 @@ class EditAdminFactory extends AdminFactory {
             // wrap the section for roots and add buttons
             if ($isroot) {
                 $section .= $this->factorButtons($baseid . '_foot', $object);
+                $admin .= $this->factorErrorMessage();
                 $admin .= $this->factorSection($baseid, $section, $sectionheader);
             } else {
                 // if this is a searchable subobject, add delete, move up, move down buttons

@@ -191,6 +191,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_COMBOBOX] = 'Beheer - lijst/invoerveld';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX] = 'Beheer - lijstveld';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX_LSS] = 'Beheer - lijstveld opmaakitems';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX_OPTION] = 'Beheer - lijstveld optie';
+$lang[LSSNames::STRUCTURE_ADMIN_ERROR_MESSAGE] = 'Beheer - foutmelding';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION] = 'Beheer - sectie';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION_COLLAPSED] = 'Beheer - sectie ingeklapt';
 $lang[LSSNames::STRUCTURE_ADMIN_SECTION_ADD] = 'Beheer - sectie toevoegknoppen';

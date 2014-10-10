@@ -72,21 +72,29 @@ var showerror = function() {
 function showError(result) {
     if (result > '') {
         // if the message modal is visible, hide it, this is a final change and waiting on the result is not necessary
-        $('#modalcontainer').modal('hide');
-        // show the error message
-        $('#errormessage').html(result);
-        $('#errorcontainer').show();
+        if ($('#modalcontainer').is(':visible')) {
+            // show the error message in the edit container
+            // $('#modalcontainer').modal('hide');
+            $('#adminerrormessage').html(result);
+            $('#modalmessage').addClass('alert-danger');
+            $('#adminerrorcontainer').removeClass('hidden');
+        } else {
+            // show the error message in the global error modal
+            $('#errormessage').html(result);
+            $('#errorcontainer').show();
+        }
         return true;
+    } else {
+        if ($('#adminerrorcontainer').is(':visible')) {
+            $('#adminerrormessage').html('');
+            $('#modalmessage').removeClass('alert-danger');
+            $('#adminerrorcontainer').addClass('hidden');
+        }
     }
     return false;
 }
 
 function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
-    // store the current location of the container on the page
-//    var contloc = 0;
-//    if ($('#' + container).length) {
-//        contloc = $('#' + container).offset().top - $('body').scrollTop();
-//    }
     // show the result
     if (replace) {
         // check whether the container to replace is coupled to this content fetch (it may have changed client-side during the roundtrip)
@@ -113,13 +121,6 @@ function resultToHTML(container, replace, checkcommandnr, commandnr, result) {
             refreshHash();
             // correct the position of the page after loading new content, only correct
             // if the page moved more than 5 pixels
-//            if ($('#' + container).length) {                
-//                var newcontloc = $('#' + container).offset().top - $('body').scrollTop();
-//                alert ($('#' + container).offset().top + ':' + contloc + ':' + newcontloc);
-//                if (Math.abs(contloc - newcontloc) > 5) {
-//                    $('body').scrollTop($('#' + container).offset().top - contloc);
-//                }
-//            }
             var margin = 200;
             if (window.innerHeight < 600) {
                 margin = 120;
@@ -155,6 +156,8 @@ function refreshHash() {
         refreshinghash = true;
         window.location.hash = newhash;
     }
+    // check whether analytics should be updated
+    checkAnalytics();
 }
 
 function fetchContent() {
@@ -172,20 +175,12 @@ function doBootStrapping() {
     // optionally, load Google Analytics
     if (settings.hasOwnProperty('GOOGLE_ANALYTICSCODE')) {
         if (settings.GOOGLE_ANALYTICSCODE.length > 6) {
-            $.getScript('http://www.google-analytics.com/ga.js');
-            (function(i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r;
-                i[r] = i[r] || function() {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-                a = s.createElement(o),
-                        m = s.getElementsByTagName(o)[0];
-                a.async = 1;
-                a.src = g;
-                m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-            ga('create', settings.GOOGLE_ANALYTICSCODE, 'bertbeentjes.nl');
+            ga('create', settings.GOOGLE_ANALYTICSCODE, 'auto');
         }
     }
     // initialize the session
@@ -235,7 +230,7 @@ function doBootStrapping() {
  */
 function checkAnalytics() {
     if (settings.hasOwnProperty('GOOGLE_ANALYTICSCODE')) {
-        if (settings.GOOGLE_ANALYTICSCODE.length > 6) {
+        if (settings.GOOGLE_ANALYTICSCODE.length > 6) {            
             var thisurl = window.location.hash;
             if (thisurl.substring(0, 1) == '#') {
                 thisurl = thisurl.substring(1);
@@ -243,6 +238,7 @@ function checkAnalytics() {
             if (thisurl != analyticsurl) {
                 ga('send', 'pageview', thisurl);
                 analyticsurl = thisurl;
+            } else {
             }
         }
     }
@@ -521,8 +517,6 @@ function addEvents(divid) {
             }
         }
     });
-    // check whether analytics should be updated
-    checkAnalytics();
     // start a lazy load sequence
     lazyEvent();
 }

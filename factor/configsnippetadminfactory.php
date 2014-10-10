@@ -45,7 +45,7 @@ class ConfigSnippetAdminFactory extends ConfigAdminFactory {
             $snippet = Snippets::getSnippet($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the snippets
         $snippets = Snippets::getSnippets();

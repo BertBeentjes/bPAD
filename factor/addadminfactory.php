@@ -37,7 +37,7 @@ class AddAdminFactory extends AdminFactory {
 
     public function factor() {
         $section = '';
-        $admin = '';
+        $admin .= $this->factorErrorMessage();
         if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_ADD)) {
             $objectversion = $this->getObject()->getVersion($this->getMode());
             // with general permission, show all templates or the ones in the requested set

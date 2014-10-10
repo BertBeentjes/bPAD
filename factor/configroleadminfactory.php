@@ -45,7 +45,7 @@ class ConfigRoleAdminFactory extends ConfigAdminFactory {
             $role = Roles::getRole($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the roles
         $roles = Roles::getRoles();

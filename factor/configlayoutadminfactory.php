@@ -45,7 +45,7 @@ class ConfigLayoutAdminFactory extends ConfigAdminFactory {
             $layout = Layouts::getLayout($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the layouts
         $layouts = Layouts::getLayouts();

@@ -45,7 +45,7 @@ class ConfigIncludeFileAdminFactory extends ConfigAdminFactory {
             $includefile = FileIncludes::getFileInclude($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the includefiles
         $includefiles = FileIncludes::getFileIncludes();

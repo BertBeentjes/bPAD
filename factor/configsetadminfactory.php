@@ -45,7 +45,7 @@ class ConfigSetAdminFactory extends ConfigAdminFactory {
             $set = Sets::getSet($row->id);
         }
         $baseid = 'CP' . $this->getObject()->getId();
-        $admin = '';
+        $admin = $this->factorErrorMessage();
         $section = '';
         // factor the sets
         $sets = Sets::getSets();

@@ -162,6 +162,13 @@ class Request {
          * command syntax change.@@@ (used for editing attributes, the value is in value):
          *   item,itemid,commandgroup.command,sessionid.lastcommandid.commandnumber
          */
+        
+        // special case: to be able to create a login form, the login command
+        // can be shortened to 'login'
+        if ($command == 'login' ) {
+            $command = 'user,username,login.login,0.0.0';
+        }
+        
         $commandparts = explode(',', $command);
 
         if (count($commandparts) == 4 && Validator::isLCaseChars($commandparts[0]) && Validator::isAddress($commandparts[1]) && Validator::isCommand($commandparts[2]) && Validator::isCommandNumber($commandparts[3])) {

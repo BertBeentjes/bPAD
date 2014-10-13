@@ -86,7 +86,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
      * Setter for the content item body
      * 
      * @param string newbody the new body
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setBody($newbody) {
         if (Store::setPositionContentItemBody($this->id, $newbody) && $this->setChanged()) {
@@ -108,7 +108,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
      * Setter for the content item input type
      * 
      * @param string newinputtype the new input type
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setInputType($newinputtype) {
         if (Store::setPositionContentItemInputType($this->id, $newinputtype) && $this->setChanged()) {
@@ -140,7 +140,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
      * it is a cache value maintained by the system, not by the user.
      * 
      * @param object the new root object
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setRootObject($newrootobject) {
         if (Store::setPositionContentItemRootObjectId($this->id, $newrootobject->getId())) {
@@ -168,7 +168,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
      * it is a cache value maintained by the system, not by the user.
      * 
      * @param template the new template
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setTemplate($newtemplate) {
         if (Store::setPositionContentItemTemplateId($this->id, $newtemplate->getId())) {
@@ -183,7 +183,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
      * after changes and internal links may be outdated
      * 
 
-     * @return boolean  if has internal links
+     * @return boolean true if has internal links
      */
     public function getHasInternalLinks() {
         return $this->hasinternallinks;
@@ -193,7 +193,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
      * Setter for has internal links
      * 
      * @param int newbool the new value for hasinternallinks
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setHasInternalLinks($newbool) {
         // Don't use setChanged as this one is called from setChanged. 

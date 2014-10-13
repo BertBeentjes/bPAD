@@ -116,7 +116,7 @@ class User extends NamedEntity{
      * setter for the first name
      * 
      * @param newfirstname the new first name
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setFirstName($newfirstname) {
@@ -150,7 +150,7 @@ class User extends NamedEntity{
      * setter for the last name
      * 
      * @param newlastname the new last name
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setLastName($newlastname) {
@@ -175,7 +175,7 @@ class User extends NamedEntity{
      * setter for the password
      * 
      * @param newpassword the new password
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setPassword($newpassword) {
@@ -200,7 +200,7 @@ class User extends NamedEntity{
      * setter for the logincounter
      * 
      * @param newlogincounter the new logincounter
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setLoginCounter($newlogincounter) {

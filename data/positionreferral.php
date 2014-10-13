@@ -79,7 +79,7 @@ class PositionReferral extends StoredEntity implements PositionContent {
      * Setter for the order by
      * 
      * @param string the new order by
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setOrderBy($neworderby) {
         if (Store::setPositionReferralOrderBy($this->id, $neworderby) && $this->setChanged()) {
@@ -101,7 +101,7 @@ class PositionReferral extends StoredEntity implements PositionContent {
      * Setter for the number of items
      * 
      * @param string the new number of items
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setNumberOfItems($newnumberofitems) {
         if (Store::setPositionReferralNumberOfItems($this->id, $newnumberofitems) && $this->setChanged()) {
@@ -123,7 +123,7 @@ class PositionReferral extends StoredEntity implements PositionContent {
      * Setter for the argument
      * 
      * @param argument the new argument
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setArgument($newargument) {
         if (Store::setPositionReferralArgumentId($this->id, $newargument->getId()) && $this->setChanged()) {

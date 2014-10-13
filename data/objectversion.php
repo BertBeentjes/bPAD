@@ -76,7 +76,7 @@ Class ObjectVersion extends StoredEntity {
     /**
      * Load the basic attributes for this object version
      * 
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception when the store isn't available
      */
     private function loadAttributes() {
@@ -92,7 +92,7 @@ Class ObjectVersion extends StoredEntity {
     /**
      * Get the basic attributes for this object version
      * 
-     * @return boolean  if success
+     * @return boolean true if success
      */
     protected function initAttributes($attr) {
         $this->id = $attr->id;
@@ -464,7 +464,7 @@ Class ObjectVersion extends StoredEntity {
      * set the layout
      * 
      * @param layout the new layout
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setLayout($newlayout) {
@@ -489,7 +489,7 @@ Class ObjectVersion extends StoredEntity {
      * set the style
      * 
      * @param style the new style
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setStyle($newstyle) {
@@ -514,7 +514,7 @@ Class ObjectVersion extends StoredEntity {
      * set the argument
      * 
      * @param argument the new argument
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setArgument($newargument) {
@@ -544,7 +544,7 @@ Class ObjectVersion extends StoredEntity {
      * set the argument id
      * 
      * @param newargumentid the new id
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setArgumentDefault($newargumentdefault) {
@@ -572,7 +572,7 @@ Class ObjectVersion extends StoredEntity {
      * set the inherit layout bool, only functional in template objects
      * 
      * @param newinheritlayout the new value
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setInheritLayout($newinheritlayout) {
@@ -600,7 +600,7 @@ Class ObjectVersion extends StoredEntity {
      * set the inherit style bool, only functional in template objects
      * 
      * @param newinheritstyle the new value
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setInheritStyle($newinheritstyle) {
@@ -626,7 +626,7 @@ Class ObjectVersion extends StoredEntity {
      * adding new template based object trees to a #pn# layout.
      * 
      * @param template the new template
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setTemplate($newtemplate) {
         if (Store::setObjectVersionTemplateId($this->id, $newtemplate->getId()) && $this->setChanged()) {

@@ -33,7 +33,7 @@ Class Validator {
      * validate the set id, valid if a set with this id exists in the store
      * 
      * @param setid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validSet($setid) {
@@ -49,7 +49,7 @@ Class Validator {
      * validate the user id, valid if a user with this id exists in the store
      * 
      * @param userid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validUser($userid) {
@@ -65,7 +65,7 @@ Class Validator {
      * validate the user group id, valid if a user group with this id exists in the store
      * 
      * @param usergroupid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validUserGroup($usergroupid) {
@@ -81,7 +81,7 @@ Class Validator {
      * validate the role id, valid if a role with this id exists in the store
      * 
      * @param roleid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validRole($roleid) {
@@ -97,7 +97,7 @@ Class Validator {
      * validate the setting id, valid if a setting with this id exists in the store
      * 
      * @param settingid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validSetting($settingid) {
@@ -113,7 +113,7 @@ Class Validator {
      * validate the includefile id, valid if a includefile with this id exists in the store
      * 
      * @param includefileid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validIncludeFile($includefileid) {
@@ -129,7 +129,7 @@ Class Validator {
      * validate the snippet id, valid if a snippet with this id exists in the store
      * 
      * @param snippetid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validSnippet($snippetid) {
@@ -145,7 +145,7 @@ Class Validator {
      * validate the template id
      * 
      * @param int templateid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validTemplate($templateid) {
@@ -198,7 +198,7 @@ Class Validator {
      * @param int styleid the id to validate
      * @param string styletype the style type
      * @param int setid the id of the set the style must be in
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validStyle($styleid, $styletype = NULL, $setid = Set::DEFAULT_SET) {
@@ -223,7 +223,7 @@ Class Validator {
      * validate the style parameter id
      * 
      * @param int styleparamid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validStyleParam($styleparamid) {
@@ -240,7 +240,7 @@ Class Validator {
      * 
      * @param int layoutid the id to validate
      * @param int setid the id of the set the style must be in
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validLayout($layoutid, $setid = Set::DEFAULT_SET) {
@@ -261,7 +261,7 @@ Class Validator {
      * 
      * @param int structureid the id to validate
      * @param int setid the id of the set the style must be in
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validStructure($structureid, $setid = Set::DEFAULT_SET) {
@@ -281,7 +281,7 @@ Class Validator {
      * validate the argument id
      * 
      * @param int argumentid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validArgument($argumentid) {
@@ -297,7 +297,7 @@ Class Validator {
      * validate the contextgroup id
      * 
      * @param int contextgroupid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validContextGroup($contextgroupid) {
@@ -313,7 +313,7 @@ Class Validator {
      * validate the mode id, valid if a mode with this id exists in the store
      * 
      * @param modeid the id to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      * @throws exception when store not available
      */
     public static function validMode($modeid) {
@@ -329,7 +329,7 @@ Class Validator {
      * validate the input type of a position content item, valid if a known input type
      * 
      * @param string inputtype the inputtype to validate
-     * @return boolean  if valid
+     * @return boolean true if valid
      */
     public static function validInputType($inputtype) {
         if (Validator::isType($inputtype)) {

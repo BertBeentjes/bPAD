@@ -231,35 +231,38 @@ class PositionFactory extends Factory {
             if (is_array($objects)) {
                 $lazyloadstructure = Structures::getStructureByName(LSSNames::STRUCTURE_LAZY_LOAD)->getVersion($this->getMode(), $this->getContext())->getBody();
                 $number = 0;
+                $maxitems = $this->getPosition()->getPositionContent()->getMaxItems();
                 foreach ($objects as $objectvalues) {
-                    $object = $objectvalues['object'];
-                    $groupvalue = $objectvalues['groupvalue'];
-                    // check authorization for this object and check that it isn't the container of this instance and show it
-                    if ($object->isVisible($this->getMode(), $instancecontext) && $object->getId()!=$container->getId()) {
-                        // create a lazy load scenario for each object, a front end script lazy loads the content with the supplied command
-                        $number = $number + 1;
-                        // preload the first objects and lazy load the rest
-                        if ($number <= Settings::getSetting(Setting::CONTENT_PRELOADINSTANCES)->getValue()) {
-                            $load = Terms::object_placeholder($object, $instancecontext);
-                        } else {
-                            $containerid = $this->getPosition()->getId() . '-' . $number;
-                            $load = str_replace(Terms::POSITION_REFERRAL, CommandFactory::loadObject($object, $containerid, $this->getMode(), $instancecontext), $lazyloadstructure);
-                            $load = str_replace(Terms::POSITION_UID, 'I' . $containerid, $load);
-                        }
-                        // create grouped sections
-                        if ($this->getPosition()->getPositionContent()->getGroupBy()) {
-                            // if there is a new groupvalue, insert a section and a header
-                            if ($groupvalue != $lastgroupvalue) {
-                                if ($instancecontent > '') {
-                                    $instancecontent = str_replace(Terms::POSITION_CONTENT, $instancecontent, Structures::getStructureByName(LSSNames::STRUCTURE_INSTANCE_SECTION)->getVersion($this->getMode(), $this->getContext())->getBody());
-                                }
-                                $instancecontent = $instancecontent . str_replace(Terms::POSITION_CONTENT, $groupvalue, Structures::getStructureByName(LSSNames::STRUCTURE_INSTANCE_HEADER)->getVersion($this->getMode(), $this->getContext())->getBody());
-                                $returnvalue .= $instancecontent;
-                                $instancecontent = '';
-                                $lastgroupvalue = $groupvalue;
+                    if ($number < $maxitems || $maxitems == 0) {
+                        $object = $objectvalues['object'];
+                        $groupvalue = $objectvalues['groupvalue'];
+                        // check authorization for this object and check that it isn't the container of this instance and show it
+                        if ($object->isVisible($this->getMode(), $instancecontext) && $object->getId()!=$container->getId()) {
+                            // create a lazy load scenario for each object, a front end script lazy loads the content with the supplied command
+                            $number = $number + 1;
+                            // preload the first objects and lazy load the rest
+                            if ($number <= Settings::getSetting(Setting::CONTENT_PRELOADINSTANCES)->getValue()) {
+                                $load = Terms::object_placeholder($object, $instancecontext);
+                            } else {
+                                $containerid = $this->getPosition()->getId() . '-' . $number;
+                                $load = str_replace(Terms::POSITION_REFERRAL, CommandFactory::loadObject($object, $containerid, $this->getMode(), $instancecontext), $lazyloadstructure);
+                                $load = str_replace(Terms::POSITION_UID, 'I' . $containerid, $load);
                             }
+                            // create grouped sections
+                            if ($this->getPosition()->getPositionContent()->getGroupBy()) {
+                                // if there is a new groupvalue, insert a section and a header
+                                if ($groupvalue != $lastgroupvalue) {
+                                    if ($instancecontent > '') {
+                                        $instancecontent = str_replace(Terms::POSITION_CONTENT, $instancecontent, Structures::getStructureByName(LSSNames::STRUCTURE_INSTANCE_SECTION)->getVersion($this->getMode(), $this->getContext())->getBody());
+                                    }
+                                    $instancecontent = $instancecontent . str_replace(Terms::POSITION_CONTENT, $groupvalue, Structures::getStructureByName(LSSNames::STRUCTURE_INSTANCE_HEADER)->getVersion($this->getMode(), $this->getContext())->getBody());
+                                    $returnvalue .= $instancecontent;
+                                    $instancecontent = '';
+                                    $lastgroupvalue = $groupvalue;
+                                }
+                            }
+                            $instancecontent .= $load;
                         }
-                        $instancecontent .= $load;
                     }
                 }
                 // add the last (or maybe only one) section to the content

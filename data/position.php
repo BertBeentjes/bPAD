@@ -210,7 +210,7 @@ class Position extends StoredEntity {
     /**
      * set the structure
      * 
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setStructure($newstructure) {
@@ -234,7 +234,7 @@ class Position extends StoredEntity {
     /**
      * set the style
      * 
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setStyle($newstyle) {
@@ -258,7 +258,7 @@ class Position extends StoredEntity {
     /**
      * set the number 
      * 
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setNumber($newnumber) {
@@ -284,7 +284,7 @@ class Position extends StoredEntity {
      * set the inherit style bool, only available for positions in a template
      * 
      * @param bool the new value
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setInheritStyle($newbool) {
@@ -310,7 +310,7 @@ class Position extends StoredEntity {
      * set the inherit structure bool, only available for positions in a template
      * 
      * @param bool the new value
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if store not available
      */
     public function setInheritStructure($newbool) {

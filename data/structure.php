@@ -243,7 +243,7 @@ class Structure extends SettedEntity {
      * overrides the generic set name (the getter is not overridden)
      * 
      * @param newname the name
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails or if the structure is bPAD defined
      */
     public function setName($newname) {

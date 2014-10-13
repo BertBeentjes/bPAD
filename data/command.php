@@ -139,7 +139,7 @@ class Command extends Log {
      * setter for the command
      * 
      * @param newcommand the command
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setCommand($newcommand) {
@@ -179,7 +179,7 @@ class Command extends Log {
      * setter for the command number
      * 
      * @param newcommandnumber the command number
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setCommandNumber($newcommandnumber) {
@@ -204,7 +204,7 @@ class Command extends Log {
      * setter for the command number
      * 
      * @param newsessionidentifier the command number
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setSessionIdentifier($newsessionidentifier) {
@@ -229,7 +229,7 @@ class Command extends Log {
      * setter for the command number
      * 
      * @param newlastcommandid the command number
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setLastCommandId($newlastcommandid) {
@@ -254,7 +254,7 @@ class Command extends Log {
      * setter for the value
      * 
      * @param newvalue the value
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setValue($newvalue) {
@@ -284,7 +284,7 @@ class Command extends Log {
      * in changes) the old value has a value, otherwise it is NULL.
      * 
      * @param newoldvalue the new oldvalue
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setOldValue($newoldvalue) {

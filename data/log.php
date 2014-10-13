@@ -106,7 +106,7 @@ abstract class Log {
      * setter for the item address
      * 
      * @param string newitemaddress the itemaddress
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setItemAddress($newitemaddress) {
@@ -131,7 +131,7 @@ abstract class Log {
      * setter for the userid
      * 
      * @param user the userid
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setUser($newuser) {
@@ -156,7 +156,7 @@ abstract class Log {
      * setter for the date
      * 
      * @param newdate the date
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setDate($newdate) {

@@ -540,6 +540,17 @@ class Execute {
                         Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
                     }
                     break;
+                case 'positioninstancemaxitems':
+                    if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_INSTANCE) {
+                        $instance = $position->getPositionContent();
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($instance->getMaxItems());
+                        // set the new value
+                        $instance->setMaxItems(!$instance->getMaxItems());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
                 case 'positioninstancefillonload':
                     if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_INSTANCE) {
                         $instance = $position->getPositionContent();

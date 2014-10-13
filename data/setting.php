@@ -166,7 +166,7 @@ class Setting extends NamedEntity {
      * setter for the value
      * 
      * @param newvalue the new value
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setValue($newvalue) {

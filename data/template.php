@@ -89,7 +89,7 @@ class Template extends SettedEntity {
      * setter for the name, check whether the template is bpad defined or not first
      * 
      * @param newname the name
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails or if the style is bPAD defined
      */
     public function setName($newname) {

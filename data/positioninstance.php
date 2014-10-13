@@ -33,6 +33,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     private $searchwords; // restrict the instance to objects containing the search words
     private $parent; // restrict the instance to descendants of a certain parent object
     private $activeitems; // show active or inactive objects (recycle bin)
+    private $maxitems; // the maximum number of items to show
     private $fillonload; // fill the instance when loading the page or, in case of search, wait for the user input
     private $useinstancecontext; // use the instance context, or the default context (e.g. for site search)
     private $orderby; // ordering of the objects to show
@@ -61,6 +62,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
         $this->searchwords = $attr->searchwords;
         $this->parent = Objects::getObject($attr->parentid);
         $this->activeitems = $attr->activeitems;
+        $this->maxitems = $attr->maxitems;
         $this->fillonload = $attr->fillonload;
         $this->useinstancecontext = $attr->useinstancecontext;
         $this->orderby = $attr->orderby;
@@ -248,7 +250,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     /**
      * Getter for activeitems. 
      * 
-     * @return boolean  if the instance show active items
+     * @return boolean true if the instance show active items
      */
     public function getActiveItems() {
         return $this->activeitems;
@@ -263,6 +265,28 @@ class PositionInstance extends StoredEntity implements PositionContent {
     public function setActiveItems($newbool) {
         if (Store::setPositionInstanceActiveItems($this->id, $newbool) && $this->setChanged()) {
             $this->activeitems = $newbool;
+            return true;
+        }
+    }        
+
+    /**
+     * Getter for maxitems. 
+     * 
+     * @return int 0 for unlimited, otherwise the maximum number of items to show
+     */
+    public function getMaxItems() {
+        return $this->maxitems;
+    }
+    
+    /**
+     * Setter for max items
+     * 
+     * @param int newint the new value for maxitems
+     * @return boolean true if success
+     */
+    public function setMaxItems($newint) {
+        if (Store::setPositionInstanceMaxItems($this->id, $newint) && $this->setChanged()) {
+            $this->maxitems = $newint;
             return true;
         }
     }        

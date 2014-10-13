@@ -127,7 +127,7 @@ class Factory {
     /**
      * check for a term in the content
      * 
-     * @return boolean  if found
+     * @return boolean true if found
      */
     protected function hasTerm($term) {
         return (strpos($this->getContent(), $term) > -1);

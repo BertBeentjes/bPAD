@@ -54,7 +54,7 @@ abstract class SettedEntity extends NamedEntity{
      * setter for the set
      * 
      * @param set the new set
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setSet($newset) {

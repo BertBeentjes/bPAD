@@ -248,7 +248,7 @@ class Object extends SettedEntity {
      * if this object is part of an object tree based upon a template, 
      * propagate the change upward to the object template root
      * 
-     * @return boolean  if success
+     * @return boolean true if success
      */
     public function setChanged() {
         $thischanged = true;
@@ -307,7 +307,7 @@ class Object extends SettedEntity {
      * set the object active or not
      * 
      * @param bool active or not
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setActive($bool) {
@@ -323,7 +323,7 @@ class Object extends SettedEntity {
      * set the object active bool of the children
      * 
      * @param bool active or not
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setActiveRecursive($bool) {
@@ -349,7 +349,7 @@ class Object extends SettedEntity {
      * set the object active bool of the children
      * 
      * @param bool active or not
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setActiveRecursiveTemplateBasedChildren($bool) {
@@ -399,7 +399,7 @@ class Object extends SettedEntity {
      * the object
      *
      * @param bool template or not
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setIsTemplate($bool) {
@@ -426,7 +426,7 @@ class Object extends SettedEntity {
      * the object
      * 
      * @param bool templateroot or not
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setIsTemplateRoot($bool) {
@@ -451,7 +451,7 @@ class Object extends SettedEntity {
      * setter for the new bool
      * 
      * @param bool new or not
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setNew($bool) {
@@ -467,7 +467,7 @@ class Object extends SettedEntity {
      * set the object new bool of the children
      * 
      * @param bool new or not
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setNewRecursive($bool) {
@@ -502,7 +502,7 @@ class Object extends SettedEntity {
      * setter for the session identifier
      * 
      * @param string new session identifier
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setSessionIdentifier($newsessionidentifier) {
@@ -529,7 +529,7 @@ class Object extends SettedEntity {
      * when creating the object
      * 
      * @param bool objecttemplateroot or not
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setIsObjectTemplateRoot($bool) {
@@ -555,7 +555,7 @@ class Object extends SettedEntity {
      * usually set once when creating the object
      * 
      * @param template
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setTemplate($newtemplate) {
@@ -789,7 +789,7 @@ class Object extends SettedEntity {
      * 
      * @param mode $mode
      * @param context $context
-     * @return boolean  if visible
+     * @return boolean true if visible
      */
     public function isVisible($mode, $context) {
         // hide inactive objects in view mode, if not in the recycle bin context

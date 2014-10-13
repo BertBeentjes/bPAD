@@ -259,7 +259,7 @@ class Layout extends SettedEntity {
      * multiple installs, where the id may vary)
      * 
      * @param newname the name
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails or if the layout is bPAD defined
      */
     public function setName($newname) {

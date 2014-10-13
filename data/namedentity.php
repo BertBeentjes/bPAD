@@ -57,7 +57,7 @@ abstract class NamedEntity extends StoredEntity {
      * setter for the name
      * 
      * @param newname the name
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setName($newname) {

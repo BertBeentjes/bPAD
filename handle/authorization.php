@@ -193,7 +193,7 @@ class Authorization {
      * Check whether the user has the permission to do something with a page in the site
      * 
      * @param int permission type
-     * @return boolean  if permission granted
+     * @return boolean true if permission granted
      */
     public static function getPagePermission($permissiontype) {
         return self::objectPermission(Objects::getObject(SysCon::SITE_ROOT_OBJECT), $permissiontype);
@@ -204,7 +204,7 @@ class Authorization {
      * 
      * @param object the object
      * @param int permission type
-     * @return boolean  if permission granted
+     * @return boolean true if permission granted
      */
     public static function getObjectPermission($object, $permissiontype) {
         return self::objectPermission($object, $permissiontype);

@@ -42,7 +42,7 @@ class Store {
      * @param user the user that has access to the db
      * @param pw the password for the user
      * @param db databasename
-     * @return boolean  if connection is made
+     * @return boolean true if connection is made
      * @throws exception when connection fails
      */
     public static function connect($host, $user, $pw, $db) {
@@ -56,7 +56,7 @@ class Store {
     /**
      * check the connection
      * 
-     * @return boolean  if connection is still there
+     * @return boolean true if connection is still there
      * @throws exception when connection is broken
      */
     private static function checkConnection() {
@@ -402,7 +402,7 @@ class Store {
      * 
      * @param tablename the name of the table that has changed
      * @param int the id of the row to update
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setChanged($tablename, $id) {
         $stmt = self::$connection->stmt_init();
@@ -487,10 +487,10 @@ class Store {
      * get the positioninstance for a positionid (or null if not available)
      * 
      * @param int $positionid
-     * @return resultset id, objectid, templateid, listwords, searchwords, parentid, activeitems, fillonload, useinstancecontext, orderby, groupby, createdate, createuserid, changedate, changeuserid
+     * @return resultset id, objectid, templateid, listwords, searchwords, parentid, activeitems, maxitems, fillonload, useinstancecontext, orderby, groupby, createdate, createuserid, changedate, changeuserid
      */
     public static function getPositionInstance($positionid) {
-        return self::selectQuery("SELECT id, object_id objectid, template_id templateid, listwords, searchwords, parent_id parentid, activeitems, fillonload, useinstancecontext, orderby, groupby, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid, outdated FROM positioninstances WHERE fk_position_id=" . $positionid);
+        return self::selectQuery("SELECT id, object_id objectid, template_id templateid, listwords, searchwords, parent_id parentid, activeitems, maxitems, fillonload, useinstancecontext, orderby, groupby, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid, outdated FROM positioninstances WHERE fk_position_id=" . $positionid);
     }
 
     /**
@@ -579,7 +579,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the value (true or false)
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectActive($id, $bool) {
         $intbool = (int) $bool;
@@ -595,7 +595,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the value (true or false)
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectNew($id, $bool) {
         $intbool = (int) $bool;
@@ -611,7 +611,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newname the string with the new name
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectName($id, $newname) {
         $stmt = self::$connection->stmt_init();
@@ -626,7 +626,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newsessionidentifier the string with the new session identifier
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectSessionIdentifier($id, $newsessionidentifier) {
         $stmt = self::$connection->stmt_init();
@@ -641,7 +641,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newsetid the new set id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectSetId($id, $newsetid) {
         $stmt = self::$connection->stmt_init();
@@ -656,7 +656,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new value (true or false)
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectIsTemplate($id, $bool) {
         $intbool = (int) $bool;
@@ -672,7 +672,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new value (true or false)
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectIsTemplateRoot($id, $bool) {
         $intbool = (int) $bool;
@@ -688,7 +688,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new value (true or false)
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectIsObjectTemplateRoot($id, $bool) {
         $intbool = (int) $bool;
@@ -704,7 +704,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newtemplateid the new template id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectTemplateId($id, $newtemplateid) {
         $stmt = self::$connection->stmt_init();
@@ -719,7 +719,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newlayoutid the new layout id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionLayoutId($id, $newlayoutid) {
         $stmt = self::$connection->stmt_init();
@@ -734,7 +734,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newstyleid the new style id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionStyleId($id, $newstyleid) {
         $stmt = self::$connection->stmt_init();
@@ -749,7 +749,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newargumentid the new argument id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionArgumentId($id, $newargumentid) {
         $stmt = self::$connection->stmt_init();
@@ -764,7 +764,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newargumentdefault the new default value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionArgumentDefault($id, $newargumentdefault) {
         $stmt = self::$connection->stmt_init();
@@ -779,7 +779,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new inherit layout value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionInheritLayout($id, $bool) {
         $intbool = (int) $bool;
@@ -795,7 +795,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new inherit context value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionInheritContext($id, $bool) {
         $intbool = (int) $bool;
@@ -811,7 +811,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new inherit style value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionInheritStyle($id, $bool) {
         $intbool = (int) $bool;
@@ -827,7 +827,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newcontextid the new context id value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionContextId($id, $newcontextid) {
         $stmt = self::$connection->stmt_init();
@@ -842,7 +842,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newtemplateid the new template id value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionTemplateId($id, $newtemplateid) {
         $stmt = self::$connection->stmt_init();
@@ -857,7 +857,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new order ascending value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionOrderAscending($id, $bool) {
         $intbool = (int) $bool;
@@ -873,7 +873,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new mode value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectVersionMode($id, $newmodeid) {
         $stmt = self::$connection->stmt_init();
@@ -1657,7 +1657,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newstructureid the new structure id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionStructureId($id, $newstructureid) {
         $stmt = self::$connection->stmt_init();
@@ -1672,7 +1672,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newstyleid the new style id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionStyleId($id, $newstyleid) {
         $stmt = self::$connection->stmt_init();
@@ -1687,7 +1687,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newnumber the new number
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionNumber($id, $newnumber) {
         $stmt = self::$connection->stmt_init();
@@ -1702,7 +1702,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new inherit style value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInheritStyle($id, $bool) {
         $intbool = (int) $bool;
@@ -1718,7 +1718,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new inherit structure value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInheritStructure($id, $bool) {
         $intbool = (int) $bool;
@@ -1734,7 +1734,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param objectid the id of the object
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionObjectObject($id, $objectid) {
         $stmt = self::$connection->stmt_init();
@@ -1749,7 +1749,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newname the string with the new name
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionContentItemName($id, $newname) {
         $stmt = self::$connection->stmt_init();
@@ -1764,7 +1764,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newinputtype the string with the new input type
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionContentItemInputType($id, $newinputtype) {
         $stmt = self::$connection->stmt_init();
@@ -1779,7 +1779,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newbody the string with the new body
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionContentItemBody($id, $newbody) {
         $stmt = self::$connection->stmt_init();
@@ -1794,7 +1794,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newrootobjectid new object id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionContentItemRootObjectId($id, $newrootobjectid) {
         $stmt = self::$connection->stmt_init();
@@ -1809,7 +1809,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newtemplateid new template
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionContentItemTemplateId($id, $newtemplateid) {
         $stmt = self::$connection->stmt_init();
@@ -1824,7 +1824,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new hasinternallinks value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionContentItemHasInternalLinks($id, $bool) {
         $intbool = (int) $bool;
@@ -1840,7 +1840,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newordertypeid new order type id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionReferralOrderBy($id, $neworderby) {
         $stmt = self::$connection->stmt_init();
@@ -1855,7 +1855,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newnumberofitems new number of items
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionReferralNumberOfItems($id, $newnumberofitems) {
         $stmt = self::$connection->stmt_init();
@@ -1870,7 +1870,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newargumentid new argument id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionReferralArgumentId($id, $newargumentid) {
         $stmt = self::$connection->stmt_init();
@@ -1885,7 +1885,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newobjectid new object id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceObjectId($id, $newobjectid) {
         $stmt = self::$connection->stmt_init();
@@ -1900,7 +1900,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newtemplateid new template id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceTemplateId($id, $newtemplateid) {
         $stmt = self::$connection->stmt_init();
@@ -1915,7 +1915,7 @@ class Store {
      * 
      * @param  the  of the row to update
      * @param newlistwords new listwords 
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceListWords($id, $newlistwords) {
         $stmt = self::$connection->stmt_init();
@@ -1930,7 +1930,7 @@ class Store {
      * 
      * @param  the  of the row to update
      * @param newsearchwords new searchwords 
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceSearchWords($id, $newsearchwords) {
         $stmt = self::$connection->stmt_init();
@@ -1945,7 +1945,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newparentid new parent id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceParentId($id, $newparentid) {
         $stmt = self::$connection->stmt_init();
@@ -1960,7 +1960,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new activeitems value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceActiveItems($id, $bool) {
         $intbool = (int) $bool;
@@ -1972,11 +1972,26 @@ class Store {
     }
 
     /**
+     * prepare a statement to update the position instance activeitems value
+     * 
+     * @param int the id of the row to update
+     * @param bool the new maxitems value
+     * @return boolean true if action query succeeds
+     */
+    public static function setPositionInstanceMaxItems($id, $int) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE positioninstances SET maxitems=? WHERE id=?")) {
+            $stmt->bind_param("ii", $int, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
      * prepare a statement to update the position instance fillonload value
      * 
      * @param int the id of the row to update
      * @param bool the new activeitems value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceFillOnLoad($id, $bool) {
         $intbool = (int) $bool;
@@ -1992,7 +2007,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new activeitems value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceUseInstanceContext($id, $bool) {
         $intbool = (int) $bool;
@@ -2008,7 +2023,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new outdated value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceOutdated($id, $bool) {
         $intbool = (int) $bool;
@@ -2024,7 +2039,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string orderby the new orderby value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceOrderBy($id, $neworderby) {
         $stmt = self::$connection->stmt_init();
@@ -2039,7 +2054,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new groupby value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceGroupBy($id, $bool) {
         $intbool = (int) $bool;
@@ -2055,7 +2070,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newname the string with the new name
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setTemplateName($id, $newname) {
         $stmt = self::$connection->stmt_init();
@@ -2070,7 +2085,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool true if deleted
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setTemplateDeleted($id, $bool) {
         $intbool = (int) $bool;
@@ -2086,7 +2101,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int newstructureid the new id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setTemplateStructureId($id, $newstructureid) {
         $stmt = self::$connection->stmt_init();
@@ -2101,7 +2116,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int newstyleid the new id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setTemplateStyleId($id, $newstyleid) {
         $stmt = self::$connection->stmt_init();
@@ -2116,7 +2131,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int newsetid the new id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setTemplateSetId($id, $newsetid) {
         $stmt = self::$connection->stmt_init();
@@ -2131,7 +2146,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool true if instanceallowed
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setTemplateInstanceAllowed($id, $bool) {
         $intbool = (int) $bool;
@@ -2147,7 +2162,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool true if searchable
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setTemplateSearchable($id, $bool) {
         $intbool = (int) $bool;
@@ -2164,7 +2179,7 @@ class Store {
      * @param tablename the name of the table
      * @param int the id of the row to update
      * @param newname the string with the new name
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setEntityName($tablename, $id, $newname) {
         $stmt = self::$connection->stmt_init();
@@ -2180,7 +2195,7 @@ class Store {
      * @param tablename the name of the table
      * @param int the id of the row to update
      * @param newsetid the new set id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setEntitySetId($tablename, $id, $newsetid) {
         $stmt = self::$connection->stmt_init();
@@ -2196,7 +2211,7 @@ class Store {
      * @param int id the id of the row to update
      * @param string newbody the string with the new body
      * @param string tablename the name of the table
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setContextedVersionBody($id, $newbody, $tablename) {
         $stmt = self::$connection->stmt_init();
@@ -2244,7 +2259,7 @@ class Store {
      * @param int id the id of the row to update
      * @param string newbody the string with the new body
      * @param string tablename the name of the table
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setModedVersionBody($id, $newbody, $tablename) {
         $stmt = self::$connection->stmt_init();
@@ -2259,7 +2274,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newstyletype the new styletype
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setStyleStyleType($id, $newstyletype) {
         $stmt = self::$connection->stmt_init();
@@ -2274,7 +2289,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string newclasssuffix the new classsuffix
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setStyleClassSuffix($id, $newclasssuffix) {
         $stmt = self::$connection->stmt_init();
@@ -2289,7 +2304,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool true if searchable
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setContextInCSS($id, $bool) {
         $intbool = (int) $bool;
@@ -2305,7 +2320,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool true if searchable
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setContextBackupContextId($id, $newbackupcontextid) {
         $stmt = self::$connection->stmt_init();
@@ -2320,7 +2335,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool true if searchable
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setContextContextGroupId($id, $newcontextgroupid) {
         $stmt = self::$connection->stmt_init();
@@ -2335,7 +2350,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newfirstname the string with the new first name
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setUserFirstName($id, $newfirstname) {
         $stmt = self::$connection->stmt_init();
@@ -2350,7 +2365,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newlastname the string with the new last name
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setUserLastName($id, $newlastname) {
         $stmt = self::$connection->stmt_init();
@@ -2365,7 +2380,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newpassword the string with the new password
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setUserPassword($id, $newpassword) {
         $stmt = self::$connection->stmt_init();
@@ -2380,7 +2395,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param newlogincounter the string with the new logincounter
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setUserLoginCounter($id, $newlogincounter) {
         $stmt = self::$connection->stmt_init();
@@ -2395,7 +2410,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int newobjectid the new object id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectUserGroupRoleObjectId($id, $newobjectid) {
         $stmt = self::$connection->stmt_init();
@@ -2410,7 +2425,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int newusergroupid the new usergroup id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectUserGroupRoleUserGroupId($id, $newusergroupid) {
         $stmt = self::$connection->stmt_init();
@@ -2425,7 +2440,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int newroleid the new role id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectUserGroupRoleRoleId($id, $newroleid) {
         $stmt = self::$connection->stmt_init();
@@ -2440,7 +2455,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean inherit the new inherit value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectUserGroupRoleInherit($id, $bool) {
         $intbool = (int) $bool;
@@ -2456,7 +2471,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int newroleid the new role id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionRoleId($id, $newroleid) {
         $stmt = self::$connection->stmt_init();
@@ -2471,7 +2486,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage template
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageTemplate($id, $bool) {
         $intbool = (int) $bool;
@@ -2487,7 +2502,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for view object
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionViewObject($id, $bool) {
         $intbool = (int) $bool;
@@ -2503,7 +2518,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for upload file 
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionUploadFile($id, $bool) {
         $intbool = (int) $bool;
@@ -2519,7 +2534,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for frontend respond
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionFrontendRespond($id, $bool) {
         $intbool = (int) $bool;
@@ -2535,7 +2550,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for frontend edit
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionFrontendEdit($id, $bool) {
         $intbool = (int) $bool;
@@ -2551,7 +2566,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for frontend deactivate
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionFrontendDeactivate($id, $bool) {
         $intbool = (int) $bool;
@@ -2567,7 +2582,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for frontend add
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionFrontendAdd($id, $bool) {
         $intbool = (int) $bool;
@@ -2583,7 +2598,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for frontend creator deactivate
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionFrontendCreatorDeactivate($id, $bool) {
         $intbool = (int) $bool;
@@ -2599,7 +2614,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for frontend creator edit
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionFrontendCreatorEdit($id, $bool) {
         $intbool = (int) $bool;
@@ -2615,7 +2630,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage content
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageContent($id, $bool) {
         $intbool = (int) $bool;
@@ -2631,7 +2646,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage layout
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageLayout($id, $bool) {
         $intbool = (int) $bool;
@@ -2647,7 +2662,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage lss version
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageLSSVersion($id, $bool) {
         $intbool = (int) $bool;
@@ -2663,7 +2678,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage style
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageStyle($id, $bool) {
         $intbool = (int) $bool;
@@ -2679,7 +2694,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage structure
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageStructure($id, $bool) {
         $intbool = (int) $bool;
@@ -2695,7 +2710,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage system
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageSystem($id, $bool) {
         $intbool = (int) $bool;
@@ -2711,7 +2726,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage language
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageLanguage($id, $bool) {
         $intbool = (int) $bool;
@@ -2727,7 +2742,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage setting
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageSetting($id, $bool) {
         $intbool = (int) $bool;
@@ -2743,7 +2758,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage user
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageUser($id, $bool) {
         $intbool = (int) $bool;
@@ -2759,7 +2774,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage role
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageRole($id, $bool) {
         $intbool = (int) $bool;
@@ -2775,7 +2790,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for manage authorization
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionManageAuthorization($id, $bool) {
         $intbool = (int) $bool;
@@ -2791,7 +2806,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for show admin bar
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionShowAdminBar($id, $bool) {
         $intbool = (int) $bool;
@@ -2807,7 +2822,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for lss version
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionLSSVersion($id, $bool) {
         $intbool = (int) $bool;
@@ -2823,7 +2838,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param boolean the new value for flush archive
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setPermissionFlushArchive($id, $bool) {
         $intbool = (int) $bool;
@@ -2839,7 +2854,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param datestring the new value for check date
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setLSSVersionCheckCheckDate($id, $newdate) {
         $stmt = self::$connection->stmt_init();
@@ -2854,7 +2869,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for the installed version
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setLSSVersionCheckInstalledVersion($id, $newinstalledversion) {
         $stmt = self::$connection->stmt_init();
@@ -2869,7 +2884,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param datestring the new value for create date
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setLSSVersionCreateDate($id, $newdate) {
         $stmt = self::$connection->stmt_init();
@@ -2884,7 +2899,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for the version text
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setLSSVersionVersionText($id, $newversiontext) {
         $stmt = self::$connection->stmt_init();
@@ -2899,7 +2914,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for the object id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectCacheObjectId($id, $newobjectid) {
         $stmt = self::$connection->stmt_init();
@@ -2914,7 +2929,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for the context id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectCacheContextId($id, $newcontextid) {
         $stmt = self::$connection->stmt_init();
@@ -2929,7 +2944,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param datetimestring the new value for the cache date
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectCacheCacheDate($id, $newcachedate) {
         $stmt = self::$connection->stmt_init();
@@ -2944,7 +2959,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for the cache
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectCacheCache($id, $newcache) {
         $stmt = self::$connection->stmt_init();
@@ -2959,7 +2974,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for the context id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectCacheOutdated($id, $bool) {
         $intbool = (int) $bool;
@@ -2975,7 +2990,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for the user id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setObjectCacheUserId($id, $newuserid) {
         $stmt = self::$connection->stmt_init();
@@ -2990,7 +3005,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for the session identifier
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setSessionSessionIdentifier($id, $newsessionidentifier) {
         $stmt = self::$connection->stmt_init();
@@ -3005,7 +3020,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for the object id 
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setSessionObjectId($id, $newobjectid) {
         $stmt = self::$connection->stmt_init();
@@ -3020,7 +3035,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for the create date
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setSessionCreateDate($id, $newcreatedate) {
         $stmt = self::$connection->stmt_init();
@@ -3035,7 +3050,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param datetimestring the new value for the cache date
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setStylesheetCacheCacheDate($id, $newcachedate) {
         $stmt = self::$connection->stmt_init();
@@ -3050,7 +3065,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for the cache
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setStylesheetCacheCache($id, $newcache) {
         $stmt = self::$connection->stmt_init();
@@ -3065,7 +3080,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param bool the new value for outdated
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setStylesheetCacheOutdated($id, $bool) {
         $intbool = (int) $bool;
@@ -3081,7 +3096,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for version
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setVersionVersion($id, $newversion) {
         $stmt = self::$connection->stmt_init();
@@ -3096,7 +3111,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param datetimestring the new value for release date
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setVersionReleaseDate($id, $newreleasedate) {
         $stmt = self::$connection->stmt_init();
@@ -3111,7 +3126,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for release info
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setVersionReleaseInfo($id, $newreleaseinfo) {
         $stmt = self::$connection->stmt_init();
@@ -3126,7 +3141,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for setting
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setSettingValue($id, $newvalue) {
         $stmt = self::$connection->stmt_init();
@@ -3141,7 +3156,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for item
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setLogItem($tablename, $id, $newitem) {
         $stmt = self::$connection->stmt_init();
@@ -3156,7 +3171,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for item id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setLogItemAddress($tablename, $id, $newitemaddress) {
         $stmt = self::$connection->stmt_init();
@@ -3171,7 +3186,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for user id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setLogUserId($tablename, $id, $newuserid) {
         $stmt = self::$connection->stmt_init();
@@ -3186,7 +3201,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for date
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setLogDate($tablename, $id, $newdate) {
         $stmt = self::$connection->stmt_init();
@@ -3201,7 +3216,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for command
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setCommandLogCommand($id, $newcommand) {
         $stmt = self::$connection->stmt_init();
@@ -3216,7 +3231,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for session identifier
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setCommandLogSessionIdentifier($id, $newsessionidentifier) {
         $stmt = self::$connection->stmt_init();
@@ -3231,7 +3246,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for last command id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setCommandLogLastCommandId($id, $newlastcommandid) {
         $stmt = self::$connection->stmt_init();
@@ -3246,7 +3261,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for command number
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setCommandLogCommandNumber($id, $newcommandnumber) {
         $stmt = self::$connection->stmt_init();
@@ -3261,7 +3276,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setCommandLogValue($id, $newvalue) {
         $stmt = self::$connection->stmt_init();
@@ -3276,7 +3291,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for old value
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setCommandLogOldValue($id, $newoldvalue) {
         $stmt = self::$connection->stmt_init();
@@ -3291,7 +3306,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for event
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setEventLogEvent($id, $newevent) {
         $stmt = self::$connection->stmt_init();
@@ -3306,7 +3321,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for event number
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setEventLogEventNumber($id, $neweventnumber) {
         $stmt = self::$connection->stmt_init();
@@ -3321,7 +3336,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param string the new value for type 
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setFileIncludeType($id, $newtype) {
         $stmt = self::$connection->stmt_init();
@@ -3336,7 +3351,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for the context group id
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setSnippetContextGroupId($id, $newcontextgroup) {
         $stmt = self::$connection->stmt_init();
@@ -3351,7 +3366,7 @@ class Store {
      * 
      * @param int the id of the row to update
      * @param int the new value for the mime type
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function setSnippetMimeType($id, $newmimetype) {
         $stmt = self::$connection->stmt_init();
@@ -3365,7 +3380,7 @@ class Store {
      * outdate all cached versions of an object that has been changed
      * 
      * @param int the id of the cached object
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function outdateCachedObject($id) {
         $stmt = self::$connection->stmt_init();
@@ -3379,7 +3394,7 @@ class Store {
      * outdate all cached versions of an object that use a certain layout
      * 
      * @param int the id of the layout
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function outdateCachedObjectsByLayout($id) {
         $stmt = self::$connection->stmt_init();
@@ -3393,7 +3408,7 @@ class Store {
      * outdate all cached versions of an object that use a certain structure
      * 
      * @param int the id of the structure
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function outdateCachedObjectsByStructure($id) {
         $stmt = self::$connection->stmt_init();
@@ -3406,7 +3421,7 @@ class Store {
     /**
      * outdate all instances
      * 
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function outdateInstances() {
         $stmt = self::$connection->stmt_init();
@@ -3419,7 +3434,7 @@ class Store {
      * outdate all referrals with a certain argument
      * 
      * @param int $argumentid
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function outdateReferrals($argumentid) {
         $stmt = self::$connection->stmt_init();
@@ -3431,7 +3446,7 @@ class Store {
     /**
      * outdate all contentitems with internal links
      * 
-     * @return boolean  if action query succeeds
+     * @return boolean true if action query succeeds
      */
     public static function outdateLinkedContentItems() {
         $stmt = self::$connection->stmt_init();

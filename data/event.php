@@ -84,7 +84,7 @@ class Event extends Log {
      * setter for the event
      * 
      * @param newevent the event
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setEvent($newevent) {
@@ -109,7 +109,7 @@ class Event extends Log {
      * setter for the eventnumber
      * 
      * @param neweventnumber the eventnumber
-     * @return boolean  if success
+     * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setEventLogEventNumber($neweventnumber) {

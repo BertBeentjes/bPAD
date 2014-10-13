@@ -253,7 +253,7 @@ class ObjectFactory extends Factory {
      * factor the positions for the object, check for a pn layout and if so check
      * for the value of the argument
      * 
-     * @return boolean  if success
+     * @return boolean true if success
      */
     private function factorPositions() {
         // If the layout is of the #pn# type (has an undefined number of positions), 

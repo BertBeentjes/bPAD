@@ -657,6 +657,8 @@ class EditAdminFactory extends AdminFactory {
         $section .= $this->factorListBox($baseid . '_object', CommandFactory::editPositionInstanceParent($instance), $objects, $instance->getParent()->getId(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_PARENT));
         // activeitems
         $section .= $this->factorCheckBox($baseid . '_activeitems', CommandFactory::editPositionInstanceActiveItems($instance), $instance->getActiveItems(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_ACTIVE_ITEMS));
+        // maxitems
+        $section .= $this->factorTextInput($baseid . '_maxitems', CommandFactory::editPositionInstanceMaxItems($instance), $instance->getMaxItems(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_MAX_ITEMS));
         // fillonload
         $section .= $this->factorCheckBox($baseid . '_fillonload', CommandFactory::editPositionInstanceFillOnLoad($instance), $instance->getFillOnLoad(), Helper::getLang(AdminLabels::ADMIN_POSITION_INSTANCE_FILL_ON_LOAD));
         // useinstancecontext

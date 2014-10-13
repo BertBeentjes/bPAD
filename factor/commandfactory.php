@@ -508,6 +508,16 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to edit the position instance max items
+     * 
+     * @param positioninstance $positioninstance
+     * @return string
+     */
+    public static function editPositionInstanceMaxItems($positioninstance) {
+        return 'position,' . $positioninstance->getContainer()->getContainer()->getContainer()->getId() . '.' . $positioninstance->getContainer()->getNumber() . ',change.positioninstancemaxitems' . '.' . $positioninstance->getContainer()->getContainer()->getMode()->getId();
+    }
+
+    /**
      * Compose the command to edit the position instance fill on load
      * 
      * @param positioninstance $positioninstance

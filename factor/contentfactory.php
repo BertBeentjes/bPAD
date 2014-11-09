@@ -51,6 +51,14 @@ class ContentFactory extends Factory {
             if (strstr($this->getContent(), Terms::CONTENT_ROOT)) {
                 $this->replaceTerm(Terms::CONTENT_ROOT, $this->getRootContent(), $this->getContent());
             }
+            // replace the content root term by the content
+            if (strstr($this->getContent(), Terms::CONTENT_METADATA)) {
+                $this->replaceTerm(Terms::CONTENT_METADATA, $this->getMetaData(), $this->getContent());
+            }
+            // replace the content root term by the content
+            if (strstr($this->getContent(), Terms::CONTENT_SITEMAP)) {
+                $this->replaceTerm(Terms::CONTENT_SITEMAP, $this->getSiteMap(), $this->getContent());
+            }
             // replace the error message term by the error message container
             if (strstr($this->getContent(), Terms::CONTENT_ERROR_MESSAGE)) {
                 $this->replaceTerm(Terms::CONTENT_ERROR_MESSAGE, $this->getErrorMessageContainer(), $this->getContent());
@@ -101,6 +109,31 @@ class ContentFactory extends Factory {
     protected function getRootContent() {
         $rootobject = Objects::getObject(syscon::SITE_ROOT_OBJECT);
         $rootcontent = CacheObjects::getCacheObject($rootobject, $this->getContext(), $this->getMode());
+        return $rootcontent;
+    }
+    
+    /**
+     * Get the metadata to put in the content metadata position
+     * 
+     * @return string
+     */
+    protected function getMetaData() {
+        // recalc the request, so that the right metadata is used
+        Request::init();
+        // get the metadata content
+        $rootobject = Objects::getObject(syscon::SITE_ROOT_OBJECT);
+        $rootcontent = CacheObjects::getCacheObject($rootobject, Contexts::getContextByGroupAndName(ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_METADATA), Context::CONTEXT_DEFAULT), $this->getMode());        
+        return $rootcontent;
+    }
+    
+    /**
+     * Get the sitemap to put in the content sitemap position
+     * 
+     * @return string
+     */
+    protected function getSiteMap() {
+        $rootobject = Objects::getObject(syscon::SITE_ROOT_OBJECT);
+        $rootcontent = CacheObjects::getCacheObject($rootobject, Contexts::getContextByGroupAndName(ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_SITEMAP), Context::CONTEXT_DEFAULT), $this->getMode());
         return $rootcontent;
     }
     

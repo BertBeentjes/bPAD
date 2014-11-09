@@ -261,7 +261,8 @@ class ObjectFactory extends Factory {
         if ($this->getObject()->getVersion($this->getMode())->getLayout()->isPNType()) {
             // pn types aren't cacheable because of deep linking
             $this->cacheable = false;
-            if ($this->getObject()->getVersion($this->getMode())->getArgument()->isDefault()) {
+            // check for an argument or the sitemap
+            if ($this->getObject()->getVersion($this->getMode())->getArgument()->isDefault() || $this->getContext()->getContextGroup()->isSiteMap()) {
                 $objectfound = false;
                 // check for a deep linked object id
                 if (Request::getURL()->checkDeepLink($this->getObject(), $this->getMode())) {
@@ -286,8 +287,6 @@ class ObjectFactory extends Factory {
                     $this->explodePN(); // show all positions
                 }
             } else {
-                // the content of this object depends on the argument (effectively: the requested url), this object can't be cached
-                $this->cacheable = false;
                 // default position(s) to show
                 $showposition = $this->getObject()->getVersion($this->getMode())->getArgumentDefault();
                 // get the next object name from the request url
@@ -473,7 +472,8 @@ class ObjectFactory extends Factory {
     }
 
     /**
-     * is this object cacheable? Objects with referrals aren't.
+     * Is this object cacheable? Objects with referrals aren't.
+     * Only has the correct value after the object has been factored.
      * 
      * @return boolean
      */
@@ -513,11 +513,11 @@ class ObjectFactory extends Factory {
     private function factorMenu() {
         $menu = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_MENU)->getVersion($this->getMode(), $this->getContext())->getBody();
         $menuitem = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_MENU_ITEM)->getVersion($this->getMode(), $this->getContext())->getBody();
-        $objectunpublished = Structures::getStructureByName(LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR)->getVersion($this->getMode(), $this->getContext())->getBody();
         // add the object name
         $menu = str_replace(Terms::OBJECT_ROOT_NAME, $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getName(), $menu);
         // add the unpublished indicator
         if ($this->getObject()->getChangeDate() > $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate()) {
+            $objectunpublished = Structures::getStructureByName(LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR)->getVersion($this->getMode(), $this->getContext())->getBody();
             $menu = str_replace(Terms::OBJECT_UNPUBLISHED_INDICATOR, $objectunpublished, $menu);
         } 
         // remove the indicator when it isn't used
@@ -555,6 +555,7 @@ class ObjectFactory extends Factory {
         $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::editObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $edit);
         // add the unpublished indicator
         if ($this->getObject()->getChangeDate() > $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate()) {
+            $objectunpublished = Structures::getStructureByName(LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR)->getVersion($this->getMode(), $this->getContext())->getBody();
             $edit = str_replace(Terms::OBJECT_UNPUBLISHED_INDICATOR, $objectunpublished, $edit);
         } 
         // remove the indicator when it isn't used

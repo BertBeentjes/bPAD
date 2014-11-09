@@ -71,11 +71,18 @@ class Page extends Respond {
      * 
      */
     public static function chooseContextGroup() {
-        $mobiledetect = new Mobile_Detect();
-        if ($mobiledetect->isMobile()) {
-            return ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_MOBILE);
+        // check the kind of request
+        if (Request::getURL()->getFullURL() == Request::SITEMAP) {
+            // this is a sitemap
+            return ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_SITEMAP);
         } else {
-            return ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_DEFAULT);
+            // this is a normal page, now select mobile or not
+            $mobiledetect = new Mobile_Detect();
+            if ($mobiledetect->isMobile()) {
+                return ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_MOBILE);
+            } else {
+                return ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_DEFAULT);
+            }
         }
     }
     

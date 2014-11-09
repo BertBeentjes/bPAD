@@ -38,6 +38,7 @@ class Request {
     const PAGE = 'page'; // basic page, passed as url
     const FILE = 'file'; // file, passed as url starting with _file and after that the object number
     const INCLUDEFILE = 'includefile'; // include a file, passed as url starting with _includefile
+    const SITEMAP = 'sitemap.xml'; // return the sitemap
     const CONTENT = 'content'; // part of the page content, passed as command in AJAX post request
     const ADMIN = 'admin'; // admin functionality, passed as command in AJAX post request
     const LOGIN = 'login'; // login request, passed as a command in an AJAX post request or as a url (e.g. from a form post)
@@ -120,6 +121,11 @@ class Request {
                     } else {
                         throw new Exception(Helper::getLang(Errors::ERROR_URL_SYNTAX));
                     }
+                    break;
+                case self::SITEMAP:
+                    self::$type = self::PAGE;
+                    // only a filename is request
+                    unset($urlparts);
                     break;
                 default:
                     self::$type = self::PAGE;

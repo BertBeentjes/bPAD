@@ -147,4 +147,13 @@ abstract class StoredEntity {
         return true;
     }
     
+    /**
+     * Is the sitemap context group or not
+     * 
+     * @return boolean true if default
+     */
+    public function isSiteMap() {
+        return $this->id == ContextGroup::CONTEXTGROUP_SITEMAP;
+    }
+
 }

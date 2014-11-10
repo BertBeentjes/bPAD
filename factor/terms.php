@@ -113,6 +113,8 @@ class Terms {
     const ADMIN_CURRENT_VALUE = '#currentvalue#'; // the current value for a content item, used in the upload function
     const ADMIN_CURRENT_LABEL = '#currentlabel#'; // the label for the current value, used in the upload function
     const ADMIN_PROCESSING = '#processing#'; // insert processing message (language string), used in the frontend
+    const ADMIN_CONFIG_BUTTON = '#config#'; // config button(s)
+    const ADMIN_CONFIG_PANEL = '#configpanel#'; // config panel
     
     /**
      * A numbered position

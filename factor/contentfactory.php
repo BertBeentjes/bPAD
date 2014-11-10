@@ -95,6 +95,15 @@ class ContentFactory extends Factory {
             if (strstr($this->getContent(), Terms::CONTENT_BPAD_LANGUAGE)) {
                 $this->replaceTerm(Terms::CONTENT_BPAD_LANGUAGE, Settings::getSetting(Setting::SITE_LANGUAGE)->getValue(), $this->getContent());
             }
+            // add a fool proof config button (well... almost fool proof, only fools like me that destroy admin layouts or structures can still get stuck)
+            if ($this->hasTerm(Terms::ADMIN_CONFIG_BUTTON)) {
+                if (Authorization::getPagePermission(Authorization::AUTHORIZATION_MANAGE) || Authorization::getPagePermission(Authorization::LANGUAGE_MANAGE) || Authorization::getPagePermission(Authorization::ROLE_MANAGE) || Authorization::getPagePermission(Authorization::SYSTEM_MANAGE) || Authorization::getPagePermission(Authorization::TEMPLATE_MANAGE) || Authorization::getPagePermission(Authorization::USER_FLUSH_ARCHIVE) || Authorization::getPagePermission(Authorization::USER_MANAGE) || Authorization::getPagePermission(Authorization::SETTING_MANAGE)) {
+                    $this->replaceTerm(Terms::ADMIN_CONFIG_BUTTON, $this->factorConfigButton());
+                    $this->replaceTerm(Terms::ADMIN_CONFIG_PANEL, $this->factorConfigPanel());
+                }
+            }
+            $this->clearTerm(Terms::ADMIN_CONFIG_BUTTON);
+            $this->clearTerm(Terms::ADMIN_CONFIG_PANEL);
         } else {
             throw new Exception(Helper::getLang(Errors::ERROR_FACTORY_NOT_INITIALIZED_CORRECTLY) . ' @ ' . __METHOD__);
         }
@@ -168,6 +177,41 @@ class ContentFactory extends Factory {
         $settings .= 'GOOGLE_ANALYTICSCODE : "' . Settings::getSetting(Setting::GOOGLE_ANALYTICSCODE)->getValue() . '"';
         $settings .= '}';
         return $settings;
+    }
+
+    /**
+     * Create the config button, the config is site global, but can be integrated 
+     * in the site in different locations/objects and different ways,
+     * depending on authorization 
+     * 
+     * @return string
+     */
+    private function factorConfigButton() {
+        $config = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_CONFIG_BUTTON)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $config = str_replace(Terms::ADMIN_VALUE, Helper::getLang(LSSNames::STRUCTURE_ADMIN_CONFIG_BUTTON), $config);
+        // factor the config panel
+        $configadminfactory = new ConfigAdminFactory;
+        $configadminfactory->setContext($this->getContext());
+        $configadminfactory->setMode($this->getMode());
+        $configadminfactory->setObject(Objects::getObject(SysCon::SITE_ROOT_OBJECT));
+        $configadminfactory->factor();
+        $config = str_replace(Terms::OBJECT_ITEM_CONTENT, $configadminfactory->getContent(), $config);
+        return $config;
+    }
+
+    /**
+     * Create the config panel for this object
+     * 
+     * @return string
+     */
+    private function factorConfigPanel() {
+        // get the panel
+        $config = Structures::getStructureByName(LSSNames::STRUCTURE_CONFIG_PANEL)->getVersion($this->getMode(), $this->getContext())->getBody();
+        // insert the panel id
+        $config = str_replace(Terms::OBJECT_ITEM_ID, 'CP' . Objects::getObject(SysCon::SITE_ROOT_OBJECT)->getId(), $config);
+        // empty by default
+        $config = str_replace(Terms::ADMIN_CONTENT, '', $config);
+        return $config;
     }
 
 }

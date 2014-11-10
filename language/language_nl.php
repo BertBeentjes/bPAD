@@ -186,6 +186,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_LSS] = 'Beheer -toon opmaakitems';
 $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_ADD_NAME] = 'Toevoegknoppen';
 $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_LSS_NAME] = 'Opmaakitems';
 $lang[LSSNames::STRUCTURE_ADMIN_TEXT_INPUT] = 'Beheer - invoerveld';
+$lang[LSSNames::STRUCTURE_ADMIN_CONFIG_BUTTON] = 'Configuratie';
 $lang[LSSNames::STRUCTURE_ADMIN_CHECKBOX] = 'Beheer - vinkveld';
 $lang[LSSNames::STRUCTURE_ADMIN_COMBOBOX] = 'Beheer - lijst/invoerveld';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX] = 'Beheer - lijstveld';

@@ -187,6 +187,7 @@ $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_LSS] = 'Administrator - show layou
 $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_ADD_NAME] = 'Add buttons';
 $lang[LSSNames::STRUCTURE_ADMIN_BUTTON_TOGGLE_LSS_NAME] = 'Lay-out items';
 $lang[LSSNames::STRUCTURE_ADMIN_TEXT_INPUT] = 'Administrator - text input';
+$lang[LSSNames::STRUCTURE_ADMIN_CONFIG_BUTTON] = 'Configure';
 $lang[LSSNames::STRUCTURE_ADMIN_CHECKBOX] = 'Administrator - checkbox';
 $lang[LSSNames::STRUCTURE_ADMIN_COMBOBOX] = 'Administrator - combobox';
 $lang[LSSNames::STRUCTURE_ADMIN_LISTBOX] = 'Administrator - listbox';

@@ -599,6 +599,7 @@ $lang[AdminLabels::ADMIN_SETTING_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_SETTING_VALUE] = 'Waarde';
 $lang[AdminLabels::ADMIN_INCLUDE_FILE_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_INCLUDE_FILE_MIME_TYPE] = 'Mimetype';
+$lang[AdminLabels::ADMIN_INCLUDE_FILE_COMMENT] = 'Opmerking';
 $lang[AdminLabels::ADMIN_SNIPPET_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_SNIPPET_MIME_TYPE] = 'Mimetype';
 $lang[AdminLabels::ADMIN_SNIPPET_CONTEXT_GROUP] = 'Contextgroep';

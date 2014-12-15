@@ -1542,13 +1542,23 @@ class CommandFactory {
     }
 
     /**
-     * Compose the command to edit the includefile name
+     * Compose the command to edit the includefile file type
      * 
      * @param fileinclude $includefile
      * @return string
      */
     public static function editIncludeFileMimeType($includefile) {
         return 'includefile,' . $includefile->getId() . ',change.includefilemimetype';
+    }
+
+    /**
+     * Compose the command to edit the includefile comment 
+     * 
+     * @param fileinclude $includefile
+     * @return string
+     */
+    public static function editIncludeFileComment($includefile) {
+        return 'includefile,' . $includefile->getId() . ',change.includefilecomment';
     }
 
     /**

@@ -1531,6 +1531,12 @@ class Execute {
                         Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
                     }
                     break;
+                case 'includefilecomment':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($includefile->getComment());
+                    // set the new value
+                    $includefile->setComment(Request::getCommand()->getValue());
+                    break;
                 case 'includefileversionbody':
                     // store the old value in the command
                     Request::getCommand()->setOldValue($includefile->getVersion(Modes::getMode(Mode::EDITMODE))->getBody());

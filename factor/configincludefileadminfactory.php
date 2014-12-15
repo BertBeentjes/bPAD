@@ -76,6 +76,8 @@ class ConfigIncludeFileAdminFactory extends ConfigAdminFactory {
         $section .= $this->factorTextInput($baseid . '_name', CommandFactory::editIncludeFileName($includefile), $includefile->getName(), Helper::getLang(AdminLabels::ADMIN_INCLUDE_FILE_NAME));
         // add the text input for the mime type
         $section .= $this->factorTextInput($baseid . '_mime', CommandFactory::editIncludeFileMimeType($includefile), $includefile->getMimeType(), Helper::getLang(AdminLabels::ADMIN_INCLUDE_FILE_MIME_TYPE));
+        // add the text input for the comment
+        $section .= $this->factorTextArea($baseid . '_comment', CommandFactory::editIncludeFileComment($includefile), $includefile->getComment(), Helper::getLang(AdminLabels::ADMIN_INCLUDE_FILE_COMMENT));
         // remove button 
         $section .= $this->factorButtonGroup($this->factorButton($baseid . '_remove', CommandFactory::removeIncludeFile($this->getObject(), $includefile, $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_REMOVE_INCLUDE_FILE)));
         $admin .= $this->factorSection($baseid . '_header', $section);

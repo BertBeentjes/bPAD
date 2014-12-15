@@ -1481,10 +1481,10 @@ class Store {
      * get the basic attributes for a file include
      * 
      * @param int the id of the row 
-     * @return resultset name, mimetype, createdate, createuserid, changedate, changeuserid
+     * @return resultset name, mimetype, comment, createdate, createuserid, changedate, changeuserid
      */
     public static function getFileInclude($id) {
-        return self::selectQuery("SELECT name, mimetype, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid FROM fileincludes WHERE id=" . $id);
+        return self::selectQuery("SELECT name, mimetype, comment, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid FROM fileincludes WHERE id=" . $id);
     }
 
     /**
@@ -3342,6 +3342,21 @@ class Store {
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("UPDATE fileincludes SET mimetype=? WHERE id=?")) {
             $stmt->bind_param("si", $newtype, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set file include comment
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for comment
+     * @return boolean true if action query succeeds
+     */
+    public static function setFileIncludeComment($id, $newcomment) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE fileincludes SET comment=? WHERE id=?")) {
+            $stmt->bind_param("si", $newcomment, $id);
             return self::actionQuery($stmt);
         }
     }

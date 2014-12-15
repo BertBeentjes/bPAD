@@ -31,7 +31,8 @@ class FileInclude extends NamedEntity {
     const DEFAULT_FILE_INCLUDE = 1;
 
     private $mimetype; // the mime type, used to set the correct return type
-    private $fileincludeversions = array(); // the versions for this file include
+    private $comment; // the comment, e.g. can contain info on how to update the included file
+    private $fileincludeversions = array(); // the versions for this file include    
     
     /**
      * Construct the file include
@@ -67,6 +68,7 @@ class FileInclude extends NamedEntity {
      */
     protected function initAttributes($attr) {
         $this->mimetype = $attr->mimetype;
+        $this->comment = $attr->comment;
         parent::initAttributes($attr);
         return true;
     }
@@ -105,6 +107,31 @@ class FileInclude extends NamedEntity {
     public function setMimeType($newmimetype) {
         if (Store::setFileIncludeType($this->id, $newmimetype) && $this->setChanged()) {
             $this->mimetype = $newmimetype;
+            return true;
+        } else {
+            throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
+    }
+
+    /**
+     * Get the comment of the file include
+     * 
+     * @return string type
+     */
+    public function getComment() {
+        return $this->comment;
+    }
+    
+    /**
+     * Set the comment for the file include
+     * 
+     * @param string $newcomment the new value for the comment
+     * @return boolean true if success
+     * @throws Exception when update fails
+     */
+    public function setComment($newcomment) {
+        if (Store::setFileIncludeComment($this->id, $newcomment) && $this->setChanged()) {
+            $this->comment = $newcomment;
             return true;
         } else {
             throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);

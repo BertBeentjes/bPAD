@@ -115,7 +115,6 @@ class Object extends SettedEntity {
             if ($result = Store::getObjectParentIds($this->getId(), $mode->getId())) {
                 if ($row = $result->fetchObject()) {
                     $objectparent = Objects::getObject($row->parentobjectid);
-                    //$positionparent = $objectparent->getVersion($mode)->getPosition($row->parentpositionnumber);
                     $this->objectversions[$mode->getId()] = new ObjectVersion($this, $objectparent, $row->parentpositionnumber, $this->findObjectTemplateRoot($objectparent, $mode), $mode);
                     return $this->objectversions[$mode->getId()];
                 }
@@ -149,7 +148,7 @@ class Object extends SettedEntity {
      * or the object itself
      */
     private function findObjectTemplateRoot($objectparent, $mode) {
-        if (!$this->template->isDefault() && !$this->getIsObjectTemplateRoot() && !$this->getIsTemplateRoot()) {
+        if (!$this->getTemplate()->isDefault() && !$this->getIsObjectTemplateRoot() && !$this->getIsTemplateRoot()) {
             return $objectparent->getVersion($mode)->getObjectTemplateRootObject();
         } else {
             return $this;
@@ -266,7 +265,7 @@ class Object extends SettedEntity {
             CacheObjects::outdateLinkedContentItems();
             CachePositionInstances::outdateInstances();
         }
-        // set the change date and user once
+        // set the change date and user
         $thischanged = parent::setChanged(); // call the overridden function to set the change user/date
         // if this is not the objecttemplateroot, propagate the change upwards
         if ($this->hasTemplateParent()) {
@@ -819,7 +818,7 @@ class Object extends SettedEntity {
      * @return boolean true if the object has changed
      */
     public function hasChanged() {
-        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() <= $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate()) {
+        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() < $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate()) {
             return true;
         }
         return false;

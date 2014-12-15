@@ -516,7 +516,7 @@ class ObjectFactory extends Factory {
         // add the object name
         $menu = str_replace(Terms::OBJECT_ROOT_NAME, $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getName(), $menu);
         // add the unpublished indicator
-        if ($this->getObject()->getChangeDate() > $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate()) {
+        if ($this->getObject()->hasChanged()) {
             $objectunpublished = Structures::getStructureByName(LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR)->getVersion($this->getMode(), $this->getContext())->getBody();
             $menu = str_replace(Terms::OBJECT_UNPUBLISHED_INDICATOR, $objectunpublished, $menu);
         } 
@@ -554,7 +554,7 @@ class ObjectFactory extends Factory {
         $edit = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_EDIT_BUTTON), $edit);
         $edit = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::editObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $edit);
         // add the unpublished indicator
-        if ($this->getObject()->getChangeDate() > $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate()) {
+        if ($this->getObject()->hasChanged()) {
             $objectunpublished = Structures::getStructureByName(LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR)->getVersion($this->getMode(), $this->getContext())->getBody();
             $edit = str_replace(Terms::OBJECT_UNPUBLISHED_INDICATOR, $objectunpublished, $edit);
         } 

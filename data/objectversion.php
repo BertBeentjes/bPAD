@@ -115,14 +115,13 @@ Class ObjectVersion extends StoredEntity {
      * @return boolean
      */
     public function setChanged($force = false) {
-        $thischanged = parent::setChanged($force);
         $parentchanged = true;
         if (!$this->changed || $force) {
-            if ($this->container->hasTemplateParent()) {
+            if ($this->getContainer()->hasTemplateParent()) {
                 // set the change value for the version with the correct mode of the object parent
                 // check for looping...
                 if ($this->getObjectParent()->getId() != $this->getContainer()->getId()) {
-                    $parentchanged = $this->objectparent->getVersion($this->getMode())->setChanged();
+                    $parentchanged = $this->getObjectParent()->getVersion($this->getMode())->setChanged();
                 }
             }
             // when changing an object version in view mode, the caches should be updated
@@ -133,6 +132,7 @@ Class ObjectVersion extends StoredEntity {
                 CacheObjectAddressableParentObjects::updateCache($this);
             }
         }
+        $thischanged = parent::setChanged($force);
         return ($thischanged && $parentchanged);
     }
     

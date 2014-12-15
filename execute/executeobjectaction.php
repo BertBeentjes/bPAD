@@ -253,10 +253,10 @@ class ExecuteObjectAction {
         // only when the action is publish or cancel (function is only called in
         // those cases, but just to be sure...)
         if ($this->getAction() == self::EXECUTE_PUBLISH || $this->getAction() == self::EXECUTE_CANCEL) {
+            $this->recurseIntoChildren();
             // touch the view version, to update the cache and set the change date to
             // a value more recent than the edit version
             $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setChanged(true);
-            $this->recurseIntoChildren();
         }
     }
 

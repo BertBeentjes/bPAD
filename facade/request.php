@@ -180,16 +180,16 @@ class Request {
         if (count($commandparts) == 4 && Validator::isLCaseChars($commandparts[0]) && Validator::isAddress($commandparts[1]) && Validator::isCommand($commandparts[2]) && Validator::isCommandNumber($commandparts[3])) {
             $commandnumberparts = explode('.', $commandparts[3]);
             if (count($commandnumberparts) == 3) {
-                self::$command = Command::newCommand();
-                self::$command->setItem($commandparts[0]);
-                self::$command->setItemAddress($commandparts[1]);
-                self::$command->setCommand($commandparts[2]);
-                self::$command->setCommandNumber($commandnumberparts[2]);
-                self::$command->setLastCommandId($commandnumberparts[1]);
-                self::$command->setSessionIdentifier($commandnumberparts[0]);
-                self::$command->setUser(Authentication::getUser());
-                self::$command->setDate(Helper::getDateTime());
-                self::$command->setValue($value);
+                self::$command = Commands::newCommandFull($commandparts[0], $commandparts[1], $commandparts[2], $commandnumberparts[2], $commandnumberparts[1], $commandnumberparts[0], Authentication::getUser(), Helper::getDateTime(), $value);
+                // self::$command->setItem($commandparts[0]);
+                // self::$command->setItemAddress($commandparts[1]);
+                // self::$command->setCommand($commandparts[2]);
+                // self::$command->setCommandNumber($commandnumberparts[2]);
+                // self::$command->setLastCommandId($commandnumberparts[1]);
+                // self::$command->setSessionIdentifier($commandnumberparts[0]);
+                // self::$command->setUser(Authentication::getUser());
+                // self::$command->setDate(Helper::getDateTime());
+                // self::$command->setValue($value);
                 switch (self::$command->getCommandGroup()) {
                     case 'content' :
                         self::$type = self::CONTENT;

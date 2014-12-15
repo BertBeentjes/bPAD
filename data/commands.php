@@ -39,4 +39,31 @@ class Commands {
             }
         }
     }
+    
+    /**
+     * create a new command in the store
+     * 
+     */
+    public static function newCommand() {
+        return new Command(Store::insertCommand());
+    }
+    
+    /**
+     * create a new command in the store at once with all attributes
+     * 
+     * @param $item string
+     * @param $itemaddress string
+     * @param $command string
+     * @param $commandnumber integer
+     * @param $lastcommandid integer
+     * @param $sessionidentifier string
+     * @param $user user
+     * @param $date date
+     * @param $value string
+     * @return command
+     */
+    public static function newCommandFull($item, $itemaddress, $command, $commandnumber, $lastcommandid, $sessionidentifier, $user, $date, $value) {
+        return new Command(Store::insertCommandFull($item, $itemaddress, $command, $commandnumber, $lastcommandid, $sessionidentifier, $user->getId(), $date, $value));
+    }
+        
 }

@@ -3484,6 +3484,28 @@ class Store {
     }
 
     /**
+     * insert a new command into the Store with all attribute values
+     * 
+     * @param $item string
+     * @param $itemaddress string
+     * @param $command string
+     * @param $commandnumber integer
+     * @param $lastcommandid integer
+     * @param $sessionidentifier string
+     * @param $user integer
+     * @param $date date
+     * @param $value string
+     * @return int the new id
+     */
+    public static function insertCommandFull($item, $itemaddress, $command, $commandnumber, $lastcommandid, $sessionidentifier, $userid, $date, $value) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO commandlog (item, itemaddress, command, commandnumber, lastcommandid, sessionidentifier, fk_user_id, date, value) VALUES (?,?,?,?,?,?,?,?,?)")) {
+            $stmt->bind_param("sssiisiss", $item, $itemaddress, $command, $commandnumber, $lastcommandid, $sessionidentifier, $userid, $date, $value);
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
      * insert a new session into the Store
      * 
      * @param int sessionidentifier

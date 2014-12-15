@@ -39,14 +39,6 @@ class Command extends Log {
     private $context; // optionally add the context to the command
     
     /**
-     * create a new command in the store
-     * 
-     */
-    public static function newCommand() {
-        return new Command(Store::insertCommand());
-    }
-    
-    /**
      * Construct a command from the log
      * 
      * @param int $id the id of the command log to load
@@ -81,6 +73,7 @@ class Command extends Log {
      */
     protected function initAttributes($attr) {
         $this->command = $attr->command;
+        $this->evalCommand($attr->command);
         $this->commandnumber = $attr->commandnumber;
         $this->lastcommandid = $attr->lastcommandid;
         $this->sessionidentifier = $attr->sessionidentifier;
@@ -144,28 +137,39 @@ class Command extends Log {
      */
     public function setCommand($newcommand) {
         if (Store::setCommandLogCommand($this->id,  $newcommand)) {
-            $this->command = $newcommand;
-            $commandparts = explode('.', $this->command);
-            $this->commandgroup = $commandparts[0];
-            $this->commandmember = $commandparts[1];
-            if (isset($commandparts[2])) {
-                $modeid = intval($commandparts[2]);
-                if (Validator::validMode($modeid)) {
-                    $this->mode = Modes::getMode($modeid);
-                }
-            }    
-            if (isset($commandparts[3])) {
-                $contextid = intval($commandparts[3]);
-                if (Validator::isNumeric($contextid)) {
-                    $this->context = Contexts::getContext($contextid);
-                }
-            }    
+            $this->evalCommand($newcommand);
             return true;
         } else {
             throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
         }
     }
 
+    /**
+     * evaluate the command
+     * 
+     * @param newcommand the command
+     * @return boolean true if success
+     * @throws exception if the update in the store fails
+     */
+    private function evalCommand($newcommand) {
+        $this->command = $newcommand;
+        $commandparts = explode('.', $this->command);
+        $this->commandgroup = $commandparts[0];
+        $this->commandmember = $commandparts[1];
+        if (isset($commandparts[2])) {
+            $modeid = intval($commandparts[2]);
+            if (Validator::validMode($modeid)) {
+                $this->mode = Modes::getMode($modeid);
+            }
+        }    
+        if (isset($commandparts[3])) {
+            $contextid = intval($commandparts[3]);
+            if (Validator::isNumeric($contextid)) {
+                $this->context = Contexts::getContext($contextid);
+            }
+        }            
+    }
+    
     /**
      * getter for the commandnumber
      * 

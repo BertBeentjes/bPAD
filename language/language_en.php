@@ -228,6 +228,8 @@ $lang[LSSNames::STRUCTURE_HTML] = 'HTML';
 $lang[LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR] = 'Object unpublished changes';
 
 $lang[LSSNames::LAYOUT_AD] = 'Ad';
+$lang[LSSNames::LAYOUT_AD_WIDE] = 'Ad wide';
+$lang[LSSNames::LAYOUT_ACTION_BUTTON] = 'Action button';
 $lang[LSSNames::LAYOUT_ARTICLE_IMG_TITLE_TEXT] = 'Article image - title - text';
 $lang[LSSNames::LAYOUT_ARTICLE_IMG_TITLE_TEXT_WIDE] = 'Article image - title - text - wide';
 $lang[LSSNames::LAYOUT_ARTICLE_IMG_LEFT_TEXT_RIGHT] = 'Article image left - text right';
@@ -309,6 +311,7 @@ $lang[LSSNames::LAYOUT_LINE] = 'Line';
 $lang[LSSNames::LAYOUT_TITLE] = 'Title';
 $lang[LSSNames::LAYOUT_WHITESPACE] = 'Whitespace';
 
+$lang[LSSNames::STYLE_ACTION_BUTTON] = 'Action button';
 $lang[LSSNames::STYLE_AD_TITLE_IMG_TEXT] = 'Ad title - image - text';
 $lang[LSSNames::STYLE_ARTICLE_TITLE_IMG_TEXT] = 'Article title - image - text';
 $lang[LSSNames::STYLE_TITLE_IMG_TEXT_MARGIN] = 'Article title - image - text - large margins';
@@ -413,6 +416,7 @@ $lang[LSSNames::SET_WHITESPACE] = 'Whitespace';
 $lang[LSSNames::SET_DEFAULT] = '_default';
 
 $lang[LSSNames::TEMPLATE_AD] = 'Ad';
+$lang[LSSNames::TEMPLATE_ACTION_BUTTON] = 'Action button';
 $lang[LSSNames::TEMPLATE_ARTICLE_TITLE_IMG_TEXT] = 'Article title - image - text';
 $lang[LSSNames::TEMPLATE_ARTICLE_TITLE_TEXT] = 'Article title - text';
 $lang[LSSNames::TEMPLATE_ARTICLE_TITLE_BLOCK_BLOCK] = 'Article title - two blocks';

@@ -301,6 +301,21 @@ function addEvents(divid) {
                     this.blur();
                 });
                 break;
+            case 'open-url':
+                if ($(this).attr('data-bpad-open-url').length) {
+                    $(this).on("click", function() {
+                        var value = $(this).attr('data-bpad-open-url');
+                        // check for relative or absolute link, open link
+                        if (value.substring(0,1) == '/') {
+                            doCommand('object,' + value.substring(1, value.length - 5) + ',content.fetch', false, '');
+                            return false;
+                        } else {
+                            window.location = url; // redirect
+                            return false;
+                        }
+                    });
+                }
+                break;
             default:
                 // attach the event and pass the command info
                 $(this).on('click', {

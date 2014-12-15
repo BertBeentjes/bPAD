@@ -447,6 +447,7 @@ class ExecuteObjectAction {
         $target->setParent($source->getParent());
         $target->setSearchWords($source->getSearchWords());
         $target->setTemplate($source->getTemplate());
+        $target->setMaxItems($source->getMaxItems());
     }
 
     /**

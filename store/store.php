@@ -1975,7 +1975,7 @@ class Store {
      * prepare a statement to update the position instance activeitems value
      * 
      * @param int the id of the row to update
-     * @param bool the new maxitems value
+     * @param int the new maxitems value
      * @return boolean true if action query succeeds
      */
     public static function setPositionInstanceMaxItems($id, $int) {

@@ -404,13 +404,15 @@ class EditAdminFactory extends AdminFactory {
         if ($object->getIsObjectTemplateRoot() && !$object->getTemplate()->isDefault()) {
             $section .= $this->factorTextInput($baseid . '_templatename', '', $object->getTemplate()->getName(), Helper::getLang(AdminLabels::ADMIN_OBJECT_TEMPLATE_NAME), 'disabled');
         }
-        // show the link for addressable objects
-        if ($object->isAddressable($this->getMode())) {
-            $section .= $this->factorTextInput($baseid . '_link', '', Terms::object_internal_link($object), Helper::getLang(AdminLabels::ADMIN_OBJECT_INTERNAL_LINK), 'disabled');
-        }
-        // show a deep link for instanciable objects
-        if ($object->getTemplate()->getInstanceAllowed() && !$object->isAddressable($this->getMode())) {
-            $section .= $this->factorTextInput($baseid . '_deeplink', '', $object->getDeepLink($this->getMode()), Helper::getLang(AdminLabels::ADMIN_OBJECT_DEEP_LINK), 'disabled');
+        if (!$object->getIsTemplate()) {
+            // show the link for addressable objects
+            if ($object->isAddressable($this->getMode())) {
+                $section .= $this->factorTextInput($baseid . '_link', '', Terms::object_internal_link($object), Helper::getLang(AdminLabels::ADMIN_OBJECT_INTERNAL_LINK), 'disabled');
+            }
+            // show a deep link for instanciable objects
+            if ($object->getTemplate()->getInstanceAllowed() && !$object->isAddressable($this->getMode())) {
+                $section .= $this->factorTextInput($baseid . '_deeplink', '', $object->getDeepLink($this->getMode()), Helper::getLang(AdminLabels::ADMIN_OBJECT_DEEP_LINK), 'disabled');
+            }
         }
         return $section;
     }

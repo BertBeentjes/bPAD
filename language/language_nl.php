@@ -227,6 +227,8 @@ $lang[LSSNames::STRUCTURE_HTML] = 'HTML';
 $lang[LSSNames::STRUCTURE_OBJECT_UNPUBLISHED_INDICATOR] = 'Object ongepubliceerde aanpassingen';
 
 $lang[LSSNames::LAYOUT_AD] = 'Advertentie';
+$lang[LSSNames::LAYOUT_AD_WIDE] = 'Advertentie breed';
+$lang[LSSNames::LAYOUT_ACTION_BUTTON] = 'Actieknop';
 $lang[LSSNames::LAYOUT_ARTICLE_IMG_TITLE_TEXT] = 'Artikel beeld - titel - tekst';
 $lang[LSSNames::LAYOUT_ARTICLE_IMG_TITLE_TEXT_WIDE] = 'Artikel beeld - titel - tekst breed';
 $lang[LSSNames::LAYOUT_ARTICLE_IMG_LEFT_TEXT_RIGHT] = 'Artikel beeld links - tekst rechts';
@@ -308,6 +310,7 @@ $lang[LSSNames::LAYOUT_LINE] = 'Tekstregel';
 $lang[LSSNames::LAYOUT_TITLE] = 'Titel';
 $lang[LSSNames::LAYOUT_WHITESPACE] = 'Witruimte';
 
+$lang[LSSNames::STYLE_ACTION_BUTTON] = 'Actieknop';
 $lang[LSSNames::STYLE_AD_TITLE_IMG_TEXT] = 'Advertentie titel - beeld - tekst';
 $lang[LSSNames::STYLE_ARTICLE_TITLE_IMG_TEXT] = 'Artikel titel - beeld - tekst';
 $lang[LSSNames::STYLE_TITLE_IMG_TEXT_MARGIN] = 'Artikel titel - beeld - tekst - grote marge';
@@ -372,9 +375,9 @@ $lang[LSSNames::STYLE_TEXT_DARK_BG] = 'Tekst op donkere achtergrond';
 $lang[LSSNames::STYLE_TEXT_LIGHT_BG] = 'Tekst op lichte achtergrond';
 $lang[LSSNames::STYLE_TEXT_TWO_COLUMNS] = 'Tekst tweekoloms';
 $lang[LSSNames::STYLE_LINE] = 'Tekstregel';
-$lang[LSSNames::STYLE_TITLE] = 'Titel';
+$lang[LSSNames::STYLE_TITLE] = 'Titel op lichte achtergrond';
 $lang[LSSNames::STYLE_TITLE_ARTICLE] = 'Titel artikel positie';
-$lang[LSSNames::STYLE_TITLE_DARK] = 'Titel donker';
+$lang[LSSNames::STYLE_TITLE_DARK] = 'Titel op donkere achtergrond';
 $lang[LSSNames::STYLE_TITLE_LEFT] = 'Titel links';
 $lang[LSSNames::STYLE_TITLE_MARGIN] = 'Titel marge';
 $lang[LSSNames::STYLE_TITLE_RIGHT] = 'Titel rechts';
@@ -412,6 +415,7 @@ $lang[LSSNames::SET_WHITESPACE] = 'Witruimte';
 $lang[LSSNames::SET_DEFAULT] = '_default';
 
 $lang[LSSNames::TEMPLATE_AD] = 'Advertentie';
+$lang[LSSNames::TEMPLATE_ACTION_BUTTON] = 'Actieknop';
 $lang[LSSNames::TEMPLATE_ARTICLE_TITLE_IMG_TEXT] = 'Artikel titel - beeld - tekst';
 $lang[LSSNames::TEMPLATE_ARTICLE_TITLE_TEXT] = 'Artikel titel - tekst';
 $lang[LSSNames::TEMPLATE_ARTICLE_TITLE_BLOCK_BLOCK] = 'Artikel titel - twee blokken';

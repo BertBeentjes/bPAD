@@ -231,7 +231,7 @@ class PositionFactory extends Factory {
             if (is_array($objects)) {
                 $lazyloadstructure = Structures::getStructureByName(LSSNames::STRUCTURE_LAZY_LOAD)->getVersion($this->getMode(), $this->getContext())->getBody();
                 $number = 0;
-                $maxitems = $this->getPosition()->getPositionContent()->getMaxItems();
+                $maxitems = $this->getPosition()->getPositionContent()->getMaxItems();                
                 foreach ($objects as $objectvalues) {
                     if ($number < $maxitems || $maxitems == 0) {
                         $object = $objectvalues['object'];

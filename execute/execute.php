@@ -546,7 +546,7 @@ class Execute {
                         // store the old value in the command
                         Request::getCommand()->setOldValue($instance->getMaxItems());
                         // set the new value
-                        $instance->setMaxItems(!$instance->getMaxItems());
+                        $instance->setMaxItems(Request::getCommand()->getValue());
                     } else {
                         Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
                     }

@@ -27,6 +27,8 @@
  * @since 0.4.0
  */
 class Terms {
+    const CONTENT_SITE_NAME = '#sitename#'; // insert the name of the site
+    const CONTENT_SITE_LOCALE = '#sitelocale#'; // insert the locale of the site (for open graph purposes)
     const CONTENT_BPAD_VERSION = '#bpadversion#'; // insert the bPAD version number here
     const CONTENT_BPAD_LANGUAGE = '#bpadlanguage#'; // insert the bPAD language here
     const CONTENT_ROOT = '#root#'; // insert content starting with the site root here in a snippet 

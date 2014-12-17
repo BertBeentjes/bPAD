@@ -65,6 +65,7 @@ $lang['SETTINGS_SITE_ADMINEMAIL'] = 'E-mailadres beheerder';
 $lang['SETTINGS_SITE_MAXUPLOADSIZE'] = 'Maximale grootte uploadbestanden';
 $lang['SETTINGS_SITE_UPLOAD_LOCATION'] = 'Locatie voor uploadbestanden';
 $lang['SETTINGS_SITE_UPLOAD_LOCATION_PERMISSIONS'] = 'Permissies voor de locatie voor uploadbestanden';
+$lang['SETTINGS_SITE_LOCALE'] = 'Locale';
 
 $lang['SETTINGS_SECURITY_HASHALGORITHM'] = 'Hash algoritme';
 $lang['SETTINGS_SECURITY_SALT'] = 'Salt';

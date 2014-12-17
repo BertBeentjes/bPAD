@@ -66,6 +66,7 @@ $lang['SETTINGS_SITE_ADMINEMAIL'] = 'Administrator email';
 $lang['SETTINGS_SITE_MAXUPLOADSIZE'] = 'Maximum upload size';
 $lang['SETTINGS_SITE_UPLOAD_LOCATION'] = 'Location for uploaded files';
 $lang['SETTINGS_SITE_UPLOAD_LOCATION_PERMISSIONS'] = 'Permissions for the location for uploaded files';
+$lang['SETTINGS_SITE_LOCALE'] = 'Locale';
 
 $lang['SETTINGS_SECURITY_HASHALGORITHM'] = 'Hash algorithm';
 $lang['SETTINGS_SECURITY_SALT'] = 'Salt';
@@ -244,7 +245,7 @@ $lang[LSSNames::LAYOUT_ARTICLE_TITLE_BLOCK_BLOCK] = 'Article title - two blocks'
 $lang[LSSNames::LAYOUT_ARTICLE_TITLE_BLOCK_BLOCK_EQUAL] = 'Article title - two blocks equal';
 $lang[LSSNames::LAYOUT_ARTICLE_TITLE_BLOCK_LARGE_BLOCK] = 'Article title - block large left - block small right';
 $lang[LSSNames::LAYOUT_ARTICLE_TITLE_BLOCK_OVERLAY_BLOCK] = 'Article title - block overlay - block';
-$lang[LSSNames::LAYOUT_ARTICLE_TITLE_BLOCK_BLOCK_LARGE] = 'Article block small left - block large right';
+$lang[LSSNames::LAYOUT_ARTICLE_TITLE_BLOCK_BLOCK_LARGE] = 'Article title - block small left - block large right';
 $lang[LSSNames::LAYOUT_ARTICLE_BLOCK_BLOCK] = 'Article two blocks';
 $lang[LSSNames::LAYOUT_ARTICLE_BLOCK_IMG_BLOCK] = 'Article block image - block';
 $lang[LSSNames::LAYOUT_ARTICLE_BLOCK_BLOCK_IMG] = 'Article block - block image';

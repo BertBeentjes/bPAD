@@ -49,6 +49,7 @@ class Setting extends NamedEntity {
     const SITE_MAXUPLOADSIZE = 105; // the maximum size for uploads
     const SITE_UPLOAD_LOCATION = 106; // the location for uploading files, by default the 'media' folder
     const SITE_UPLOAD_LOCATION_PERMISSIONS = 107; // the permissions for the location for uploading files, by default 770
+    const SITE_LOCALE = 108; // the name of the site
     
     const SECURITY_HASHALGORITHM = 200; // the hash algorithm to use for passwords
     const SECURITY_SALT = 201; // the salt to use in passwords

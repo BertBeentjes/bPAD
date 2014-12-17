@@ -47,6 +47,14 @@ class ContentFactory extends Factory {
             if (strstr($this->getContent(), Terms::CONTENT_COMMAND_ID)) {
                 $this->replaceTerm(Terms::CONTENT_COMMAND_ID, Commands::getLastCommand()->getId(), $this->getContent());
             }
+            // replace the site name term by the site name
+            if (strstr($this->getContent(), Terms::CONTENT_SITE_NAME)) {
+                $this->replaceTerm(Terms::CONTENT_SITE_NAME, Settings::getSetting(Setting::SITE_NAME)->getValue(), $this->getContent());
+            }
+            // replace the site locale term by the site locale
+            if (strstr($this->getContent(), Terms::CONTENT_SITE_LOCALE)) {
+                $this->replaceTerm(Terms::CONTENT_SITE_LOCALE, Settings::getSetting(Setting::SITE_LOCALE)->getValue(), $this->getContent());
+            }
             // replace the content root term by the content
             if (strstr($this->getContent(), Terms::CONTENT_ROOT)) {
                 $this->replaceTerm(Terms::CONTENT_ROOT, $this->getRootContent(), $this->getContent());

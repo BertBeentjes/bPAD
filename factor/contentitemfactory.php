@@ -92,14 +92,16 @@ class ContentItemFactory extends Factory {
      */
     function getShortContent() {
         $content = strip_tags($this->getContent());
-        if (strlen($content) > 200) {
-            $content = substr($content, 0, 200);
+        if (strlen($content) > 250) {
+            $content = substr($content, 0, 250);
             $lastspace = strrpos($content, ' ');
-            if ($lastspace > 180) {
+            if ($lastspace > 230) {
                 $content = substr($content, 0, $lastspace);
             }
             $content .= '...';
         }
+        $content = str_replace('"', "'", $content);
+        $content = str_replace('....', '...', $content);
         return $content;
     }
 

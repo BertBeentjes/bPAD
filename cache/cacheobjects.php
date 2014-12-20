@@ -57,7 +57,7 @@ class CacheObjects {
             }
             if (!is_object($cache)) {
                 // create and store a new object for the cache
-                $content = self::factorObject($object, $context, $mode);
+                $content = self::factorAndCacheObject($object, $context, $mode);
             } else {
                 // return the cached content
                 $content = $cache->getCache();
@@ -79,6 +79,22 @@ class CacheObjects {
      * @return objectfactory
      */
     private static function factorObject($object, $context, $mode) {
+        // initialize the object factory
+        $objectfactory = new ObjectFactory($object, $context, $mode);
+        // factor the object
+        $objectfactory->factor();
+        return $objectfactory->getContent();
+    }
+
+    /**
+     * Factor and cache an object
+     * 
+     * @param object $object
+     * @param context $context
+     * @param mode $mode
+     * @return objectfactory
+     */
+    private static function factorAndCacheObject($object, $context, $mode) {
         // initialize the object factory
         $objectfactory = new ObjectFactory($object, $context, $mode);
         // factor the object

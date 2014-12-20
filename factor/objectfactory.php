@@ -210,6 +210,12 @@ class ObjectFactory extends Factory {
             }
             $this->replaceTerm(Terms::OBJECT_URL_NAME, $name);
         }
+        if ($this->hasTerm(Terms::OBJECT_ROOT_CREATOR)) {
+            $this->replaceTerm(Terms::OBJECT_ROOT_CREATOR, $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getCreateUser()->getFullName());
+        }
+        if ($this->hasTerm(Terms::OBJECT_ROOT_EDITOR)) {
+            $this->replaceTerm(Terms::OBJECT_ROOT_EDITOR, $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getChangeUser()->getFullName());
+        }
         if ($this->hasTerm(Terms::OBJECT_ROOT_CHANGE_DATE)) {
             $this->replaceTerm(Terms::OBJECT_ROOT_CHANGE_DATE, $this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject()->getChangeDate()->format(Helper::getDateTimeFormat()));
         }
@@ -258,6 +264,7 @@ class ObjectFactory extends Factory {
     private function factorPositions() {
         // If the layout is of the #pn# type (has an undefined number of positions), 
         // if the object has an argument, the position(s) to show depend on the value of the argument
+        $deeplink = false;
         if ($this->getObject()->getVersion($this->getMode())->getLayout()->isPNType()) {
             // pn types aren't cacheable because of deep linking
             $this->cacheable = false;
@@ -281,7 +288,9 @@ class ObjectFactory extends Factory {
                     }
                 }
                 if ($objectfound) {
-                    $this->replacePNDeepLink($showposition, $object->getId()); // show the position found in a deep link
+                    // $this->replacePNDeepLink($showposition, $object->getId()); // show the position found in a deep link
+                    $this->replacePN($showposition); // use the number for this position
+                    $deeplink = true;
                 } else {
                     // explode #pn#
                     $this->explodePN(); // show all positions
@@ -365,7 +374,7 @@ class ObjectFactory extends Factory {
             }
         }
         // show all positions
-        $this->showAllPositions();
+        $this->showAllPositions($deeplink);
         // delete empty position markers
         $this->clearP();
     }
@@ -403,23 +412,11 @@ class ObjectFactory extends Factory {
     }
 
     /**
-     * replace the #pn# code by the required position in a deep link
-     * 
-     * @param int $number the position number
-     * @param int $objectid the object to deep link to
-     */
-    private function replacePNDeepLink($number, $objectid) {
-        $deeplinkstructure = Structures::getStructureByName(LSSNames::STRUCTURE_DEEP_LINK)->getVersion($this->getMode(), $this->getContext())->getBody();
-        $deeplink = str_replace(Terms::ADMIN_CONTENT, Terms::object_p($number), $deeplinkstructure);
-        $deeplink = str_replace(Terms::ADMIN_OBJECT_ID, $objectid, $deeplink);
-        $this->replaceTerm(Terms::OBJECT_PN, $deeplink);
-    }
-
-    /**
      * show all positions in their numbered positions, 
      * 
+     * @param boolean $deeplink optional, true if there is a deep link
      */
-    private function showAllPositions() {
+    private function showAllPositions($deeplink = false) {
         $positions = $this->getObject()->getVersion($this->getMode())->getPositions();
         $objectsshown = 0; // check the number of objects shown, if too much, lazy load the rest
         foreach ($positions as $position) {
@@ -452,14 +449,15 @@ class ObjectFactory extends Factory {
                             }
                         }
                         // if there are more than x instanciable objects
-                        if ($objectsshown > Settings::getSetting(Setting::CONTENT_PRELOADPNOBJECTS)->getValue()) {
+                        // and this is not the site map
+                        if ($objectsshown > Settings::getSetting(Setting::CONTENT_PRELOADPNOBJECTS)->getValue() && !$this->getContext()->getContextGroup()->isSiteMap() ) {
                             // lazy load the rest
                             $lazyload = true;
                         }
                     }
                     // show the position with or without the lazy load for instanciable objects
                     $positionfactory = new PositionFactory($position, $this->getContext(), $this->getMode());
-                    $positionfactory->factor($lazyload, $objectsshown);
+                    $positionfactory->factor($lazyload, $objectsshown, $deeplink);
                     $this->replaceTerm(Terms::object_p($position->getNumber()), $positionfactory->getContent());
                 } else {
                     $this->replaceTerm(Terms::object_p($position->getNumber()), '');

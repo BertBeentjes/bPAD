@@ -65,6 +65,8 @@ class Terms {
     const OBJECT_URL_NAME = '#objecturlname#'; // the name of the object as can be used in the url (addressable objects only)
     const OBJECT_ROOT_NAME = '#rootobjectname#'; // the name of the root object of this template based object
     const OBJECT_UNPUBLISHED_INDICATOR = '#objectunpublished#'; // the object has unpublished changes
+    const OBJECT_ROOT_CREATOR = '#creator#'; // the user that created this object (and the root object for this object)
+    const OBJECT_ROOT_EDITOR = '#editor#'; // the user that last changed the root object for this object
     const OBJECT_CREATE_DATE = '#createdate#'; // the create date of this object
     const OBJECT_ROOT_CREATE_DATE = '#rootcreatedate#'; // the create date of the root object
     const OBJECT_CHANGE_DATE = '#changedate#'; // the change date of this object

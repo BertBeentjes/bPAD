@@ -79,13 +79,20 @@ class PositionFactory extends Factory {
     /**
      * factor an object position
      * 
-     * @param $objectlazyload boolean default false
-     * @param $objectlazyloadnr int default 0
+     * @param boolean $objectlazyload default false
+     * @param int $objectlazyloadnr default 0
+     * @param boolean $deeplink default false
      * @return boolean true if success
      */
-    public function factor($objectlazyload = false, $objectlazyloadnr = 0) {
+    public function factor($objectlazyload = false, $objectlazyloadnr = 0, $deeplink = false) {
         // start by getting the structure for this position
-        $this->setContent($this->getPosition()->getStructure()->getVersion($this->getMode(), $this->getContext())->getBody());
+        if ($deeplink) {
+            // get the specific deeplink structure
+            $this->setContent(Structures::getStructureByName(LSSNames::STRUCTURE_DEEP_LINK)->getVersion($this->getMode(), $this->getContext())->getBody());
+        } else {
+            // get the normal structure
+            $this->setContent($this->getPosition()->getStructure()->getVersion($this->getMode(), $this->getContext())->getBody());
+        }
         // check for terms and resolve them
         $this->factorTerms();
         // fill in the content
@@ -207,7 +214,7 @@ class PositionFactory extends Factory {
     /**
      * factor the instance in this position
      * 
-     * @param context instancecontext
+     * @param context $instancecontext
      * @param string [usersearch] optional, passes an additional user search string for this instance
      * @return string
      */

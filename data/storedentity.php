@@ -54,9 +54,9 @@ abstract class StoredEntity {
      */
 
     protected function initAttributes($attr) {
-        $this->createdate = $attr->createdate;
+        $this->createdate = new DateTime($attr->createdate);
         $this->createuserid = $attr->createuserid;
-        $this->changedate = $attr->changedate;
+        $this->changedate = new DateTime($attr->changedate);
         $this->changeuserid = $attr->changeuserid;
         return true;
     }
@@ -130,7 +130,7 @@ abstract class StoredEntity {
         if (!$this->changed || $force) {
             if (Store::setChanged($this->tablename, $this->id)) {
                 if ($row = Store::getChanged($this->tablename, $this->id)->fetchObject()) {
-                    $this->changedate = $row->changedate;
+                    $this->changedate = new DateTime($row->changedate);
                     $this->changeuserid = $row->changeuserid;
                     // don't do this again for this object in this roundtrip
                     $this->changed = true;

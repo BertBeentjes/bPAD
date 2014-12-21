@@ -818,7 +818,7 @@ class Object extends SettedEntity {
      * @return boolean true if the object has changed
      */
     public function hasChanged() {
-        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() < $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate()) {
+        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() <= $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate()) {
             return true;
         }
         return false;

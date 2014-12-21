@@ -65,10 +65,8 @@ class ExecuteObjectAction {
         if ($this->getObject()->hasChanged()) {
             // archive the current view version
             $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setMode(Modes::getMode(Mode::ARCHIVEMODE));
-            // move the edit version to view mode
-            $this->getObject()->getVersion(Modes::getMode(Mode::EDITMODE))->setMode(Modes::getMode(Mode::VIEWMODE));
-            // now create a new edit mode version
-            $this->createObjectVersionEditModeFromViewMode();
+            // now a new view mode version
+            $this->createObjectVersionViewModeFromEditMode();
         } else {
             $this->recurseIntoChildren();
         }
@@ -243,20 +241,17 @@ class ExecuteObjectAction {
     }
 
     /**
-     * Create a new Object Version in Edit mode, based upon the one in View mode
+     * Create a new Object Version in view mode, based upon the one in edit mode
      */
-    private function createObjectVersionEditModeFromViewMode() {
+    private function createObjectVersionViewModeFromEditMode() {
         // create a new object version for the edit mode by copying the view mode
-        $source = $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE));
-        $target = $this->getObject()->newVersion(Modes::getMode(Mode::EDITMODE));
+        $source = $this->getObject()->getVersion(Modes::getMode(Mode::EDITMODE));
+        $target = $this->getObject()->newVersion(Modes::getMode(Mode::VIEWMODE));
         $this->copyObjectVersion($source, $target);
         // only when the action is publish or cancel (function is only called in
         // those cases, but just to be sure...)
         if ($this->getAction() == self::EXECUTE_PUBLISH || $this->getAction() == self::EXECUTE_CANCEL) {
             $this->recurseIntoChildren();
-            // touch the view version, to update the cache and set the change date to
-            // a value more recent than the edit version
-            $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setChanged(true);
         }
     }
 

@@ -147,7 +147,7 @@ class ContextedVersion extends StoredEntity {
      * @return boolean true if success
      */
     public function setMode($mode) {
-        if (Store::setContextedVersionMode($this->id, $mode->getId(), $this->tablename) && $this->setChanged()) {
+        if (Store::setContextedVersionMode($this->id, $mode->getId(), $this->tablename)) {
             $this->mode = $mode;
             return true;
         }

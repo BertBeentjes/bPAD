@@ -108,6 +108,7 @@ class CachePositionInstances {
             }
             return $objects;
         }
+        // return nothing
     }
     
     /**

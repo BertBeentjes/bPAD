@@ -280,9 +280,22 @@ class PositionFactory extends Factory {
             }
             return $returnvalue;
         } else {
+            // check that the object chosen is no parent of the current object
+            $validobject = true;
+            $showobject = $this->getPosition()->getPositionContent()->getObject();
+            $checkobject = $this->getPosition()->getContainer()->getContainer();
+            while (!$checkobject->isSiteRoot()) {
+                if ($checkobject->getId() == $showobject->getId()) {
+                    $validobject = false;
+                }
+                $checkobject = $checkobject->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectParent();
+            }
             // return the selected object in the current context (in this case, do not use the instance context, because it is more or less a 'copy' of the object)
-            // the reason to use this method can be to use a widget or block in multiple locations on a site, but only administer it once.
-            return Terms::object_placeholder($this->getPosition()->getPositionContent()->getObject(), $this->getContext());
+            // the reason to use this method can be to use a widget or block in multiple locations on a site, but only administer it once.            
+            if ($validobject) {
+                return Terms::object_placeholder($this->getPosition()->getPositionContent()->getObject(), $this->getContext());
+            }
+            return '';
         }
     }
 

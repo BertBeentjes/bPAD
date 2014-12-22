@@ -69,7 +69,7 @@ class Objects {
         if ($list = Store::getAddressableObjects($mode->getId())) {
             while ($item = $list->fetchObject()) {
                 $object = Objects::getObject($item->id);
-                if (Authorization::getObjectPermission($object, Authorization::OBJECT_VIEW)) {
+                if ($object->isVisible($mode, Contexts::getContextByGroupAndName(ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_DEFAULT), Context::CONTEXT_DEFAULT))) {
                     $objects[$counter][0] = $item->id;
                     $objects[$counter][1] = $item->name;
                     $counter = $counter + 1;

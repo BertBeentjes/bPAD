@@ -67,6 +67,8 @@ class ExecuteObjectAction {
             $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->setMode(Modes::getMode(Mode::ARCHIVEMODE));
             // now a new view mode version
             $this->createObjectVersionViewModeFromEditMode();
+            // create the cache info needed to search the content
+            $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE))->recalculatePositionContentitems();
         } else {
             $this->recurseIntoChildren();
         }

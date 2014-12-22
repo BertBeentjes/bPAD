@@ -142,7 +142,7 @@ Class ObjectVersion extends StoredEntity {
      * 
      * The values are recalculated every time something changes in an object version.
      */
-    private function recalculatePositionContentitems() {
+    public function recalculatePositionContentitems() {
         // if this isn't a template
         $object = $this->getContainer();
         $template = $this->getContainer()->getTemplate();

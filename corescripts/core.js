@@ -330,6 +330,10 @@ function addEvents(divid) {
         // remove the attribute, so the event isn't attached again
         $(this).removeAttr('data-bpad-onclick');
     });
+    // close the bootstrap menu after a command
+    $('.nav li a').on('click',function(){
+        $('.navbar-collapse.in').collapse('hide');
+    })
     // hide add buttons in the edit interface
     $(selector + '[data-bpad-hide-add]').each(function() {
         // get the value

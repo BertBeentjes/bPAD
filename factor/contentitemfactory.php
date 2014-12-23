@@ -39,7 +39,6 @@ class ContentItemFactory extends Factory {
      * @param context $context
      * @param mode $mode
      */
-
     public function __construct($contentitem, $context, $mode) {
         // do some input checking
         if (is_object($contentitem) && is_object($context) && is_object($mode)) {
@@ -84,14 +83,18 @@ class ContentItemFactory extends Factory {
         }
         return true;
     }
-    
     /**
      * Get a shortened version of the content
      * 
      * @return string
      */
     function getShortContent() {
-        $content = strip_tags($this->getContent());
+        $content = $this->getContent();
+        $content = str_replace("\r\n", "\n", $content);
+        $content = str_replace("\r", "\n", $content);
+        $content = str_replace("\n", " ", $content);
+        $content = str_replace("  ", " ", $content);
+        $content = strip_tags($content);
         if (strlen($content) > 250) {
             $content = substr($content, 0, 250);
             $lastspace = strrpos($content, ' ');
@@ -181,10 +184,7 @@ class ContentItemFactory extends Factory {
      * factor the content in the content item
      * 
      */
-    private function factorContent() {
-        // ?? still necessary ?? prepare the content item for publication
-        // ?? $contentitem = stripslashes($contentitem);
-        
+    private function factorContent() {       
         // escape some special html characters, at this moment there is no html
         // in the content
         // TODO: this is a html specific function, maybe this function must be context
@@ -346,16 +346,16 @@ class ContentItemFactory extends Factory {
     private function replaceMarkers($pattern, $replacementname, $part, $line, $postfix) {
         global $characterstructures;
         $arguments = array();
-        if (preg_match($pattern, $line) > 0) {
+        if (preg_match($pattern, $line) > -1) {
             $line .= $postfix;
             $replacement = $this->getStructureBodyByName($replacementname);
-            if (preg_match(Terms::POSITION_CONTENT, $replacement) > 0) {
+            if (preg_match(Terms::POSITION_CONTENT, $replacement) > -1) {
                 $replacement = str_replace(Terms::POSITION_CONTENT, $part, $replacement);
                 $line = preg_replace($pattern, $replacement, $line);
             } else {
                 // for internal links do something special with the first part
                 if ($replacementname == LSSNames::STRUCTURE_INTERNAL_LINK_START) {
-                    while (preg_match($pattern, $line, $matches) > 0) {
+                    while (preg_match($pattern, $line, $matches) > -1) {
                         reset($matches);
                         while (next($matches)) {
                             if (Validator::isNumeric(current($matches))) {
@@ -365,7 +365,7 @@ class ContentItemFactory extends Factory {
                                 // reference 
                                 try {
                                     $object = Objects::getObject($objectid);
-                                    if (Authorization::getObjectPermission($object, Authorization::OBJECT_VIEW)) {
+                                    if ($object->isVisible($this->getMode(), $this->getContext())) {
                                         // create the reference to the object
                                         $thisreplacement = str_replace(Terms::POSITION_REFERRAL, CommandFactory::getObject($object, $this->getMode(), $this->getContext()), $replacement);
                                         $thisreplacement = str_replace(Terms::POSITION_REFERRAL_URL, $object->getSEOURL($this->getMode()), $thisreplacement);

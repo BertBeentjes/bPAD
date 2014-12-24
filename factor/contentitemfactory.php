@@ -346,16 +346,16 @@ class ContentItemFactory extends Factory {
     private function replaceMarkers($pattern, $replacementname, $part, $line, $postfix) {
         global $characterstructures;
         $arguments = array();
-        if (preg_match($pattern, $line) > -1) {
+        if (preg_match($pattern, $line) > 0) {
             $line .= $postfix;
             $replacement = $this->getStructureBodyByName($replacementname);
-            if (preg_match(Terms::POSITION_CONTENT, $replacement) > -1) {
+            if (preg_match(Terms::POSITION_CONTENT, $replacement) > 0) {
                 $replacement = str_replace(Terms::POSITION_CONTENT, $part, $replacement);
                 $line = preg_replace($pattern, $replacement, $line);
             } else {
                 // for internal links do something special with the first part
                 if ($replacementname == LSSNames::STRUCTURE_INTERNAL_LINK_START) {
-                    while (preg_match($pattern, $line, $matches) > -1) {
+                    while (preg_match($pattern, $line, $matches) > 0) {
                         reset($matches);
                         while (next($matches)) {
                             if (Validator::isNumeric(current($matches))) {

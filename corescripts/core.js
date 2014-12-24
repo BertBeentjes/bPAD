@@ -487,7 +487,7 @@ function addEvents(divid) {
         var value = $(this).parent().children().index(this);
         $(this).attr(attrib, value);
     });
-    // after indexing, autostart the carousels
+    // after indexing, autostart the carousels (use this, instead of the autostart, because of ajax loading)
     $(selector + '[data-bpad-carousel-autostart]').each(function() {
         var options = $(this).attr('data-bpad-carousel-autostart');
         if (options.length > 0) {

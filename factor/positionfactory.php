@@ -345,6 +345,24 @@ class PositionFactory extends Factory {
         if ($this->hasTerm(Terms::POSITION_SEO_URL)) {
             $this->replaceTerm(Terms::POSITION_SEO_URL, $this->getContainerObject()->getSEOURL($this->getMode()));
         }
+        if ($this->hasTerm(Terms::POSITION_DEEP_LINK)) {
+            $this->replaceTerm(Terms::POSITION_DEEP_LINK, $this->getContainerObject()->getDeepLink($this->getMode()));
+        }
+        if ($this->hasTerm(Terms::POSITION_DEEP_LINK_FULL)) {
+            $this->replaceTerm(Terms::POSITION_DEEP_LINK_FULL, $this->getContainerObject()->getDeepLinkFull($this->getMode()));
+        }
+        if ($this->hasTerm(Terms::POSITION_DEEP_LINK_COMMAND)) {
+            $context = Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), context::CONTEXT_DEFAULT);
+            $this->replaceTerm(Terms::POSITION_DEEP_LINK_COMMAND, CommandFactory::getObjectDeepLink($this->getContainerObject(), $this->getMode(), $context));
+        }
+        // add the site root url
+        if ($this->hasTerm(Terms::POSITION_SITE_ROOT)) {
+            $this->replaceTerm(Terms::POSITION_SITE_ROOT, Settings::getSetting(Setting::SITE_ROOT)->getValue(), $this->getContent());
+        }
+        // add the sub folder for this site to file includes
+        if ($this->hasTerm(Terms::POSITION_SITE_ROOT_FOLDER)) {
+            $this->replaceTerm(Terms::POSITION_SITE_ROOT_FOLDER, Settings::getSetting(Setting::SITE_ROOTFOLDER)->getValue(), $this->getContent());
+        }
         $number = 1;
         while ($this->hasTerm(Terms::POSITION_UID)) {
             $this->replaceTerm(Terms::POSITION_UID, 'UP' . $this->getPosition()->getId() . '_' . $number);

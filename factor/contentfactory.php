@@ -79,7 +79,7 @@ class ContentFactory extends Factory {
             if (strstr($this->getContent(), Terms::CONTENT_STYLES)) {
                 $this->replaceTerm(Terms::CONTENT_STYLES, CacheStyles::getCacheStyles($this->getMode(), $this->getContext()), $this->getContent());
             }
-            // add the sub folder for this site to file includes
+            // add the site root url
             if (strstr($this->getContent(), Terms::CONTENT_SITE_ROOT)) {
                 $this->replaceTerm(Terms::CONTENT_SITE_ROOT, Settings::getSetting(Setting::SITE_ROOT)->getValue(), $this->getContent());
             }

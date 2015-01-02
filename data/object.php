@@ -747,8 +747,28 @@ class Object extends SettedEntity {
         $deeplink = $this->getSEOURL($mode);
         // remove the .html part
         $deeplink = substr($deeplink, 0, strlen($deeplink) - 5);
+        // get the root object
+        $root = $this->getVersion($mode)->getObjectTemplateRootObject();
+        while ($root->hasTemplateParent() && !$root->isSiteRoot()) {
+            $root = $root->getVersion($mode)->getObjectParent()->getVersion($mode)->getObjectTemplateRootObject();
+        }
         // add the id and the name
-        $deeplink .= '/-' . $this->getId() . '/' . $this->getURLName() . '.html';
+        $deeplink .= '/-' . $root->getId() . '/' . $root->getURLName() . '.html';
+        return $deeplink;
+    }
+
+    /**
+     * Create the full deep link for this object (/siterootfolder/name/name/name/-###/name.html)
+     * this url is used for deep linking to an article, e.g. from social media sites
+     * 
+     * @param mode 
+     * @return string
+     */
+    public function getDeepLinkFull($mode) {
+        // get the deep link
+        $deeplink = $this->getDeepLink($mode);
+        // add the site root
+        $deeplink = Settings::getSetting(Setting::SITE_ROOT)->getValue() . $deeplink;
         return $deeplink;
     }
 

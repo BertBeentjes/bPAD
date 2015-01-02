@@ -157,6 +157,16 @@ class FileInclude extends NamedEntity {
         $this->getVersion(Modes::getMode(Mode::EDITMODE))->setBody($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getBody());
         // set changed
         $this->setChanged();
+        // cache the new file in the frontendlibs folder
+        // initialize the factory
+        $factory = new ContentFactory();
+        $factory->setContent($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getBody());
+        $factory->setContextForContextGroup(ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_DEFAULT));
+        $factory->setMode(Modes::getMode(Mode::VIEWMODE));
+        // factor
+        $factory->factor();
+        
+        file_put_contents('frontendlibs/' . $this->getName(), $factory->getContent());
         return true;
     }
     

@@ -115,6 +115,7 @@ class PositionFactory extends Factory {
                     $positioncontent = $positioncontentitem->getContent();
                     $positionshortcontent = $positioncontentitem->getShortContent();
                     $positioncontenthtml = Helper::deEscapeHTMLSpecialChars($positioncontentitem->getContentItem()->getBody());
+                    $positioncontenthtml = str_replace(Terms::POSITION_OBJECT_ID, $this->getContainerObject()->getId(), $positioncontenthtml);
                 }
                 break;
             case PositionContent::POSITIONTYPE_INSTANCE:

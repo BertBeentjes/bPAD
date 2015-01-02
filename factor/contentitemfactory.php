@@ -83,6 +83,7 @@ class ContentItemFactory extends Factory {
         }
         return true;
     }
+    
     /**
      * Get a shortened version of the content
      * 

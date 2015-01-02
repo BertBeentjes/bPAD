@@ -47,8 +47,10 @@ class CacheStyles {
                     $cache = new StyleSheetCache($row->id);
                     // only return cached items that aren't outdated
                     if ($cache->getOutdated()) {
+                        // recalc the styles
+                        $styles = self::factorStyles($mode, $context);
                         // refresh the cache
-                        $cache->setCache(self::factorStyles($mode, $context));
+                        $cache->setCache($styles);
                     }
                 }
             }

@@ -45,6 +45,19 @@ class AdminFactory extends Factory {
     /**
      * 
      * @param string $id the id to use
+     * @param string $link the link to open
+     * @param string $label the label on the button
+     * @return string
+     */
+    protected function factorLinkButton($id, $link, $label) {
+        $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_LINK_BUTTON)->getVersion($this->getMode(), $this->getContext())->getBody();
+        $admin = $this->factorTerms($structure, $id, $link, '', $label);
+        return $admin;
+    }
+
+    /**
+     * 
+     * @param string $id the id to use
      * @param string $command the command to execute
      * @param string $label the label on the button
      * @return string

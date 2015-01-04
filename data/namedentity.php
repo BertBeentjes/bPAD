@@ -54,6 +54,15 @@ abstract class NamedEntity extends StoredEntity {
     }
 
     /**
+     * getter for the unlocalized name
+     * 
+     * @return string the name
+     */
+    public function getCanonicalName() {
+        return $this->name;
+    }
+
+    /**
      * setter for the name
      * 
      * @param newname the name

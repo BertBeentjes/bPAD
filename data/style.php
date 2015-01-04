@@ -227,8 +227,7 @@ class Style extends SettedEntity {
     }
 
     /**
-     * getter for isbpaddefined, no setter, this value is set to false by
-     * default. True values are for styles that are created in the update
+     * getter for isbpaddefined. True values are for styles that are created in the update
      * scripts belonging to new versions of bpad.
      * 
      * @return boolean isbpaddefined is this style defined by bpad
@@ -237,6 +236,22 @@ class Style extends SettedEntity {
         return $this->isbpaddefined;
     }
     
+    /**
+     * setter for isbpaddefined. True values are for styles that are created in the update
+     * scripts belonging to new versions of bpad.
+     * 
+     * @param boolean $bool new value
+     * @return boolean isbpaddefined is this layout defined by bpad
+     */
+    public function setIsBpadDefined($bool) {
+        if (Store::setStyleIsBpadDefined($this->getId(), $bool) && $this->setChanged()) {
+            $this->isbpaddefined = $bool;
+            return true;
+        } else {
+            throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
+    }
+  
     /**
      * setter for the name, check whether the style is bpad defined or not first
      * 
@@ -250,6 +265,22 @@ class Style extends SettedEntity {
             return true;
         }
         throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_IS_DEFINED_BY_BPAD) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * setter for the canonical name, only for bpad defined styles, meant to be
+     * used for bpad updates
+     * 
+     * @param newname the name
+     * @return boolean true if success
+     * @throws exception if the update in the store fails or if the style isn't bPAD defined
+     */
+    public function setCanonicalName($newname) {
+        if ($this->isbpaddefined && Validator::isCanonicalName($newname)) {
+            parent::setName($newname);
+            return true;
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
     }
 
     /**

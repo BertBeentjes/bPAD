@@ -21,7 +21,7 @@
  * along with bPAD.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$debuglevel = 'production';
+$debuglevel = 'trace';
 
 // load the required class that auto loads all classes
 require 'helper/required.php';
@@ -63,7 +63,6 @@ try {
             $handler->getPage();
             break;
         CASE Request::UPLOAD: // requests an upload page, loaded in an iframe on the frontend
-            // TODO: (later) create an option to load multiple files into new template based objects, select the template from a set, based upon the file extension
             $handler = new Upload(); 
             // if a file is posted, store the file. The upload is the only request
             // not using ajax, so here post and response are combined
@@ -90,6 +89,19 @@ try {
             break;
         CASE Request::CHANGE: // requests the execution of a change in an AJAX call, call the change handler
             $handler = new Change(); 
+            break;
+        CASE Request::UPDATE: // requests a new update json file, call the update handler
+            $handler = new Update(); 
+            break;
+        CASE Request::UPDATEPAGE: // requests an update page, loaded in an iframe on the frontend
+            $handler = new UpdatePage(); 
+            // if a file is posted, store the file. The upload is the only request
+            // not using ajax, so here post and response are combined
+            if (isset($_FILES[Helper::getURLSafeString(Helper::getLang(AdminLabels::ADMIN_BUTTON_UPLOAD_UPDATE))])) {
+                // execute the update
+                $handler->executeUpdate();
+            }
+            $handler->getPage();
             break;
         DEFAULT: 
             throw new Exception(Helper::getLang(Errors::ERROR_UNKNOWN_REQUEST)); 

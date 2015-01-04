@@ -87,6 +87,19 @@ class Styles {
     }
 
     /**
+     * Get a style by its name
+     * 
+     * @param string $name
+     * @return style
+     */
+    public static function getStyleByName($name) {
+        $result = Store::getStyleByName($name);
+        if ($row = $result->fetchObject()) {
+            return Styles::getStyle($row->id);
+        }
+    }
+
+    /**
      * Get all styles by set id, include a specific style (used for list boxes)
      * 
      * @param string $styletype
@@ -112,7 +125,7 @@ class Styles {
         Store::insertStyleVersion($styleid, Mode::VIEWMODE, $context->getId());
         Store::insertStyleVersion($styleid, Mode::EDITMODE, $context->getId());
         CacheStyles::outdateStyleCache();
-        return true;
+        return Styles::getStyle($styleid);
     }
 
     /**

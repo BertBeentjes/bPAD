@@ -73,6 +73,19 @@ class Layouts {
     }
 
     /**
+     * Get a layout by its name
+     * 
+     * @param string $name
+     * @return layout
+     */
+    public static function getLayoutByName($name) {
+        $result = Store::getLayoutByName($name);
+        if ($row = $result->fetchObject()) {
+            return Layouts::getLayout($row->id);
+        }
+    }
+
+    /**
      * Create a new layout
      * 
      * @return type
@@ -85,8 +98,7 @@ class Layouts {
         $context = Contexts::getContextByGroupAndName(ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_DEFAULT), Context::CONTEXT_DEFAULT);
         Store::insertLayoutVersion($layoutid, Mode::VIEWMODE, $context->getId());
         Store::insertLayoutVersion($layoutid, Mode::EDITMODE, $context->getId());
-
-        return true;
+        return Layouts::getLayout($layoutid);
     }
 
     /**

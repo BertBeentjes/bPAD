@@ -1380,6 +1380,36 @@ class Store {
     }
 
     /**
+     * get a layout by its name
+     * 
+     * @param string $name the name
+     * @return resultset id, name
+     */
+    public static function getLayoutByName($name) {
+        return self::selectQuery("SELECT layouts.id, layouts.name FROM layouts WHERE layouts.name='" . $name . "'");
+    }
+
+    /**
+     * get a style by its name
+     * 
+     * @param string $name the name
+     * @return resultset id, name
+     */
+    public static function getStyleByName($name) {
+        return self::selectQuery("SELECT styles.id, styles.name FROM styles WHERE styles.name='" . $name . "'");
+    }
+
+    /**
+     * get a set by its name
+     * 
+     * @param string $name the name
+     * @return resultset id, name
+     */
+    public static function getSetByName($name) {
+        return self::selectQuery("SELECT sets.id, sets.name FROM sets WHERE sets.name='" . $name . "'");
+    }
+
+    /**
      * get all structures for use in a list box
      * 
      * @return resultset id, name
@@ -2303,13 +2333,61 @@ class Store {
      * prepare a statement to update the context incss value
      * 
      * @param int the id of the row to update
-     * @param bool true if searchable
+     * @param bool true if in css is true
      * @return boolean true if action query succeeds
      */
     public static function setContextInCSS($id, $bool) {
         $intbool = (int) $bool;
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("UPDATE contexts SET incss=? WHERE id=?")) {
+            $stmt->bind_param("ii", $intbool, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * prepare a statement to update the layout isbpaddefined value
+     * 
+     * @param int the id of the row to update
+     * @param bool true if bpaddefined
+     * @return boolean true if action query succeeds
+     */
+    public static function setLayoutIsBpadDefined($id, $bool) {
+        $intbool = (int) $bool;
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE layouts SET isbpaddefined=? WHERE id=?")) {
+            $stmt->bind_param("ii", $intbool, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * prepare a statement to update the style isbpaddefined value
+     * 
+     * @param int the id of the row to update
+     * @param bool true if bpaddefined
+     * @return boolean true if action query succeeds
+     */
+    public static function setStyleIsBpadDefined($id, $bool) {
+        $intbool = (int) $bool;
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE styles SET isbpaddefined=? WHERE id=?")) {
+            $stmt->bind_param("ii", $intbool, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * prepare a statement to update the structure isbpaddefined value
+     * 
+     * @param int the id of the row to update
+     * @param bool true if bpaddefined
+     * @return boolean true if action query succeeds
+     */
+    public static function setStructureIsBpadDefined($id, $bool) {
+        $intbool = (int) $bool;
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE structures SET isbpaddefined=? WHERE id=?")) {
             $stmt->bind_param("ii", $intbool, $id);
             return self::actionQuery($stmt);
         }

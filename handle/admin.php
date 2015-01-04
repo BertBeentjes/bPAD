@@ -280,6 +280,19 @@ class Admin extends Respond {
                     $this->getResponse()->setContent($configadminfactory->getContent());
                 }
                 break;
+            case 'configupdate':
+                if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigUpdateAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
             default:
                 throw new Exception(Helper::getLang(Errors::ERROR_COMMAND_CONTENT) . ': ' . Request::getCommand()->getItem() . ' @ ' . __METHOD__);
                 break;

@@ -35,10 +35,10 @@ class UploadFactory extends ContentFactory {
      */
     protected function getRootContent() {
         $structure = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_FILE_INPUT)->getVersion($this->getMode(), $this->getContext())->getBody();
-        // TODO: fill in the terms
         $urlparts = Request::getURL()->getURLParts();
         $objectid = $urlparts[0];
         $positionnr = $urlparts[1];
+        // check several things and then fill in the terms
         if ($object = Objects::getObject($objectid)) {
             if ($position = $object->getVersion($this->getMode())->getPosition($positionnr)) {
                 if ($position->getPositionContent()->getType() == PositionContent::POSITIONTYPE_CONTENTITEM) {

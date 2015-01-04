@@ -679,7 +679,7 @@ class Execute {
                 case 'layoutadd':
                     // store the success value in the command
                     // add a new layout
-                    Request::getCommand()->setOldValue(Layouts::newLayout());
+                    Request::getCommand()->setOldValue(is_object(Layouts::newLayout()));
                     break;
                 case 'layoutremove':
                     // store the success value in the command
@@ -785,7 +785,7 @@ class Execute {
                 case 'structureadd':
                     // store the success value in the command
                     // add a new structure
-                    Request::getCommand()->setOldValue(Structures::newStructure());
+                    Request::getCommand()->setOldValue(is_object(Structures::newStructure()));
                     break;
                 case 'structureremove':
                     // store the success value in the command
@@ -890,10 +890,15 @@ class Execute {
                     }
                     break;
                 case 'styleclasssuffix':
-                    // store the old value in the command
-                    Request::getCommand()->setOldValue($style->getClassSuffix());
-                    // set the new value
-                    $style->setClassSuffix(Request::getCommand()->getValue());
+                    $classsuffix = Request::getCommand()->getValue();
+                    if (Validator::isClassSuffix($classsuffix)) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($style->getClassSuffix());
+                        // set the new value
+                        $style->setClassSuffix($classsuffix);
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
                     break;
                 case 'styleset':
                     // validate
@@ -909,7 +914,7 @@ class Execute {
                 case 'styleadd':
                     // store the success value in the command
                     // add a new style
-                    Request::getCommand()->setOldValue(Styles::newStyle());
+                    Request::getCommand()->setOldValue(is_object(Styles::newStyle()));
                     break;
                 case 'styleremove':
                     // store the success value in the command
@@ -1099,7 +1104,7 @@ class Execute {
                 case 'setadd':
                     // store the success value in the command
                     // add a new set
-                    Request::getCommand()->setOldValue(Sets::newSet());
+                    Request::getCommand()->setOldValue(is_object(Sets::newSet()));
                     break;
                 case 'setremove':
                     // store the success value in the command

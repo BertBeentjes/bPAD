@@ -139,6 +139,7 @@ class Required {
             case 'ConfigSettingAdminFactory': require ('factor/configsettingadminfactory.php'); break;
             case 'ConfigIncludeFileAdminFactory': require ('factor/configincludefileadminfactory.php'); break;
             case 'ConfigSnippetAdminFactory': require ('factor/configsnippetadminfactory.php'); break;
+            case 'ConfigUpdateAdminFactory': require ('factor/configupdateadminfactory.php'); break;
             case 'ContentFactory': require ('factor/contentfactory.php'); break;
             case 'ContentItemFactory': require ('factor/contentitemfactory.php'); break;
             case 'CommandFactory': require ('factor/commandfactory.php'); break;
@@ -149,6 +150,8 @@ class Required {
             case 'StyleFactory': require ('factor/stylefactory.php'); break;
             case 'Terms': require ('factor/terms.php'); break;
             case 'UploadFactory': require ('factor/uploadfactory.php'); break;
+            case 'UpdateFactory': require ('factor/updatefactory.php'); break;
+            case 'UpdatePageFactory': require ('factor/updatepagefactory.php'); break;
             
             // cache classes, the caches contain factored content; used by factory classes
             case 'CacheObjects': require ('cache/cacheobjects.php'); break;
@@ -160,6 +163,7 @@ class Required {
             case 'Execute': require ('execute/execute.php'); break;
             case 'ExecuteUpload': require ('execute/executeupload.php'); break;
             case 'ExecuteObjectAction': require ('execute/executeobjectaction.php'); break;
+            case 'ExecuteUpdate': require ('execute/executeupdate.php'); break;
             
             // handler interfaces, describe the generic functions of a handler
             case 'Handler': require ('handle/handler.php'); break;
@@ -176,6 +180,8 @@ class Required {
             case 'Upload': require ('handle/upload.php'); break;
             case 'IncludeFile': require ('handle/includefile.php'); break;
             case 'Login': require ('handle/login.php'); break;
+            case 'Update': require ('handle/update.php'); break;
+            case 'UpdatePage': require ('handle/updatepage.php'); break;
 
             // facade classes, the facade recieves requests from the frontend, validates it, record commands in the command log and distributes the request to handlers
             case 'Initializer': require ('facade/initializer.php'); break;

@@ -81,7 +81,7 @@ class Layout extends SettedEntity {
      * @return boolean true if success,
      */
     protected function initAttributes($attr) {
-        $this->isbpaddefined = $attr->isbpaddefined;
+        $this->isbpaddefined = (bool)$attr->isbpaddefined;
         parent::initAttributes($attr);
         return true;
     }
@@ -229,14 +229,29 @@ class Layout extends SettedEntity {
     }
 
     /**
-     * getter for isbpaddefined, no setter, this value is set to false by
-     * default. True values are for layouts that are created in the update
+     * getter for isbpaddefined. True values are for layouts that are created in the update
      * scripts belonging to new versions of bpad.
      * 
      * @return boolean isbpaddefined is this layout defined by bpad
      */
     public function getIsBpadDefined() {
         return $this->isbpaddefined;
+    }
+
+    /**
+     * setter for isbpaddefined. True values are for layouts that are created in the update
+     * scripts belonging to new versions of bpad.
+     * 
+     * @param boolean $bool new value
+     * @return boolean isbpaddefined is this layout defined by bpad
+     */
+    public function setIsBpadDefined($bool) {
+        if (Store::setLayoutIsBpadDefined($this->getId(), $bool) && $this->setChanged()) {
+            $this->isbpaddefined = $bool;
+            return true;
+        } else {
+            throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
     }
 
     /**
@@ -268,6 +283,22 @@ class Layout extends SettedEntity {
             return true;
         }
         throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_IS_DEFINED_BY_BPAD) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * setter for the canonical name, only for bpad defined layouts, meant to be
+     * used for bpad updates
+     * 
+     * @param newname the name
+     * @return boolean true if success
+     * @throws exception if the update in the store fails or if the layout isn't bPAD defined
+     */
+    public function setCanonicalName($newname) {
+        if ($this->isbpaddefined && Validator::isCanonicalName($newname)) {
+            parent::setName($newname);
+            return true;
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
     }
 
     /**

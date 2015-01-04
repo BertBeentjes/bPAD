@@ -931,6 +931,18 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to load the update configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configUpdate($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configupdate' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
      * Compose the command to load the individual snippet configurator in the config detail panel
      * 
      * @param object $object
@@ -1950,6 +1962,16 @@ class CommandFactory {
      */
     public static function editPermission($permission, $permissiontype) {
         return 'permission,' . $permission->getId() . ',change.' . $permissiontype;
+    }
+
+    /**
+     * Compose the command to download a file with database updates
+     * 
+     * @param object $object
+     * @return string
+     */
+    public static function downloadUpdate($object) {
+        return 'update,' . $object->getId() . ',update.download';
     }
 
 }

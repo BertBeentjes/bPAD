@@ -53,6 +53,19 @@ class Sets {
     }
     
     /**
+     * Get a set by its name
+     * 
+     * @param string $name
+     * @return layout
+     */
+    public static function getSetByName($name) {
+        $result = Store::getSetByName($name);
+        if ($row = $result->fetchObject()) {
+            return Sets::getSet($row->id);
+        }
+    }
+
+    /**
      * Get all sets
      * 
      * @return resultset
@@ -68,7 +81,7 @@ class Sets {
      */
     public static function newSet() {
         $setid = Store::insertSet();
-        return true;
+        return Sets::getSet($setid);
     }
 
     /**

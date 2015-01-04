@@ -106,8 +106,7 @@ class Structures {
         $context = Contexts::getContextByGroupAndName(ContextGroups::getContextGroup(ContextGroup::CONTEXTGROUP_DEFAULT), Context::CONTEXT_DEFAULT);
         Store::insertStructureVersion($structureid, Mode::VIEWMODE, $context->getId());
         Store::insertStructureVersion($structureid, Mode::EDITMODE, $context->getId());
-
-        return true;
+        return Structures::getStructure($structureid);
     }
 
     /**

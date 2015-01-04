@@ -123,6 +123,10 @@ class ConfigAdminFactory extends AdminFactory {
         if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
             $section .= $this->factorMenuItem(CommandFactory::configSnippets($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_SNIPPETS));
         }
+        // add snippets button (check authorization)
+        if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configUpdate($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_UPDATES));
+        }
         return $section;
     }
 

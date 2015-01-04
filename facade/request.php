@@ -44,6 +44,8 @@ class Request {
     const LOGIN = 'login'; // login request, passed as a command in an AJAX post request or as a url (e.g. from a form post)
     const UPLOAD = 'upload'; // upload request
     const CHANGE = 'change'; // change, passed as command in AJAX post request
+    const UPDATE = 'update'; // update, commands related to creating or processing updates
+    const UPDATEPAGE = 'updatepage'; // update, commands related to creating or processing updates
     const UNKNOWN = 'unknown';
 
     /**
@@ -122,6 +124,20 @@ class Request {
                         throw new Exception(Helper::getLang(Errors::ERROR_URL_SYNTAX));
                     }
                     break;
+                case '_' . self::UPDATE:
+                    if (Validator::isUpdateURL($urlparts)) {
+                        self::$type = self::UPDATE;
+                    } else {
+                        throw new Exception(Helper::getLang(Errors::ERROR_URL_SYNTAX));
+                    }
+                    break;
+                case '_' . self::UPDATEPAGE:
+                    if (Validator::isUpdatePageURL($urlparts)) {
+                        self::$type = self::UPDATEPAGE;
+                    } else {
+                        throw new Exception(Helper::getLang(Errors::ERROR_URL_SYNTAX));
+                    }
+                    break;
                 case self::SITEMAP:
                     self::$type = self::PAGE;
                     // only a filename is request
@@ -180,16 +196,8 @@ class Request {
         if (count($commandparts) == 4 && Validator::isLCaseChars($commandparts[0]) && Validator::isAddress($commandparts[1]) && Validator::isCommand($commandparts[2]) && Validator::isCommandNumber($commandparts[3])) {
             $commandnumberparts = explode('.', $commandparts[3]);
             if (count($commandnumberparts) == 3) {
+                // create the complete command in one statement for performance reasons
                 self::$command = Commands::newCommandFull($commandparts[0], $commandparts[1], $commandparts[2], $commandnumberparts[2], $commandnumberparts[1], $commandnumberparts[0], Authentication::getUser(), Helper::getDateTime(), $value);
-                // self::$command->setItem($commandparts[0]);
-                // self::$command->setItemAddress($commandparts[1]);
-                // self::$command->setCommand($commandparts[2]);
-                // self::$command->setCommandNumber($commandnumberparts[2]);
-                // self::$command->setLastCommandId($commandnumberparts[1]);
-                // self::$command->setSessionIdentifier($commandnumberparts[0]);
-                // self::$command->setUser(Authentication::getUser());
-                // self::$command->setDate(Helper::getDateTime());
-                // self::$command->setValue($value);
                 switch (self::$command->getCommandGroup()) {
                     case 'content' :
                         self::$type = self::CONTENT;

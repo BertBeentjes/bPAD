@@ -373,6 +373,28 @@ Class Validator {
     }
 
     /**
+     * Check whether it is a valid canonical name
+     * 
+     * e.g.: THIS_IS_A_CANONICAL_NAME
+     * 
+     * @param string $str
+     */
+    public static function isCanonicalName($str) {
+        return preg_match('/^[A-Z0-9_]+$/', $str);
+    }
+
+    /**
+     * Check whether it is a valid classsuffix
+     * 
+     * e.g.: THIS_IS_A_CANONICAL_NAME
+     * 
+     * @param string $str
+     */
+    public static function isClassSuffix($str) {
+        return preg_match('/^[a-z_\-]+$/', $str);
+    }
+
+    /**
      * Check whether it is a url safe name
      * 
      * @param string $str
@@ -517,6 +539,26 @@ Class Validator {
      */
     public static function isUploadURL($urlparts) {
         return count($urlparts) === 4 && $urlparts[3] === 'upload.html' && Validator::isNumeric($urlparts[1]) && Validator::isNumeric($urlparts[2]);
+    }
+
+    /**
+     * Check whether a the urlparts are ok for an update:
+     * _update/update.json
+     * 
+     * @param array()
+     */
+    public static function isUpdateURL($urlparts) {
+        return count($urlparts) === 2 && $urlparts[1] === 'update.json';
+    }
+
+    /**
+     * Check whether a the urlparts are ok for an update page:
+     * _updatepage/update.html
+     * 
+     * @param array()
+     */
+    public static function isUpdatePageURL($urlparts) {
+        return count($urlparts) === 2 && $urlparts[1] === 'update.html';
     }
 
 }

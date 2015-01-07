@@ -80,7 +80,32 @@ class PositionInstance extends StoredEntity implements PositionContent {
     public function setChanged() {
         return $this->setOutdated(True) && parent::setChanged();
     }
-    
+
+    /**
+     * Set all attributes at once, performance optimization for copying position content items
+     * 
+     * @param int $activeitems
+     * @param boolean $fillonload
+     * @param boolean $useinstancecontext
+     * @param string $groupby
+     * @param string $listwords
+     * @param object $object
+     * @param string $orderby
+     * @param boolean $outdated
+     * @param object $parent
+     * @param string $searchwords
+     * @param template $template
+     * @param int $maxitems
+     * @return boolean
+     * @throws Exception
+     */
+    public function copyAttributes($activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $object, $orderby, $outdated, $parent, $searchwords, $template, $maxitems) {
+        if (Store::setPositionInstanceAttributes($activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $object->getId(), $orderby, $outdated, $parent->getId(), $searchwords, $template->getId(), $maxitems) && $this->setChanged()) {
+            return true;
+        } else {
+            throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }        
+    }
     /**
      * Return the type of content in this position
      * 
@@ -119,6 +144,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
         
     /**
      * Setter for cache is outdated
+     * This attribute can also be set by copyAttributes!
      * 
      * @param boolean newbool the new value for outdated
      * @return boolean true if success
@@ -144,6 +170,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the object
+     * This attribute can also be set by copyAttributes!
      * 
      * @param object the new object id
      * @return boolean true if success
@@ -167,6 +194,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the template
+     * This attribute can also be set by copyAttributes!
      * 
      * @param template the new template id
      * @return boolean true if success
@@ -190,6 +218,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the listwords 
+     * This attribute can also be set by copyAttributes!
      * 
      * @param string newlistwords the new listwords 
      * @return boolean true if success
@@ -213,6 +242,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the searchwords 
+     * This attribute can also be set by copyAttributes!
      * 
      * @param string newsearchwords the new searchwords 
      * @return boolean true if success
@@ -236,6 +266,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the parent
+     * This attribute can also be set by copyAttributes!
      * 
      * @param object the new parent
      * @return boolean true if success
@@ -258,6 +289,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for active items
+     * This attribute can also be set by copyAttributes!
      * 
      * @param boolean newbool the new value for activeitems
      * @return boolean true if success
@@ -280,6 +312,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for max items
+     * This attribute can also be set by copyAttributes!
      * 
      * @param int newint the new value for maxitems
      * @return boolean true if success
@@ -302,6 +335,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for fill on load
+     * This attribute can also be set by copyAttributes!
      * 
      * @param boolean newbool the new value for fillonload
      * @return boolean true if success
@@ -324,6 +358,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for use instance context
+     * This attribute can also be set by copyAttributes!
      * 
      * @param boolean newbool the new value for useinstancecontext
      * @return boolean true if success
@@ -347,6 +382,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the orderby 
+     * This attribute can also be set by copyAttributes!
      * 
      * @param string neworderby the new orderby 
      * @return boolean true if success
@@ -369,6 +405,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
     
     /**
      * Setter for group by
+     * This attribute can also be set by copyAttributes!
      * 
      * @param boolean newbool the new value for groupby
      * @return boolean true if success

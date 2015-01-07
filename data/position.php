@@ -199,6 +199,31 @@ class Position extends StoredEntity {
     }
 
     /**
+     * set all attributes at once, performance optimization for copying object
+     * versions
+     * 
+     * @param structure $structure
+     * @param style $style
+     * @param int $number
+     * @param boolean $inheritstructure
+     * @param boolean $inheritstyle
+     * @return boolean true if success
+     * @throws exception if the update in the store fails
+     */
+    public function copyAttributes($structure, $style, $number, $inheritstructure, $inheritstyle) {
+        if (Store::setPositionAttributes($this->getId(), $structure->getId(), $style->getId(), $number, $inheritstructure, $inheritstyle) && $this->setChanged()) {
+            $this->structure = $structure;
+            $this->style = $style;
+            $this->number = $number;
+            $this->inheritstructure = $inheritstructure;
+            $this->inheritstyle = $inheritstyle;
+            return true;
+        } else {
+            throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
+    }
+    
+    /**
      * get the structure
      * 
      * @return structure
@@ -209,6 +234,7 @@ class Position extends StoredEntity {
 
     /**
      * set the structure
+     * This attribute can also be set by copyAttributes!
      * 
      * @return boolean true if success
      * @throws exception if store not available
@@ -233,6 +259,7 @@ class Position extends StoredEntity {
 
     /**
      * set the style
+     * This attribute can also be set by copyAttributes!
      * 
      * @return boolean true if success
      * @throws exception if store not available
@@ -257,6 +284,7 @@ class Position extends StoredEntity {
 
     /**
      * set the number 
+     * This attribute can also be set by copyAttributes!
      * 
      * @return boolean true if success
      * @throws exception if store not available
@@ -282,6 +310,7 @@ class Position extends StoredEntity {
 
     /**
      * set the inherit style bool, only available for positions in a template
+     * This attribute can also be set by copyAttributes!
      * 
      * @param bool the new value
      * @return boolean true if success
@@ -308,6 +337,7 @@ class Position extends StoredEntity {
 
     /**
      * set the inherit structure bool, only available for positions in a template
+     * This attribute can also be set by copyAttributes!
      * 
      * @param bool the new value
      * @return boolean true if success

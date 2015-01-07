@@ -52,6 +52,7 @@ abstract class SettedEntity extends NamedEntity{
 
     /**
      * setter for the set
+     * For some objects, this attribute can also be set by copyAttributes!
      * 
      * @param set the new set
      * @return boolean true if success

@@ -64,6 +64,7 @@ abstract class NamedEntity extends StoredEntity {
 
     /**
      * setter for the name
+     * For some objects, this attribute can also be set by copyAttributes!
      * 
      * @param newname the name
      * @return boolean true if success

@@ -396,6 +396,7 @@ class Object extends SettedEntity {
     /**
      * set the object as part of a template, only set once when creating
      * the object
+     * This attribute can also be set by copyAttributes!
      *
      * @param bool template or not
      * @return boolean true if success
@@ -423,6 +424,7 @@ class Object extends SettedEntity {
     /**
      * set the object as root of the template tree, only set once when creating
      * the object
+     * This attribute can also be set by copyAttributes!
      * 
      * @param bool templateroot or not
      * @return boolean true if success
@@ -526,14 +528,41 @@ class Object extends SettedEntity {
     /**
      * set the object as root of the template based object tree, only set once 
      * when creating the object
+     * This attribute can also be set by copyAttributes!
      * 
      * @param bool objecttemplateroot or not
      * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setIsObjectTemplateRoot($bool) {
-        if (Store::setObjectIsObjectTemplateRoot($this->id, $bool) && $this->setChanged()) {
+        if (Store::setObjectIsObjectTemplateRoot($this->getId(), $bool) && $this->setChanged()) {
             $this->isobjecttemplateroot = $bool;
+            return true;
+        } else {
+            throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
+    }
+    
+    /**
+     * Set multiple attributes at once, performance optimization for copying objects
+     * 
+     * @param boolean $isobjecttemplateroot
+     * @param boolean $istemplate
+     * @param boolean $istemplateroot
+     * @param string $name
+     * @param set $set
+     * @param template $template
+     * @return boolean true if success
+     * @throws exception if the update in the store fails
+     */
+    public function copyAttributes($isobjecttemplateroot, $istemplate, $istemplateroot, $name, $set, $template) {
+        if (Store::setObjectAttributes($this->getId(), $isobjecttemplateroot, $istemplate, $istemplateroot, $name, $set->getId(), $template->getId()) && $this->setChanged()) {
+            $this->isobjecttemplateroot = $isobjecttemplateroot;
+            $this->istemplate = $istemplate;
+            $this->istemplateroot = $istemplateroot;
+            $this->name = $name;
+            $this->set = $set;
+            $this->template = $template;
             return true;
         } else {
             throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
@@ -552,13 +581,14 @@ class Object extends SettedEntity {
     /**
      * set the template this object is based upon or part of, 
      * usually set once when creating the object
+     * This attribute can also be set by copyAttributes!
      * 
      * @param template
      * @return boolean true if success
      * @throws exception if the update in the store fails
      */
     public function setTemplate($newtemplate) {
-        if (Store::setObjectTemplateId($this->id, $newtemplate->getId()) && $this->setChanged()) {
+        if (Store::setObjectTemplateId($this->getId(), $newtemplate->getId()) && $this->setChanged()) {
             $this->template = $newtemplate;
             return true;
         } else {
@@ -580,7 +610,7 @@ class Object extends SettedEntity {
         if ($this->objectusergrouprolesloaded) {
             return $this->objectusergrouproles;
         } else {
-            if ($objectusergrouproles = Store::getObjectObjectUserGroupRole($this->id)) {
+            if ($objectusergrouproles = Store::getObjectObjectUserGroupRole($this->getId())) {
                 while ($row = $objectusergrouproles->fetchObject()) {
                     $this->objectusergrouproles[$row->id] = new ObjectUserGroupRole($row->id);
                 }

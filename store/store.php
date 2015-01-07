@@ -714,7 +714,30 @@ class Store {
         }
     }
 
-    /**
+     /**
+     * prepare a statement to update the object attributes in one go
+     * 
+     * @param int the id of the row to update
+     * @param boolean $isobjecttemplateroot 
+     * @param boolean $istemplate 
+     * @param boolean $istemplateroot 
+     * @param string $name 
+     * @param int $setid
+     * @param int $templateid
+     * @return boolean true if action query succeeds
+     */
+    public static function setObjectAttributes($id, $isobjecttemplateroot, $istemplate, $istemplateroot, $name, $setid, $templateid) {
+        $isobjecttemplateroot = (int) $isobjecttemplateroot;
+        $istemplate = (int) $istemplate;
+        $istemplateroot = (int) $istemplateroot;
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE objects SET isobjecttemplateroot=?, istemplate=?, istemplateroot=?, name=?, fk_set_id=?, fk_template_id=? WHERE id=?")) {
+            $stmt->bind_param("iiisiii", $isobjecttemplateroot, $istemplate, $istemplateroot, $name, $setid, $templateid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+   /**
      * prepare a statement to update the object layout id
      * 
      * @param int the id of the row to update
@@ -879,6 +902,29 @@ class Store {
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("UPDATE objectversions SET fk_mode_id=? WHERE id=?")) {
             $stmt->bind_param("ii", $newmodeid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+     /**
+     * prepare a statement to update the object version attributes in one go
+     * 
+     * @param int $id the id of the row to update
+     * @param int $layoutid 
+     * @param int $styleid
+     * @param int $argumentid
+     * @param int $argumentdefault
+     * @param boolean $inheritlayout
+     * @param boolean $inheritstyle
+     * @param int $templateid
+     * @return boolean true if action query succeeds
+     */
+    public static function setObjectVersionAttributes($id, $layoutid, $styleid, $argumentid, $argumentdefault, $inheritlayout, $inheritstyle, $templateid) {
+        $inheritlayout = (int) $inheritlayout;
+        $inheritstyle = (int) $inheritstyle;
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE objectversions SET fk_layout_id=?, fk_style_id=?, fk_argument_id=?, argumentdefault=?, inheritlayout=?, inheritstyle=?, fk_template_id=? WHERE id=?")) {
+            $stmt->bind_param("iiiiiiii", $layoutid, $styleid, $argumentid, $argumentdefault, $inheritlayout, $inheritstyle, $templateid, $id);
             return self::actionQuery($stmt);
         }
     }
@@ -1682,6 +1728,27 @@ class Store {
         return self::selectQuery("SELECT id FROM snippets WHERE fk_contextgroup_id=" . $contextgroupid);
     }
 
+     /**
+     * prepare a statement to update the object version attributes in one go
+     * 
+     * @param int $id the id of the row to update
+     * @param int $structureid 
+     * @param int $styleid
+     * @param int $number
+     * @param boolean $inheritstructure
+     * @param boolean $inheritstyle
+     * @return boolean true if action query succeeds
+     */
+    public static function setPositionAttributes($id, $structureid, $styleid, $number, $inheritstructure, $inheritstyle) {
+        $inheritstructure = (int) $inheritstructure;
+        $inheritstyle = (int) $inheritstyle;
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE positions SET fk_structure_id=?, fk_style_id=?, number=?, inheritstructure=?, inheritstyle=? WHERE id=?")) {
+            $stmt->bind_param("iiiiii", $structureid, $styleid, $number, $inheritstructure, $inheritstyle, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
     /**
      * prepare a statement to update the position structure id
      * 
@@ -1774,6 +1841,25 @@ class Store {
         }
     }
 
+     /**
+     * prepare a statement to update the position content item attributes in one go
+     * 
+     * @param int $id the id of the row to update
+     * @param string $inputtype
+     * @param string $name
+     * @param int $rootobjectid
+     * @param int $templateid
+     * @param string $body
+     * @return boolean true if action query succeeds
+     */
+    public static function setPositionContentItemAttributes($id, $inputtype, $name, $rootobjectid, $templateid, $body) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE positioncontentitems SET inputtype=?, name=?, fk_rootobject_id=?, fk_template_id=?, contentitembody=? WHERE id=?")) {
+            $stmt->bind_param("ssiisi", $inputtype, $name, $rootobjectid, $templateid, $body, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
     /**
      * set position content item name
      * 
@@ -1861,6 +1947,14 @@ class Store {
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("UPDATE positioncontentitems SET hasinternallinks=? WHERE id=?")) {
             $stmt->bind_param("ii", $intbool, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    public static function setPositionReferralAttributes($id, $argumentid, $numberofitems, $orderby) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE positionreferrals SET fk_argument_id=?, numberofitems=?, orderby=? WHERE id=?")) {
+            $stmt->bind_param("iisi", $argumentid, $numberofitems, $orderby, $id);
             return self::actionQuery($stmt);
         }
     }
@@ -1981,6 +2075,35 @@ class Store {
         $stmt = self::$connection->stmt_init();
         if ($stmt->prepare("UPDATE positioninstances SET parent_id=? WHERE id=?")) {
             $stmt->bind_param("ii", $newparentid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * Set all attributes of a positioninstance, created for performance improvement
+     * of copying position instances
+     * 
+     * @param int $activeitems
+     * @param boolean $fillonload
+     * @param boolean $useinstancecontext
+     * @param string $groupby
+     * @param string $listwords
+     * @param int $objectid
+     * @param string $orderby
+     * @param boolean $outdated
+     * @param int $parentid
+     * @param string $searchwords
+     * @param int $templateid
+     * @param int $maxitems
+     * @return boolean
+     */
+    public static function setPositionInstanceAttributes($activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $objectid, $orderby, $outdated, $parentid, $searchwords, $templateid, $maxitems) {
+        $fillonload = (int)$fillonload;
+        $useinstancecontext = (int)$useinstancecontext;
+        $outdated = (int)$outdated;        
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE positioncontentitems SET activeitems=?, fillonload=?, useinstancecontext=?, groupby=?, listwords=?, object_id=?, orderby=?, outdated=?, parent_id=?, searchwords=?, template_id=?, maxitems=? WHERE id=?")) {
+            $stmt->bind_param("iiissisiisiii", $activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $objectid, $orderby, $outdated, $parentid, $searchwords, $templateid, $maxitems, $id);
             return self::actionQuery($stmt);
         }
     }

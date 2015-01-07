@@ -452,6 +452,35 @@ Class ObjectVersion extends StoredEntity {
     }
 
     /**
+     * set all attributes at once, performance optimization for copying object
+     * versions
+     * 
+     * @param layout $layout
+     * @param style $style
+     * @param argument $argument
+     * @param int $argumentdefault
+     * @param boolean $inheritlayout
+     * @param boolean $inheritstyle
+     * @param template $template
+     * @return boolean true if success
+     * @throws exception if the update in the store fails
+     */
+    public function copyAttributes($layout, $style, $argument, $argumentdefault, $inheritlayout, $inheritstyle, $template) {
+        if (Store::setObjectVersionAttributes($this->getId(), $layout->getId(), $style->getId(), $argument->getId(), $argumentdefault, $inheritlayout, $inheritstyle, $template->getId()) && $this->setChanged()) {
+            $this->layout = $layout;
+            $this->style = $style;
+            $this->argument = $argument;
+            $this->argumentdefault = $argumentdefault;
+            $this->inheritlayout = $inheritlayout;
+            $this->inheritstyle = $inheritstyle;
+            $this->template = $template;
+            return true;
+        } else {
+            throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }
+    }
+    
+    /**
      * get the layout id
      * 
      * @return Layout
@@ -462,6 +491,7 @@ Class ObjectVersion extends StoredEntity {
 
     /**
      * set the layout
+     * This attribute can also be set by copyAttributes!
      * 
      * @param layout the new layout
      * @return boolean true if success
@@ -487,6 +517,7 @@ Class ObjectVersion extends StoredEntity {
 
     /**
      * set the style
+     * This attribute can also be set by copyAttributes!
      * 
      * @param style the new style
      * @return boolean true if success
@@ -512,6 +543,7 @@ Class ObjectVersion extends StoredEntity {
 
     /**
      * set the argument
+     * This attribute can also be set by copyAttributes!
      * 
      * @param argument the new argument
      * @return boolean true if success
@@ -541,7 +573,8 @@ Class ObjectVersion extends StoredEntity {
     }
 
     /**
-     * set the argument id
+     * set the argument default value
+     * This attribute can also be set by copyAttributes!
      * 
      * @param newargumentid the new id
      * @return boolean true if success
@@ -570,6 +603,7 @@ Class ObjectVersion extends StoredEntity {
 
     /**
      * set the inherit layout bool, only functional in template objects
+     * This attribute can also be set by copyAttributes!
      * 
      * @param newinheritlayout the new value
      * @return boolean true if success
@@ -598,6 +632,7 @@ Class ObjectVersion extends StoredEntity {
 
     /**
      * set the inherit style bool, only functional in template objects
+     * This attribute can also be set by copyAttributes!
      * 
      * @param newinheritstyle the new value
      * @return boolean true if success
@@ -624,6 +659,7 @@ Class ObjectVersion extends StoredEntity {
     /**
      * set the template for this version, this template id is used for 
      * adding new template based object trees to a #pn# layout.
+     * This attribute can also be set by copyAttributes!
      * 
      * @param template the new template
      * @return boolean true if success

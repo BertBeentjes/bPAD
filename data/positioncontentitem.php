@@ -57,6 +57,34 @@ class PositionContentItem extends NamedEntity implements PositionContent {
         parent::initAttributes($attr);
     }
     
+    /**
+     * Set all attributes at once, performance optimization for copying position content items
+     * 
+     * @param string $inputtype
+     * @param string $name
+     * @param object $rootobject
+     * @param template $template
+     * @param string $body
+     * @return boolean
+     * @throws Exception
+     */
+    public function copyAttributes($inputtype, $name, $rootobject, $template, $body) {
+        // if the new input type is a file, empty the body
+        if ($inputtype == PositionContentItem::INPUTTYPE_UPLOADEDFILE) {
+            $body = '';
+        }
+        if (Store::setPositionContentItemAttributes($this->getId(), $inputtype, $name, $rootobject->getId(), $template->getId(), $body) && $this->setChanged()) {
+            $this->inputtype = $inputtype;
+            $this->name = $name;
+            $this->rootobject = $rootobject;
+            $this->template = $template;
+            $this->body = $body;
+            return true;
+        } else {
+            throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }        
+    }
+    
     public function setChanged() {
         // update the internal links bit
         $this->setHasInternalLinks($this->checkInternalLinks());
@@ -84,6 +112,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
     
     /**
      * Setter for the content item body
+     * This attribute can also be set by copyAttributes!
      * 
      * @param string newbody the new body
      * @return boolean true if success
@@ -106,6 +135,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
     
     /**
      * Setter for the content item input type
+     * This attribute can also be set by copyAttributes!
      * 
      * @param string newinputtype the new input type
      * @return boolean true if success
@@ -138,6 +168,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
     /**
      * Setter for the root object. This one doesn't trigger setChanged, because
      * it is a cache value maintained by the system, not by the user.
+     * This attribute can also be set by copyAttributes!
      * 
      * @param object the new root object
      * @return boolean true if success
@@ -166,6 +197,7 @@ class PositionContentItem extends NamedEntity implements PositionContent {
     /**
      * Setter for the template. This one doesn't trigger setChanged, because
      * it is a cache value maintained by the system, not by the user.
+     * This attribute can also be set by copyAttributes!
      * 
      * @param template the new template
      * @return boolean true if success

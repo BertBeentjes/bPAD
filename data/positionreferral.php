@@ -67,6 +67,27 @@ class PositionReferral extends StoredEntity implements PositionContent {
     }
         
     /**
+     * Change all attributes in one statement, performance optimization for
+     * use when copying objects
+     * 
+     * @param type $argument
+     * @param type $numberofitems
+     * @param type $orderby
+     * @return boolean
+     * @throws Exception
+     */
+    public function copyAttributes($argument, $numberofitems, $orderby) {
+        if (Store::setPositionReferralAttributes($this->getId(), $argument->getId(), $numberofitems, $orderby) && $this->setChanged()) {
+            $this->argument = $argument;
+            $this->numberofitems = $numberofitems;
+            $this->orderby = $orderby;
+            return true;
+        } else {
+            throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
+        }        
+    }
+
+    /**
      * Getter for the order by
      * 
      * @return string the order type
@@ -77,6 +98,7 @@ class PositionReferral extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the order by
+     * This attribute can also be set by copyAttributes!
      * 
      * @param string the new order by
      * @return boolean true if success
@@ -99,6 +121,7 @@ class PositionReferral extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the number of items
+     * This attribute can also be set by copyAttributes!
      * 
      * @param string the new number of items
      * @return boolean true if success
@@ -121,6 +144,7 @@ class PositionReferral extends StoredEntity implements PositionContent {
     
     /**
      * Setter for the argument
+     * This attribute can also be set by copyAttributes!
      * 
      * @param argument the new argument
      * @return boolean true if success

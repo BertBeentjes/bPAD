@@ -234,12 +234,8 @@ class ExecuteObjectAction {
      * @param object $source
      */
     private function copyObject($source) {
-        $this->getObject()->setIsObjectTemplateRoot($source->getIsTemplateRoot() || $source->getIsObjectTemplateRoot());
-        $this->getObject()->setIsTemplate(false);
-        $this->getObject()->setIsTemplateRoot(false);
-        $this->getObject()->setName($source->getName());
-        $this->getObject()->setSet($source->getSet());
-        $this->getObject()->setTemplate($source->getTemplate());
+        // update all attributes of the new object in one statement
+        $this->getObject()->copyAttributes($source->getIsTemplateRoot() || $source->getIsObjectTemplateRoot(), false, false, $source->getName(), $source->getSet(), $source->getTemplate());
     }
 
     /**
@@ -291,10 +287,9 @@ class ExecuteObjectAction {
      * @param objectversion $target 
      */
     private function copyObjectVersion($source, $target) {
-        // copy the attribute values
-        $target->setLayout($source->getLayout());
-        $target->setStyle($source->getStyle());
-        $target->setArgument($source->getArgument());
+        // update all attributes in one statement
+        $target->copyAttributes($source->getLayout(), $source->getStyle(), $source->getArgument(), $source->getArgumentDefault(), $source->getInheritLayout(), $source->getInheritStyle(), $source->getTemplate());
+        // check whether to create a new argument for this version
         if ($target->getArgument()->isCreate() && !$target->getContainer()->getIsTemplate()) {
             // create a new argument for this version
             if (NULL === $this->getArgument()) {
@@ -302,10 +297,6 @@ class ExecuteObjectAction {
             }
             $target->setArgument($this->getArgument());
         }
-        $target->setArgumentDefault($source->getArgumentDefault());
-        $target->setInheritLayout($source->getInheritLayout());
-        $target->setInheritStyle($source->getInheritStyle());
-        $target->setTemplate($source->getTemplate());
         // create new positions and copy them
         $positions = $source->getPositions();
         foreach ($positions as $position) {
@@ -323,12 +314,8 @@ class ExecuteObjectAction {
      * @param position $target 
      */
     private function copyPosition($source, $target) {
-        // copy the attribute values
-        $target->setStructure($source->getStructure());
-        $target->setStyle($source->getStyle());
-        $target->setNumber($source->getNumber());
-        $target->setInheritStyle($source->getInheritStyle());
-        $target->setInheritStructure($source->getInheritStructure());
+        // update all attributes in one statement
+        $target->copyAttributes($source->getStructure(), $source->getStyle(), $source->getNumber(), $source->getInheritStructure(), $source->getInheritStyle());
         // create the position content
         switch ($source->getPositionContent()->getType()) {
             case PositionContent::POSITIONTYPE_CONTENTITEM:
@@ -392,12 +379,8 @@ class ExecuteObjectAction {
      * @param positioncontentitem $target 
      */
     private function copyPositionContentItem($source, $target) {
-        // first the input type, it may reset certain values
-        $target->setInputType($source->getInputType());
-        $target->setName($source->getName());
-        $target->setRootObject($source->getRootObject());
-        $target->setTemplate($source->getTemplate());
-        $target->setBody($source->getBody());
+        // update all attributes in one statement
+        $target->copyAttributes($source->getInputType(), $source->getName(), $source->getRootObject(), $source->getTemplate(), $source->getBody());
         // if the source contains an uploaded file, copy it to the new contentitem
         if ($source->getInputType() == PositionContentItem::INPUTTYPE_UPLOADEDFILE && $source->getBody() > '') {
             $sourcefolder = $source->calculateFolder();
@@ -433,18 +416,7 @@ class ExecuteObjectAction {
      * @param positioninstance $target 
      */
     private function copyPositionInstance($source, $target) {
-        $target->setActiveItems($source->getActiveItems());
-        $target->setFillOnLoad($source->getFillOnLoad());
-        $target->setUseInstanceContext($source->getUseInstanceContext());
-        $target->setGroupBy($source->getGroupBy());
-        $target->setListWords($source->getListWords());
-        $target->setObject($source->getObject());
-        $target->setOrderBy($source->getOrderBy());
-        $target->setOutdated(true);
-        $target->setParent($source->getParent());
-        $target->setSearchWords($source->getSearchWords());
-        $target->setTemplate($source->getTemplate());
-        $target->setMaxItems($source->getMaxItems());
+        $target->copyAttributes($source->getActiveItems(), $source->getFillOnLoad(), $source->getUseInstanceContext(), $source->getGroupBy(), $source->getListWords(), $source->getObject(), $source->getOrderBy(), true, $source->getParent(), $source->getSearchWords(), $source->getTemplate(), $source->getMaxItems());
     }
 
     /**
@@ -454,9 +426,7 @@ class ExecuteObjectAction {
      * @param positionreferral $target 
      */
     private function copyPositionReferral($source, $target) {
-        $target->setArgument($source->getArgument());
-        $target->setNumberOfItems($source->getNumberOfItems());
-        $target->setOrderBy($source->getOrderBy());
+        $target->copyAttributes($source->getArgument(), $source->getNumberOfItems(), $source->getOrderBy());
     }
 
     /**

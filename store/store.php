@@ -2102,7 +2102,7 @@ class Store {
         $useinstancecontext = (int)$useinstancecontext;
         $outdated = (int)$outdated;        
         $stmt = self::$connection->stmt_init();
-        if ($stmt->prepare("UPDATE positioncontentitems SET activeitems=?, fillonload=?, useinstancecontext=?, groupby=?, listwords=?, object_id=?, orderby=?, outdated=?, parent_id=?, searchwords=?, template_id=?, maxitems=? WHERE id=?")) {
+        if ($stmt->prepare("UPDATE positioninstances SET activeitems=?, fillonload=?, useinstancecontext=?, groupby=?, listwords=?, object_id=?, orderby=?, outdated=?, parent_id=?, searchwords=?, template_id=?, maxitems=? WHERE id=?")) {
             $stmt->bind_param("iiissisiisiii", $activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $objectid, $orderby, $outdated, $parentid, $searchwords, $templateid, $maxitems, $id);
             return self::actionQuery($stmt);
         }

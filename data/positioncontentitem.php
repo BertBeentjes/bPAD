@@ -69,10 +69,6 @@ class PositionContentItem extends NamedEntity implements PositionContent {
      * @throws Exception
      */
     public function copyAttributes($inputtype, $name, $rootobject, $template, $body) {
-        // if the new input type is a file, empty the body
-        if ($inputtype == PositionContentItem::INPUTTYPE_UPLOADEDFILE) {
-            $body = '';
-        }
         if (Store::setPositionContentItemAttributes($this->getId(), $inputtype, $name, $rootobject->getId(), $template->getId(), $body) && $this->setChanged()) {
             $this->inputtype = $inputtype;
             $this->name = $name;

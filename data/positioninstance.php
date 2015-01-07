@@ -100,7 +100,7 @@ class PositionInstance extends StoredEntity implements PositionContent {
      * @throws Exception
      */
     public function copyAttributes($activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $object, $orderby, $outdated, $parent, $searchwords, $template, $maxitems) {
-        if (Store::setPositionInstanceAttributes($activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $object->getId(), $orderby, $outdated, $parent->getId(), $searchwords, $template->getId(), $maxitems) && $this->setChanged()) {
+        if (Store::setPositionInstanceAttributes($this->getId(), $activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $object->getId(), $orderby, $outdated, $parent->getId(), $searchwords, $template->getId(), $maxitems) && $this->setChanged()) {
             return true;
         } else {
             throw new Exception(Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);

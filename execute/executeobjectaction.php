@@ -254,6 +254,21 @@ class ExecuteObjectAction {
     }
 
     /**
+     * Create a new Object Version in edit mode, based upon the one in view mode
+     */
+    private function createObjectVersionEditModeFromViewMode() {
+        // create a new object version for the edit mode by copying the view mode
+        $source = $this->getObject()->getVersion(Modes::getMode(Mode::VIEWMODE));
+        $target = $this->getObject()->newVersion(Modes::getMode(Mode::EDITMODE));
+        $this->copyObjectVersion($source, $target);
+        // only when the action is publish or cancel (function is only called in
+        // those cases, but just to be sure...)
+        if ($this->getAction() == self::EXECUTE_PUBLISH || $this->getAction() == self::EXECUTE_CANCEL) {
+            $this->recurseIntoChildren();
+        }
+    }
+
+    /**
      * recurse into the children of the object and execute the same action for 
      * these children.
      */

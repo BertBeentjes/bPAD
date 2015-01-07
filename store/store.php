@@ -2097,7 +2097,7 @@ class Store {
      * @param int $maxitems
      * @return boolean
      */
-    public static function setPositionInstanceAttributes($activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $objectid, $orderby, $outdated, $parentid, $searchwords, $templateid, $maxitems) {
+    public static function setPositionInstanceAttributes($id, $activeitems, $fillonload, $useinstancecontext, $groupby, $listwords, $objectid, $orderby, $outdated, $parentid, $searchwords, $templateid, $maxitems) {
         $fillonload = (int)$fillonload;
         $useinstancecontext = (int)$useinstancecontext;
         $outdated = (int)$outdated;        

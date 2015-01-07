@@ -25,10 +25,10 @@
  * Factors a position
  */
 class PositionFactory extends Factory {
-
     private $position; // the position to factor
     private $containerobject; // the object that contains the position (in a version)
-
+    private $cacheable = true; // is the position cacheable?
+    
     /**
      * initialize the position factory
      * 
@@ -301,6 +301,16 @@ class PositionFactory extends Factory {
     }
 
     /**
+     * Is this object cacheable? Objects with referrals aren't.
+     * Only has the correct value after the object has been factored.
+     * 
+     * @return boolean
+     */
+    public function getCacheable() {
+        return $this->cacheable;
+    }
+
+    /**
      * check which terms are used in the position structure, and factor content for 
      * these terms
      */
@@ -354,6 +364,9 @@ class PositionFactory extends Factory {
         if ($this->hasTerm(Terms::POSITION_DEEP_LINK_COMMAND)) {
             $context = Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), context::CONTEXT_DEFAULT);
             $this->replaceTerm(Terms::POSITION_DEEP_LINK_COMMAND, CommandFactory::getObjectDeepLink($this->getContainerObject(), $this->getMode(), $context));
+            // when this position contains a deep link command, the containing object can't be
+            // cached. Deep link commands can change when other objects change
+            $this->cacheable = false;
         }
         // add the site root url
         if ($this->hasTerm(Terms::POSITION_SITE_ROOT)) {

@@ -48,23 +48,30 @@ class CacheObjects {
             if ($result = Store::getObjectCacheByObjectIdContextIdUserId($object->getId(), $context->getId(), Authentication::getUser()->getId())) {
                 if ($row = $result->fetchObject()) {
                     $cache = new ObjectCache($row->id);
-                    // only return cached items that aren't outdated
-                    if ($cache->getOutdated()) {
-                        // refresh the cache
-                        $cache->setCache(self::factorObject($object, $context, $mode));
-                    }
                 }
             }
             if (!is_object($cache)) {
                 // create and store a new object for the cache
-                $content = self::factorAndCacheObject($object, $context, $mode);
+                $content = self::factorAndCacheObject($object, $context, $mode)->getContent();
             } else {
-                // return the cached content
-                $content = $cache->getCache();
+                // only return cached items that aren't outdated
+                if ($cache->getOutdated()) {
+                    $objectfactory = self::factorObject($object, $context, $mode);
+                    // if the object is cacheable, store it in the cache (objects with referrals aren't cacheable, their content depends on the request url
+                    if ($objectfactory->getCacheable()) {
+                        // refresh the cache
+                        $cache->setCache($objectfactory->getContent());
+                    }
+                    // return the cached content
+                    $content = $objectfactory->getContent();
+                } else {
+                    // return the cached content
+                    $content = $cache->getCache();
+                }
             }
         } else {
             // return the factored object
-            $content = self::factorObject($object, $context, $mode);
+            $content = self::factorObject($object, $context, $mode)->getContent();
         }
         $content = self::getChildObjects($content, $mode);
         return $content;
@@ -83,7 +90,7 @@ class CacheObjects {
         $objectfactory = new ObjectFactory($object, $context, $mode);
         // factor the object
         $objectfactory->factor();
-        return $objectfactory->getContent();
+        return $objectfactory;
     }
 
     /**
@@ -95,15 +102,13 @@ class CacheObjects {
      * @return objectfactory
      */
     private static function factorAndCacheObject($object, $context, $mode) {
-        // initialize the object factory
-        $objectfactory = new ObjectFactory($object, $context, $mode);
-        // factor the object
-        $objectfactory->factor();
+        // get the factored object
+        $objectfactory = self::factorObject($object, $context, $mode);
         // if the object is cacheable, store it in the cache (objects with referrals aren't cacheable, their content depends on the request url
         if ($objectfactory->getCacheable()) {
             self::storeObject($object, $context, $objectfactory->getContent());
         }
-        return $objectfactory->getContent();
+        return $objectfactory;
     }
 
     /**

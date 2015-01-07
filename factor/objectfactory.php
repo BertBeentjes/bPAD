@@ -243,6 +243,9 @@ class ObjectFactory extends Factory {
         if ($this->hasTerm(Terms::OBJECT_DEEP_LINK_COMMAND)) {
             $context = Contexts::getContextByGroupAndName($this->getContext()->getContextGroup(), context::CONTEXT_DEFAULT);
             $this->replaceTerm(Terms::OBJECT_DEEP_LINK_COMMAND, CommandFactory::getObjectDeepLink($this->getObject(), $this->getMode(), $context));
+            // when this object contains a deep link command, the object can't be
+            // cached. Deep link commands can change when other objects change
+            $this->cacheable = false;
         }
         // add the site root url
         if ($this->hasTerm(Terms::OBJECT_SITE_ROOT)) {
@@ -277,7 +280,8 @@ class ObjectFactory extends Factory {
         // if the object has an argument, the position(s) to show depend on the value of the argument
         $deeplink = false;
         if ($this->getObject()->getVersion($this->getMode())->getLayout()->isPNType()) {
-            // pn types aren't cacheable because of deep linking
+            // pn types aren't cacheable because of resolving deep links will 
+            // create different content in different situations
             $this->cacheable = false;
             // check for an argument or the sitemap
             if ($this->getObject()->getVersion($this->getMode())->getArgument()->isDefault() || $this->getContext()->getContextGroup()->isSiteMap()) {
@@ -469,6 +473,11 @@ class ObjectFactory extends Factory {
                     // show the position with or without the lazy load for instanciable objects
                     $positionfactory = new PositionFactory($position, $this->getContext(), $this->getMode());
                     $positionfactory->factor($lazyload, $objectsshown, $deeplink);
+                    if (!$positionfactory->getCacheable()) {
+                        // when the position isn't cacheable, the complete
+                        // object isn't cacheable
+                        $this->cacheable = false;
+                    }
                     $this->replaceTerm(Terms::object_p($position->getNumber()), $positionfactory->getContent());
                 } else {
                     $this->replaceTerm(Terms::object_p($position->getNumber()), '');
@@ -544,11 +553,6 @@ class ObjectFactory extends Factory {
             $move = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_MOVE_BUTTON), $menuitem);
             $move = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::moveObject($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getContext()), $move);
         }
-        // add option
-//        if (Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_MANAGE) || Authorization::getObjectPermission($this->getObject(), Authorization::OBJECT_FRONTEND_ADD)) {
-//            $add = str_replace(Terms::OBJECT_ITEM_CONTENT, Helper::getLang(LSSNames::STRUCTURE_ADD_BUTTON), $menuitem);
-//            $add = str_replace(Terms::OBJECT_ITEM_COMMAND, CommandFactory::addContent($this->getObject()->getVersion($this->getMode())->getObjectTemplateRootObject(), $this->getMode(), $this->getContext()), $add);
-//        }
         $menu = str_replace(Terms::OBJECT_ITEM_CONTENT, $edit . $move . $add, $menu);
         return $menu;
     }

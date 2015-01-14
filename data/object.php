@@ -390,7 +390,7 @@ class Object extends SettedEntity {
      * @return boolean template based or not
      */
     public function getIsTemplateBased() {
-        return (!$this->getIsTemplate()) && (!$this->getTemplate()->isDefault());
+        return !$this->getIsTemplate() && !$this->getTemplate()->isDefault();
     }
 
     /**
@@ -820,7 +820,7 @@ class Object extends SettedEntity {
      * @return boolean
      */
     public function isAddressable($mode) {
-        return ($this->getIsObjectTemplateRoot() || (!$this->getIsTemplateBased())) && ($this->getVersion($mode)->getObjectParent()->getVersion($mode)->getArgument()->getId() != Argument::DEFAULT_ARGUMENT);
+        return ($this->getIsObjectTemplateRoot() || !$this->getIsTemplateBased()) && ($this->getVersion($mode)->getObjectParent()->getVersion($mode)->getArgument()->getId() != Argument::DEFAULT_ARGUMENT);
     }
 
     /**
@@ -868,7 +868,7 @@ class Object extends SettedEntity {
      * @return boolean true if the object has changed
      */
     public function hasChanged() {
-        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() <= $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate()) {
+        if ($this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChangeDate() <= $this->getVersion(Modes::getMode(Mode::EDITMODE))->getChangeDate() || $this->getNew()) {
             return true;
         }
         return false;

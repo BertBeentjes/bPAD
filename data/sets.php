@@ -60,8 +60,10 @@ class Sets {
      */
     public static function getSetByName($name) {
         $result = Store::getSetByName($name);
-        if ($row = $result->fetchObject()) {
-            return Sets::getSet($row->id);
+        if (is_object($result)) {
+            if ($row = $result->fetchObject()) {
+                return Sets::getSet($row->id);
+            }
         }
     }
 

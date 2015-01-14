@@ -65,9 +65,11 @@ class Structures {
             return self::getStructure(self::$structureidsbyname[$name]);
         } else {
             if ($result = Store::getStructureIdByName($name)) {
-                if ($row = $result->fetchObject()) {
-                    self::$structureidsbyname[$name] = $row->id;
-                    return self::getStructure($row->id);
+                if (is_object($result)) {
+                    if ($row = $result->fetchObject()) {
+                        self::$structureidsbyname[$name] = $row->id;
+                        return self::getStructure($row->id);
+                    }
                 }
             }
         }

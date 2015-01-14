@@ -4069,11 +4069,11 @@ class Store {
                 // several object based order types 
                 case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC:
                 case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC:
-                    $query .= ", DATE_FORMAT(objectversions.changedate, '" . Helper::getDateFormatStore() . "') groupvalue ";
+                    $query .= ", DATE_FORMAT(objects.changedate, '" . Helper::getDateFormatStore() . "') groupvalue ";
                     break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC:
                 case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
-                    $query .= ", DATE_FORMAT(objectversions.createdate, '" . Helper::getDateFormatStore() . "') groupvalue ";
+                    $query .= ", DATE_FORMAT(objects.createdate, '" . Helper::getDateFormatStore() . "') groupvalue ";
                     break;
                 default:
                     // it's a list field
@@ -4167,16 +4167,16 @@ class Store {
             switch ($orderby) {
                 // several object based order types 
                 case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_ASC:
-                    $query .= "INNER JOIN objectversions ON matches.objectid=objectversions.fk_object_id WHERE objectversions.fk_mode_id=" . $modeid . " ORDER BY objectversions.changedate ASC ";
+                    $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.changedate ASC ";
                     break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC:
-                    $query .= "INNER JOIN objectversions ON matches.objectid=objectversions.fk_object_id WHERE objectversions.fk_mode_id=" . $modeid . " ORDER BY objectversions.changedate DESC ";
+                    $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.changedate DESC ";
                     break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC:
-                    $query .= "INNER JOIN objectversions ON matches.objectid=objectversions.fk_object_id WHERE objectversions.fk_mode_id=" . $modeid . " ORDER BY objectversions.createdate ASC ";
+                    $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.createdate ASC ";
                     break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
-                    $query .= "INNER JOIN objectversions ON matches.objectid=objectversions.fk_object_id WHERE objectversions.fk_mode_id=" . $modeid . " ORDER BY objectversions.createdate DESC ";
+                    $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.createdate DESC ";
                     break;
                 default:
                     // it's a list field

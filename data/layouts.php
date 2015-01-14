@@ -80,8 +80,10 @@ class Layouts {
      */
     public static function getLayoutByName($name) {
         $result = Store::getLayoutByName($name);
-        if ($row = $result->fetchObject()) {
-            return Layouts::getLayout($row->id);
+        if (is_object($result)) {
+            if ($row = $result->fetchObject()) {
+                return Layouts::getLayout($row->id);
+            }
         }
     }
 

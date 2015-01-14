@@ -94,8 +94,10 @@ class Styles {
      */
     public static function getStyleByName($name) {
         $result = Store::getStyleByName($name);
-        if ($row = $result->fetchObject()) {
-            return Styles::getStyle($row->id);
+        if (is_object($result)) {
+            if ($row = $result->fetchObject()) {
+                return Styles::getStyle($row->id);
+            }
         }
     }
 

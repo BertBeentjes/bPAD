@@ -85,6 +85,7 @@ class ExecuteUpdate {
                 if (!is_object($layout)) {
                     // create layout
                     $layout = Layouts::newLayout();
+                    $layout->setName($newlayout->name);
                 }
                 // update the layout
                 if ($layout->getIsBpadDefined() != $newlayout->isbpaddefined) {
@@ -150,11 +151,9 @@ class ExecuteUpdate {
                     // create a new version and update the body
                     $layout->newVersion($context);
                     $layoutversion = $layout->getVersion(Modes::getMode(Mode::EDITMODE), $context);
-                    if ($layoutversion->getBody() != $newlayoutversion->body) {
-                        $layoutversion->setBody($newlayoutversion->body);
-                        // publish the update
-                        $layout->publishVersion($context);
-                    }
+                    $layoutversion->setBody($newlayoutversion->body);
+                    // publish the update
+                    $layout->publishVersion($context);
                 } else {
                     // do nothing
                 }
@@ -178,6 +177,7 @@ class ExecuteUpdate {
                 if (!is_object($style)) {
                     // create style
                     $style = Styles::newStyle();
+                    $style->setName($newstyle->name);
                 }
                 // update the style
                 if ($style->getIsBpadDefined() != $newstyle->isbpaddefined) {
@@ -253,11 +253,9 @@ class ExecuteUpdate {
                     // create a new version and update the body
                     $style->newVersion($context);
                     $styleversion = $style->getVersion(Modes::getMode(Mode::EDITMODE), $context);
-                    if ($styleversion->getBody() != $newstyleversion->body) {
-                        $styleversion->setBody($newstyleversion->body);
-                        // publish the update
-                        $style->publishVersion($context);
-                    }
+                    $styleversion->setBody($newstyleversion->body);
+                    // publish the update
+                    $style->publishVersion($context);
                 } else {
                     // do nothing
                 }
@@ -281,6 +279,7 @@ class ExecuteUpdate {
                 if (!is_object($structure)) {
                     // create structure
                     $structure = Structures::newStructure();
+                    $structure->setName($newstructure->name);
                 }
                 // update the structure
                 if ($structure->getIsBpadDefined() != $newstructure->isbpaddefined) {
@@ -346,11 +345,9 @@ class ExecuteUpdate {
                     // create a new version and update the body
                     $structure->newVersion($context);
                     $structureversion = $structure->getVersion(Modes::getMode(Mode::EDITMODE), $context);
-                    if ($structureversion->getBody() != $newstructureversion->body) {
-                        $structureversion->setBody($newstructureversion->body);
-                        // publish the update
-                        $structure->publishVersion($context);
-                    }
+                    $structureversion->setBody($newstructureversion->body);
+                    // publish the update
+                    $structure->publishVersion($context);
                 } else {
                     // do nothing
                 }
@@ -373,6 +370,7 @@ class ExecuteUpdate {
             // if the set isn't found, create it
             if (!is_object($set)) {
                 $set = Sets::newSet();
+                $set->setName($name);
             }
         } else {
             // if the name is incorrect, return the default set

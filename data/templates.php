@@ -77,14 +77,16 @@ class Templates {
     private static function orderTemplates($result) {
         $templates = array();
         $names = array();
-        while ($row = $result->fetchObject()) {
-            $thistemplate = Templates::getTemplate($row->id);
-            $template = array();
-            $template[] = $thistemplate->getId();
-            $template[] = $thistemplate->getName();            
-            $templates[] = $template;
-            $names[] = $thistemplate->getName();
-            unset($template);
+        if (is_object($result)) {
+            while ($row = $result->fetchObject()) {
+                $thistemplate = Templates::getTemplate($row->id);
+                $template = array();
+                $template[] = $thistemplate->getId();
+                $template[] = $thistemplate->getName();            
+                $templates[] = $template;
+                $names[] = $thistemplate->getName();
+                unset($template);
+            }
         }
         array_multisort($names, SORT_ASC, $templates);
         return $templates;

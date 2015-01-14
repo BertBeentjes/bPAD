@@ -420,21 +420,14 @@ class AdminFactory extends Factory {
         }
         if (isset($templates)) {
             // create add buttons for each template
-            while ($row = $templates->fetchObject()) {
+            foreach ($templates as $thistemplate) {
+                $template = Templates::getTemplate($thistemplate[0]);
                 // TODO: find a better way to include the mode for the chained content.get command. Viewmode is now hardcoded.
-                $template = Templates::getTemplate($row->id);
-                // changed: always open the parent, items are created in the parent, so the parent must be opened to edit them.
-                // if ($template->getSearchable()) {
-                    // if the template to add is searchable, open the parent for editing (recursively)
-                    $editobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject();
-                    while ($editobject->getTemplate()->getSearchable() && !$editobject->isSiteRoot()) {
-                        $editobject = $editobject->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectParent()->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject();
-                    }
-                    $buttons .= $this->factorButton($baseid . $row->id, CommandFactory::addObjectFromTemplate($object, $template, $number, Modes::getMode(Mode::VIEWMODE), $this->getContext(), $editobject), Helper::getLang($row->name));
-                // } else {
-                    // if the template isn't searchable, refresh the parent for the new object
-                //     $buttons .= $this->factorButton($baseid . $row->id, CommandFactory::addObjectFromTemplate($object, $template, $number, Modes::getMode(Mode::VIEWMODE), $this->getContext()), Helper::getLang($row->name));
-                // }
+                $editobject = $object->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject();
+                while ($editobject->getTemplate()->getSearchable() && !$editobject->isSiteRoot()) {
+                    $editobject = $editobject->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectParent()->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject();
+                }
+                $buttons .= $this->factorButton($baseid . $template->getId(), CommandFactory::addObjectFromTemplate($object, $template, $number, Modes::getMode(Mode::VIEWMODE), $this->getContext(), $editobject), $template->getName());
             }
         }
         return $buttons;

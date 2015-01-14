@@ -68,22 +68,46 @@ class Styles {
     }
         
     /**
-     * Get all styles by style type
+     * Get all styles
      * 
-     * @return resultset
+     * @return array
      */
     public static function getStyles() {
-        return Store::getStyles();
+        $result = Store::getStyles();
+        return self::orderStyles($result);
+    }
+
+    /**
+     * order styles
+     * 
+     * @param resultset $result
+     * @return array
+     */
+    private static function orderStyles($result) {
+        $styles = array();
+        $names = array();
+        while ($row = $result->fetchObject()) {
+            $thisstyle = Styles::getStyle($row->id);
+            $style = array();
+            $style[] = $thisstyle->getId();
+            $style[] = $thisstyle->getName();            
+            $styles[] = $style;
+            $names[] = $thisstyle->getName();
+            unset($style);
+        }
+        array_multisort($names, SORT_ASC, $styles);
+        return $styles;
     }
 
     /**
      * Get all styles by style type
      * 
      * @param string styletype
-     * @return resultset
+     * @return array
      */
     public static function getStylesByStyleType($styletype) {
-        return Store::getStylesByStyleType($styletype);
+        $result = Store::getStylesByStyleType($styletype);
+        return self::orderStyles($result);
     }
 
     /**
@@ -107,10 +131,11 @@ class Styles {
      * @param string $styletype
      * @param set $set
      * @param style $style
-     * @return resultset
+     * @return array
      */
     public static function getStylesBySet($styletype, $set, $style) {
-        return Store::getStylesBySetId($styletype, $set->getId(), $style->getId());
+        $result = Store::getStylesBySetId($styletype, $set->getId(), $style->getId());
+        return self::orderStyles($result);
     }
 
     /**

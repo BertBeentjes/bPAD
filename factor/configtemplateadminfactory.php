@@ -41,8 +41,8 @@ class ConfigTemplateAdminFactory extends ConfigAdminFactory {
             }
         } else {
             $templates = Templates::getTemplates();
-            $row = $templates->fetchObject();
-            $template = Templates::getTemplate($row->id);
+            $firsttemplate = $templates[0];
+            $template = Templates::getTemplate($firsttemplate[0]);
         }
         $baseid = 'CP' . $this->getObject()->getId();
         $admin = $this->factorErrorMessage();

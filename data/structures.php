@@ -81,7 +81,30 @@ class Structures {
      * @return resultset
      */
     public static function getStructures() {
-        return Store::getStructures();
+        $result = Store::getStructures();
+        return self::orderStructures($result);
+    }
+
+    /**
+     * order structures
+     * 
+     * @param resultset $result
+     * @return array
+     */
+    private static function orderStructures($result) {
+        $structures = array();
+        $names = array();
+        while ($row = $result->fetchObject()) {
+            $thisstructure = Structures::getStructure($row->id);
+            $structure = array();
+            $structure[] = $thisstructure->getId();
+            $structure[] = $thisstructure->getName();            
+            $structures[] = $structure;
+            $names[] = $thisstructure->getName();
+            unset($structure);
+        }
+        array_multisort($names, SORT_ASC, $structures);
+        return $structures;
     }
 
     /**
@@ -92,7 +115,8 @@ class Structures {
      * @return resultset
      */
     public static function getStructuresBySet($set, $structure) {
-        return Store::getStructuresBySetId($set->getId(), $structure->getId());
+        $result = Store::getStructuresBySetId($set->getId(), $structure->getId());
+        return self::orderStructures($result);
     }
 
     /**

@@ -60,10 +60,34 @@ class Templates {
      */
     public static function getTemplates($defaultname = NULL) {
         if (isset($defaultname)) {
-            return Store::getTemplates($defaultname);
+            $result = Store::getTemplates($defaultname);
+        } else {
+            $name = self::getTemplate(Template::DEFAULT_TEMPLATE)->getName();
+            $result = Store::getTemplates(Helper::getLang($name));
         }
-        $name = self::getTemplate(Template::DEFAULT_TEMPLATE)->getName();
-        return Store::getTemplates(Helper::getLang($name));
+        return self::orderTemplates($result);
+    }
+
+    /**
+     * order templates
+     * 
+     * @param resultset $result
+     * @return array
+     */
+    private static function orderTemplates($result) {
+        $templates = array();
+        $names = array();
+        while ($row = $result->fetchObject()) {
+            $thistemplate = Templates::getTemplate($row->id);
+            $template = array();
+            $template[] = $thistemplate->getId();
+            $template[] = $thistemplate->getName();            
+            $templates[] = $template;
+            $names[] = $thistemplate->getName();
+            unset($template);
+        }
+        array_multisort($names, SORT_ASC, $templates);
+        return $templates;
     }
 
     /**
@@ -76,10 +100,12 @@ class Templates {
      */
     public static function getTemplatesBySet($set, $template = NULL, $showdeleted = false) {
         if (isset($template)) {
-            return Store::getTemplatesBySetId($set->getId(), $template->getId(), $showdeleted);
+            $result = Store::getTemplatesBySetId($set->getId(), $template->getId(), $showdeleted);
+        } else {
+            // a bit dirty... but -1 does no harm in the query, just no extra template selected
+            $result = Store::getTemplatesBySetId($set->getId(), -1, $showdeleted);
         }
-        // a bit dirty... but -1 does no harm in the query, just no extra template selected
-        return Store::getTemplatesBySetId($set->getId(), -1, $showdeleted);
+        return self::orderTemplates($result);
     }
 
     /**

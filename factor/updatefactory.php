@@ -66,9 +66,9 @@ class UpdateFactory extends Factory {
         $layouts = Layouts::getLayouts();
         $layoutobjects = '';
         // get all layouts
-        while ($layoutrow = $layouts->fetchObject()) {
+        foreach ($layouts as $thislayout) {
             $layoutobject = '';
-            $layout = Layouts::getLayout($layoutrow->id);
+            $layout = Layouts::getLayout($thislayout[0]);
             // only add bpad defined layouts to the update
             if ($layout->getIsBpadDefined()) {
                 $layoutobject .= $this->jsonAVPair('name', $layout->getCanonicalName());
@@ -130,9 +130,9 @@ class UpdateFactory extends Factory {
         $styles = Styles::getStyles();
         $styleobjects = '';
         // get all styles
-        while ($stylerow = $styles->fetchObject()) {
+        foreach ($styles as $thisstyle) {
             $styleobject = '';
-            $style = Styles::getStyle($stylerow->id);
+            $style = Styles::getStyle($thisstyle[0]);
             // only add bpad defined styles to the update
             if ($style->getIsBpadDefined()) {
                 $styleobject .= $this->jsonAVPair('name', $style->getCanonicalName());
@@ -196,9 +196,9 @@ class UpdateFactory extends Factory {
         $structures = Structures::getStructures();
         $structureobjects = '';
         // get all structures
-        while ($structurerow = $structures->fetchObject()) {
+        foreach ($structures as $thisstructure) {
             $structureobject = '';
-            $structure = Structures::getStructure($structurerow->id);
+            $structure = Structures::getStructure($thisstructure[0]);
             // only add bpad defined structures to the update
             if ($structure->getIsBpadDefined()) {
                 $structureobject .= $this->jsonAVPair('name', $structure->getCanonicalName());

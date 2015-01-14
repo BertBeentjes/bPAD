@@ -58,7 +58,30 @@ class Layouts {
      * @return resultset
      */
     public static function getLayouts() {
-        return Store::getLayouts();
+        $result = Store::getLayouts();
+        return self::orderLayouts($result);
+    }
+
+    /**
+     * order layouts
+     * 
+     * @param resultset $result
+     * @return array
+     */
+    private static function orderLayouts($result) {
+        $layouts = array();
+        $names = array();
+        while ($row = $result->fetchObject()) {
+            $thislayout = Layouts::getLayout($row->id);
+            $layout = array();
+            $layout[] = $thislayout->getId();
+            $layout[] = $thislayout->getName();            
+            $layouts[] = $layout;
+            $names[] = $thislayout->getName();
+            unset($layout);
+        }
+        array_multisort($names, SORT_ASC, $layouts);
+        return $layouts;
     }
 
     /**
@@ -69,7 +92,8 @@ class Layouts {
      * @return resultset
      */
     public static function getLayoutsBySet($set, $layout) {
-        return Store::getLayoutsBySetId($set->getId(), $layout->getId());
+        $result = Store::getLayoutsBySetId($set->getId(), $layout->getId());
+        return self::orderLayouts($result);
     }
 
     /**

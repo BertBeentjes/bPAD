@@ -41,8 +41,8 @@ class ConfigStructureAdminFactory extends ConfigAdminFactory {
             }
         } else {
             $structures = Structures::getStructures();
-            $row = $structures->fetchObject();
-            $structure = Structures::getStructure($row->id);
+            $firststructure = $structures[0];
+            $structure = Structures::getStructure($firststructure[0]);
         }
         $baseid = 'CP' . $this->getObject()->getId();
         $admin = $this->factorErrorMessage();

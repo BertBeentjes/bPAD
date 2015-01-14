@@ -237,9 +237,25 @@ class PositionFactory extends Factory {
             $lastgroupvalue = '';
             $instancecontent = '';
             if (is_array($objects)) {
+                // some initialization
                 $lazyloadstructure = Structures::getStructureByName(LSSNames::STRUCTURE_LAZY_LOAD)->getVersion($this->getMode(), $this->getContext())->getBody();
                 $number = 0;
                 $maxitems = $this->getPosition()->getPositionContent()->getMaxItems();                
+                // with random ordering, shuffle the objects
+                if ($this->getPosition()->getPositionContent()->getOrderBy() == PositionInstance::POSITIONINSTANCE_ORDER_RANDOM) {
+                    $count = count($objects);
+                    $loops = $count;
+                    while ($loops > 0) {
+                        $switchobject1 = rand(0, $count-1);
+                        $switchobject2 = rand(0, $count-1);
+                        $object1 = $objects[$switchobject1];
+                        $object2 = $objects[$switchobject2];
+                        $objects[$switchobject1] = $object2;
+                        $objects[$switchobject2] = $object1;                        
+                        $loops = $loops - 1;
+                    }
+                }
+                // now add the objects to the instance
                 foreach ($objects as $objectvalues) {
                     if ($number < $maxitems || $maxitems == 0) {
                         $object = $objectvalues['object'];

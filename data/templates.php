@@ -127,7 +127,9 @@ class Templates {
         $fields[2][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC);
         $fields[3][0] = PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC;
         $fields[3][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC);
-        $counter = 4;
+        $fields[4][0] = PositionInstance::POSITIONINSTANCE_ORDER_RANDOM;
+        $fields[4][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_RANDOM);
+        $counter = 5;
         if ($template->getId() != Template::DEFAULT_TEMPLATE) {
             // always look for order by fields in view mode
             if ($flex = Store::getTemplateOrderFieldsByTemplateId($template->getId(), Mode::VIEWMODE)) {

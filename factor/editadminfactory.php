@@ -90,6 +90,11 @@ class EditAdminFactory extends AdminFactory {
                 // factor the buttons for this object
                 $headercontent .= $this->factorButtons($baseid . '_head', $object);
                 $sectionheader = $this->factorSectionHeader($baseid . '_objhead', $headercontent);
+                if (Authorization::getObjectPermission($object, Authorization::OBJECT_MANAGE)) {
+                    // TODO: factor authorizations
+                    $auth = $this->factorObjectAuthorization($baseid . '_auth', $object);
+                    $section .= $this->factorSectionCollapsed($baseid . '_authsection', $auth, Helper::getLang(AdminLabels::ADMIN_OBJECT_AUTHORIZATION));
+                }
             }
             // factor an additional header for the object if it is in a template
             if ($object->getIsTemplate()) {
@@ -99,9 +104,7 @@ class EditAdminFactory extends AdminFactory {
             $objectversion = $object->getVersion($this->getMode());
             // factor the object version for the object 
             $section .= $this->factorObjectVersion($objectversion, $baseid);
-            // factor positions
-            // TODO: create add buttons for each position, and create add buttons
-            // for missing positions in templates
+            // factor positions and add buttons
             $positions = $objectversion->getPositions();
             $curnumber = 1;
             foreach ($positions as $position) {
@@ -130,18 +133,65 @@ class EditAdminFactory extends AdminFactory {
                     $section .= $this->factorSubItemButtons($baseid, $object);
                     $subitemname .= $this->factorTextInput($baseid . '_name', CommandFactory::editObjectName($object), $object->getName(), Helper::getLang(AdminLabels::ADMIN_OBJECT_NAME));
                     $admin .= $this->factorSectionCollapsed($object->getId(), $subitemname . $section, $object->getName());
+                    // factor the object authorization for object template roots, for authorized users
                 } else {
                     $admin .= $this->factorSubItem($section);
                 }
             }
-            // wrap the section
-            // return the result
         } else {
             Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
         }
         return $admin;
     }
 
+    /**
+     * Factor the authorization block for this object
+     * 
+     * @param string $baseid
+     * @param object $object
+     * @return string
+     */
+    private function factorObjectAuthorization($baseid, $object) {
+        $section = '';
+        $getusergroups = UserGroups::getUserGroups();
+        $getobjectusergrouproles = $object->getObjectUserGroupRoles();
+        $objectusergrouproles = array();
+        foreach ($getobjectusergrouproles as $ougr) {
+            $objectusergrouproles[$ougr->getUserGroup()->getId()][$ougr->getRole()->getId()] = $ougr;
+        }
+        $usergroups = array();
+        while ($row = $getusergroups->fetchObject()) {
+            $usergroups[] = UserGroups::getUserGroup($row->id);
+        }
+        $getroles = Roles::getRoles();
+        $roles = array();
+        while ($row = $getroles->fetchObject()) {
+            $roles[] = Roles::getRole($row->id);
+        }
+        foreach($usergroups as $usergroup) {
+            $rolesection = '';
+            foreach ($roles as $role) {
+                $item = '';
+                // TODO: add command
+                $command = CommandFactory::editObjectUserGroupRole($object, $this->getContainerObject(), $usergroup, $role, $this->getContext());
+                $value = isset($objectusergrouproles[$usergroup->getId()][$role->getId()]);
+                $rolesection .= $this->factorCheckBox($baseid . '_ug' . $usergroup->getId() . '_ro' . $role->getId(), $command, $value, '"' . $role->getName() . '"' . Helper::getLang(AdminLabels::ADMIN_OBJECT_USERGROUP_ROLE));
+                if (isset($objectusergrouproles[$usergroup->getId()][$role->getId()])) {
+                    $value = $objectusergrouproles[$usergroup->getId()][$role->getId()];
+                    $value = $value->getInherit();
+                } else {
+                    $value = false;
+                }
+                // TODO: add command
+                $command = CommandFactory::editObjectUserGroupRoleInherit($object, $this->getContainerObject(), $usergroup, $role, $this->getContext());
+                $rolesection .= $this->factorCheckBox($baseid . '_ug' . $usergroup->getId() . '_ro' . $role->getId() . '_i', $command, $value, '"' . $role->getName() . '"' . Helper::getLang(AdminLabels::ADMIN_OBJECT_USERGROUP_ROLE_INHERIT));
+                $rolesection .= $this->factorSeparator();
+            }
+            $section .= $this->factorSectionCollapsed($baseid . '_ug' . $usergroup->getId(), $rolesection, $usergroup->getName());
+        }
+        return $section;
+    }
+    
     /**
      * Decide what type of add buttons to show
      * 

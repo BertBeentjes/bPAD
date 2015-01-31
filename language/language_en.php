@@ -464,9 +464,12 @@ $lang[LSSNames::TEMPLATE_KEYWORD] = 'Keyword';
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Name';
 $lang[AdminLabels::ADMIN_OBJECT_TEMPLATE_NAME] = 'Based upon template';
+$lang[AdminLabels::ADMIN_OBJECT_AUTHORIZATION] = 'Authorization';
 $lang[AdminLabels::ADMIN_OBJECT_INTERNAL_LINK] = 'Link to this item';
 $lang[AdminLabels::ADMIN_OBJECT_DEEP_LINK] = 'Deep link to this item';
 $lang[AdminLabels::ADMIN_OBJECT_ACTIVE] = 'Active';
+$lang[AdminLabels::ADMIN_OBJECT_USERGROUP_ROLE] = ' only for this item';
+$lang[AdminLabels::ADMIN_OBJECT_USERGROUP_ROLE_INHERIT] = ' for this item and all subitems';
 $lang[AdminLabels::ADMIN_OBJECT_SET] = 'Set';
 $lang[AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT] = 'Layout';
 $lang[AdminLabels::ADMIN_OBJECT_VERSION_STYLE] = 'Style';

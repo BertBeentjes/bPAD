@@ -169,6 +169,13 @@ class Change extends Respond {
                         $snippet = Snippets::getSnippet(Request::getCommand()->getItemAddress());
                         Execute::changeSnippet($snippet);
                         break;
+                    case 'objectusergrouprole':
+                        $itemaddressparts = Request::getCommand()->getItemAddressParts();
+                        $object = Objects::getObject($itemaddressparts[0]);
+                        $usergroup = UserGroups::getUserGroup($itemaddressparts[1]);
+                        $role = Roles::getRole($itemaddressparts[2]);
+                        Execute::changeObjectUserGroupRole($object, $usergroup, $role);
+                        break;
                     default:
                         Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
                         break;

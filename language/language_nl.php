@@ -463,9 +463,12 @@ $lang[LSSNames::TEMPLATE_KEYWORD] = 'Keyword';
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_OBJECT_TEMPLATE_NAME] = 'Gebaseerd op sjabloon';
+$lang[AdminLabels::ADMIN_OBJECT_AUTHORIZATION] = 'Autorisatie';
 $lang[AdminLabels::ADMIN_OBJECT_INTERNAL_LINK] = 'Link naar dit item';
 $lang[AdminLabels::ADMIN_OBJECT_DEEP_LINK] = 'Diepe link naar dit item';
 $lang[AdminLabels::ADMIN_OBJECT_ACTIVE] = 'Actief';
+$lang[AdminLabels::ADMIN_OBJECT_USERGROUP_ROLE] = ' alleen voor dit item';
+$lang[AdminLabels::ADMIN_OBJECT_USERGROUP_ROLE_INHERIT] = ' voor dit item en alle subitems';
 $lang[AdminLabels::ADMIN_OBJECT_SET] = 'Set';
 $lang[AdminLabels::ADMIN_OBJECT_VERSION_LAYOUT] = 'Indeling';
 $lang[AdminLabels::ADMIN_OBJECT_VERSION_STYLE] = 'Stijl';

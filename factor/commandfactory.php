@@ -202,6 +202,34 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to change the object user group role
+     * 
+     * @param object $object
+     * @param object $editobject
+     * @param usergroup $usergroup
+     * @param role $role
+     * @param context $context
+     * @return string
+     */
+    public static function editObjectUserGroupRole($object, $editobject, $usergroup, $role, $context) {
+        return 'objectusergrouprole,' . $object->getId() . '.' . $usergroup->getId() . '.' . $role->getId() . ',change.objectusergrouprole' . '|' . self::editObject($editobject, $context);
+    }
+
+    /**
+     * Compose the command to change the object user group role with inherit
+     * 
+     * @param object $object
+     * @param object $editobject
+     * @param usergroup $usergroup
+     * @param role $role
+     * @param context $context
+     * @return string
+     */
+    public static function editObjectUserGroupRoleInherit($object, $editobject, $usergroup, $role, $context) {
+        return 'objectusergrouprole,' . $object->getId() . '.' . $usergroup->getId() . '.' . $role->getId() . ',change.objectusergrouproleinherit' . '|' . self::editObject($editobject, $context);
+    }
+
+    /**
      * Compose the command to edit the object set value, chain a reload, changing
      * the set affects the layouts, styles, structures for the object
      * 

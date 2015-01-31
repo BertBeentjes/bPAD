@@ -924,5 +924,47 @@ class Object extends SettedEntity {
         // recurse
         return $parentobject->getNameForMove($mode) . ' - ' . $name;
     }
+    
+    /**
+     * Set or remove an object user group role for this object and for its children
+     * 
+     * @param usergroup $usergroup
+     * @param role $role
+     * @param boolean $inherit
+     * @return boolean
+     */
+    public function setObjectUserGroupRole($usergroup, $role, $inherit) {
+        $objectusergrouproles = $this->getObjectUserGroupRoles();
+        $found = false;
+        // search for the usergrouprole
+        foreach ($objectusergrouproles as $objectusergrouprole) {
+            if ($objectusergrouprole->getUserGroup()->getId() == $usergroup->getId() && $objectusergrouprole->getRole()->getId() == $role->getId()) {
+                $id = $objectusergrouprole->getId();
+                if (Store::deleteObjectUserGroupRole($id)) {
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        // if it isn't there, add it
+        if (!$found) {
+            Store::insertObjectUserGroupRole($this->getId(), $usergroup->getId(), $role->getId());
+        }
+        // refresh the object usergroup roles
+        $this->objectusergrouprolesloaded = false;
+        $this->getObjectUserGroupRoles();
+        // if this is template based, get the children
+        if (!$this->getTemplate()->isDefault() || $this->getIsTemplate()) {
+            // get the child objects in view mode
+            $children = $this->getVersion(Modes::getMode(Mode::VIEWMODE))->getChildren();
+            foreach ($children as $child) {
+                // if inherit or this child is part of the same template, or a searchable part
+                if (!$child->getIsObjectTemplateRoot() || $inherit || $child->getTemplate()->getSearchable()) {
+                    $child->setObjectUserGroupRole($usergroup, $role, $inherit);
+                }
+            }
+        }
+        return true;
+    }
 
 }

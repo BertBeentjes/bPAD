@@ -234,7 +234,7 @@ class ContentItemFactory extends Factory {
                         $specialmarkup = true;
                     }
                     if (strpos($paragraph, '4+') === 0) {
-                        $paragraph = $this->replaceMarkers('/(^4\+)(.+)/', LSSNames::STRUCTURE_H4, $paragraph, "");
+                        $paragraph = $this->replaceMarkers('/(^4\+)(.+)/', LSSNames::STRUCTURE_H4, '$2', $paragraph, "");
                         $specialmarkup = true;
                     }
                     if (strpos($paragraph, '5+') === 0) {

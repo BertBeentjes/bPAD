@@ -1647,4 +1647,39 @@ class Execute {
         }
     }
     
+    /**
+     * Execute a change in a object usergrouip role
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param object $object
+     * @param usergroup $usergroup
+     * @param role $role
+     */
+    public static function changeObjectUsergroupRole($object, $usergroup, $role) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::SYSTEM_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'objectusergrouprole':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue(true);
+                    // add or remove the object usergroup role
+                    $object->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject()->setObjectUserGroupRole($usergroup, $role, false);
+                    break;
+                case 'objectusergrouproleinherit':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue(true);
+                    // add or remove the object usergroup role and inherit to all sub objects
+                    $object->getVersion(Modes::getMode(Mode::VIEWMODE))->getObjectTemplateRootObject()->setObjectUserGroupRole($usergroup, $role, false);
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
 }

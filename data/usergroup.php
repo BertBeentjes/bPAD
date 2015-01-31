@@ -65,7 +65,8 @@ class UserGroup extends NamedEntity{
      * @return boolean true if used
      */
     public function isUsed() {
-        if ($result = Store::getUserGroupUsed($this->getId())) {
+        $result = Store::getUserGroupUsed($this->getId());
+        if (is_object($result)) {
             return true;
         }
         return false;

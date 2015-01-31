@@ -948,7 +948,7 @@ class Object extends SettedEntity {
         }
         // if it isn't there, add it
         if (!$found) {
-            Store::insertObjectUserGroupRole($this->getId(), $usergroup->getId(), $role->getId());
+            Store::insertObjectUserGroupRole($this->getId(), $usergroup->getId(), $role->getId(), $inherit);
         }
         // refresh the object usergroup roles
         $this->objectusergrouprolesloaded = false;

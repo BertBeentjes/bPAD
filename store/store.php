@@ -4240,7 +4240,7 @@ class Store {
      * @return resultset id
      */
     public static function getUserGroupUsed($usergroupid) {
-        return self::selectQuery("SELECT id FROM userusergroup WHERE fk_usergroup_id=" . $usergroupid . " LIMIT 0,1 UNION SELECT id FROM objectusergrouprole WHERE fk_usergroup_id=" . $usergroupid . " LIMIT 0,1");
+        return self::selectQuery("SELECT id FROM userusergroup WHERE fk_usergroup_id=" . $usergroupid . " LIMIT 0,1");
     }
 
     /**
@@ -4622,9 +4622,14 @@ class Store {
      */
     public static function deleteUserGroup($usergroupid) {
         $stmt = self::$connection->stmt_init();
-        if ($stmt->prepare("DELETE FROM usergroups WHERE id=?")) {
+        if ($stmt->prepare("DELETE FROM objectusergrouprole WHERE fk_usergroup_id=?")) {
             $stmt->bind_param("i", $usergroupid);
-            return self::actionQuery($stmt);
+            self::actionQuery($stmt);
+            $stmt = self::$connection->stmt_init();
+            if ($stmt->prepare("DELETE FROM usergroups WHERE id=?")) {
+                $stmt->bind_param("i", $usergroupid);
+                return self::actionQuery($stmt);
+            }
         }
     }
 

@@ -4200,7 +4200,6 @@ class Store {
                     break;
             }
         }
-        echo $query;
         return self::selectQuery($query);
     }
 

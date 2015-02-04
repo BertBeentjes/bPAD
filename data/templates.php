@@ -129,6 +129,10 @@ class Templates {
         $fields[3][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC);
         $fields[4][0] = PositionInstance::POSITIONINSTANCE_ORDER_RANDOM;
         $fields[4][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_RANDOM);
+        $fields[5][0] = PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_ASC;
+        $fields[5][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_ASC);
+        $fields[6][0] = PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_DESC;
+        $fields[6][1] = Helper::getLang(PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_DESC);
         $counter = 5;
         if ($template->getId() != Template::DEFAULT_TEMPLATE) {
             // always look for order by fields in view mode

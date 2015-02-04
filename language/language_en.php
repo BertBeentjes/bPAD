@@ -137,6 +137,8 @@ $lang[PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC] = 'Change date -
 $lang[PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC] = 'Create date - oldest first';
 $lang[PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC] = 'Create date - newest first';
 $lang[PositionInstance::POSITIONINSTANCE_ORDER_RANDOM] = 'Random selection';
+$lang[PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_ASC] = 'Object name - a to z';
+$lang[PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_DESC] = 'Object name - z to a';
 
 $lang[PositionReferral::POSITIONREFERRAL_ORDER_CHANGEDATE_ASC] = 'Change date - oldest first';
 $lang[PositionReferral::POSITIONREFERRAL_ORDER_CHANGEDATE_DESC] = 'Change date - newest first';

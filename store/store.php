@@ -4075,6 +4075,10 @@ class Store {
                 case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
                     $query .= ", DATE_FORMAT(objects.createdate, '" . Helper::getDateFormatStore() . "') groupvalue ";
                     break;
+                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC:
+                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
+                    $query .= ", left(objects.name, 1) groupvalue ";
+                    break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_RANDOM:
                     $query .= ", '' groupvalue ";
                     break;
@@ -4180,6 +4184,12 @@ class Store {
                     break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
                     $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.createdate DESC ";
+                    break;
+                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC:
+                    $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.name ASC ";
+                    break;
+                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
+                    $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.name DESC ";
                     break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_RANDOM:
                     $query .= "";

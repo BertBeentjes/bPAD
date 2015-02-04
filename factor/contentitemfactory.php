@@ -242,6 +242,10 @@ class ContentItemFactory extends Factory {
                         $specialmarkup = true;
                     }
                 }
+                if (strpos($paragraph, '- ') === 0) {
+                    // no p around a list
+                    $specialmarkup = true;
+                }
                 // if there is no special markup, apply the default paragraph markup
                 if ($specialmarkup == false) {
                     $returnvalue .= $this->getStructureBodyByName(LSSNames::STRUCTURE_PARAGRAPH_START);

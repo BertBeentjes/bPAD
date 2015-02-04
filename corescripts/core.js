@@ -40,6 +40,7 @@ var checkcommandnrqueue = ''; // create an empty command queue
 var commandvaluequeue = ''; // create an empty command queue
 var queuenumber = 0; // a number for the queue
 var analyticsurl = ''; // store the last analyticsurl
+var customevents = []; // array with custom event functions
 
 var resulttohtml = function(container, replace, checkcommandnr, commandnr) {
     return function(result) {
@@ -331,7 +332,7 @@ function addEvents(divid) {
         $(this).removeAttr('data-bpad-onclick');
     });
     // close the bootstrap menu after a command
-    $('.nav li a').on('click',function(){
+    $(selector + '.nav li a').on('click',function(){
         $('.navbar-collapse.in').collapse('hide');
     })
     // hide add buttons in the edit interface
@@ -538,6 +539,22 @@ function addEvents(divid) {
     });
     // start a lazy load sequence
     lazyEvent();
+    // custom events
+    customevents.forEach(function(element) {
+        if ($.isFunction(element)) {
+                element;
+            }
+        }
+    );
+}
+
+/**
+ *  add a custom event to the custom even queue
+ */
+function addCustomEvent(customevent) {
+    if ($.isFunction(customevent)) {
+        customevents.push(customevent);
+    }
 }
 
 /**

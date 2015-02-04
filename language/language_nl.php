@@ -136,6 +136,8 @@ $lang[PositionInstance::POSITIONINSTANCE_ORDER_CHANGEDATE_DESC] = 'Wijzigdatum -
 $lang[PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC] = 'Aanmaakdatum - oudste eerst';
 $lang[PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC] = 'Aanmaakdatum - nieuwste eerst';
 $lang[PositionInstance::POSITIONINSTANCE_ORDER_RANDOM] = 'Willekeurige selectie';
+$lang[PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_ASC] = 'Object naam - a tot z';
+$lang[PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_DESC] = 'Object naam - z tot a';
 
 $lang[PositionReferral::POSITIONREFERRAL_ORDER_CHANGEDATE_ASC] = 'Wijzigdatum - oudste eerst';
 $lang[PositionReferral::POSITIONREFERRAL_ORDER_CHANGEDATE_DESC] = 'Wijzigdatum - nieuwste eerst';

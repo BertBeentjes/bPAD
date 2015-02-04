@@ -4075,9 +4075,9 @@ class Store {
                 case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
                     $query .= ", DATE_FORMAT(objects.createdate, '" . Helper::getDateFormatStore() . "') groupvalue ";
                     break;
-                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC:
-                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
-                    $query .= ", left(objects.name, 1) groupvalue ";
+                case PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_ASC:
+                case PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_DESC:
+                    $query .= ", LEFT(objects.name, 1) groupvalue ";
                     break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_RANDOM:
                     $query .= ", '' groupvalue ";
@@ -4185,10 +4185,10 @@ class Store {
                 case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
                     $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.createdate DESC ";
                     break;
-                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_ASC:
+                case PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_ASC:
                     $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.name ASC ";
                     break;
-                case PositionInstance::POSITIONINSTANCE_ORDER_CREATEDATE_DESC:
+                case PositionInstance::POSITIONINSTANCE_ORDER_OBJECTNAME_DESC:
                     $query .= "INNER JOIN objects ON matches.objectid=objects.id ORDER BY objects.name DESC ";
                     break;
                 case PositionInstance::POSITIONINSTANCE_ORDER_RANDOM:
@@ -4200,6 +4200,7 @@ class Store {
                     break;
             }
         }
+        echo $query;
         return self::selectQuery($query);
     }
 

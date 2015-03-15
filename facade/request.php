@@ -40,6 +40,7 @@ class Request {
     const INCLUDEFILE = 'includefile'; // include a file, passed as url starting with _includefile
     const SITEMAP = 'sitemap.xml'; // return the sitemap
     const CONTENT = 'content'; // part of the page content, passed as command in AJAX post request
+    const FORM = 'form'; // a form post with the form content
     const ADMIN = 'admin'; // admin functionality, passed as command in AJAX post request
     const LOGIN = 'login'; // login request, passed as a command in an AJAX post request or as a url (e.g. from a form post)
     const UPLOAD = 'upload'; // upload request
@@ -107,6 +108,12 @@ class Request {
                     } else {
                         throw new Exception(Helper::getLang(Errors::ERROR_URL_SYNTAX));
                     }
+                    break;
+                case '_' . self::FORM:
+                    self::$type = self::FORM;
+                    // ok, now drop the first part of the url, it's no longer necessary
+                    array_shift($urlparts);
+                    array_pop($urlparts);
                     break;
                 case '_' . self::INCLUDEFILE:
                     self::$type = self::INCLUDEFILE;

@@ -89,6 +89,7 @@ class Terms {
     const POSITION_DEEP_LINK = '#deeplink#'; // the deep link to this object (only for instanciable objects)
     const POSITION_DEEP_LINK_FULL = '#deeplinkfull#'; // the deep link with the site root to this object (only for instanciable objects)
     const POSITION_DEEP_LINK_COMMAND = '#deeplinkcommand#'; // the ajax command for deep linking to this object
+    const POSITION_DEEP_LINK_OBJECT_URL_NAME = '#deeplinkurlname#'; // the name of the deep link for a deep linked object, called from the parent position
     const POSITION_ROOT_CREATOR = '#creator#'; // the user that created this position (and the root object for this position)
     const POSITION_ROOT_EDITOR = '#editor#'; // the user that last changed the root object for this position
     const POSITION_ROOT_CREATE_DATE = '#createdate#'; // the create date for the root object for this position

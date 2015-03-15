@@ -63,6 +63,8 @@ class Required {
             case 'Contexts': require ('data/contexts.php'); break; // loads context
             case 'ContextGroups': require ('data/contextgroups.php'); break; // loads context group
             case 'FileIncludes': require ('data/fileincludes.php'); break; // loads file include
+            case 'FormHandlers': require ('data/formhandlers.php'); break; // loads form handler
+            case 'FormStorages': require ('data/formstorages.php'); break; // loads form storage
             case 'Layouts': require ('data/layouts.php'); break; // loads layout -> getVersion($mode, $context) -> ContextedVersion
             case 'Modes': require ('data/modes.php'); break; // loads mode
             case 'Objects': require ('data/objects.php'); break; // loads object -> getVersion($mode) -> getPositions()/getPositionNumber($number) -> Position -> PositionObject/PositionInstance/PositionContentItem/PositionReferral
@@ -88,6 +90,8 @@ class Required {
             case 'ContextGroup': require ('data/contextgroup.php'); break;
             case 'Event': require ('data/event.php'); break;
             case 'FileInclude': require ('data/fileinclude.php'); break;
+            case 'FormHandler': require ('data/formhandler.php'); break;
+            case 'FormStorage': require ('data/formstorage.php'); break;
             case 'Layout': require ('data/layout.php'); break;
             case 'LSSVersion': require ('data/lssversion.php'); break;
             case 'LSSVersionCheck': require ('data/lssversioncheck.php'); break;
@@ -175,6 +179,7 @@ class Required {
             case 'Change': require ('handle/change.php'); break;
             case 'Content': require ('handle/content.php'); break;
             case 'File': require ('handle/file.php'); break;
+            case 'Form': require ('handle/form.php'); break;
             case 'Page': require ('handle/page.php'); break; // must load before the home class (home extends page)
             case 'Home': require ('handle/home.php'); break;
             case 'Upload': require ('handle/upload.php'); break;

@@ -257,44 +257,46 @@ class ContentItemFactory extends Factory {
             // TODO: create lists with multiple levels, the current solution only supports lists of one level deep
             $ulon = false;
             foreach ($lines as $line) {
-                // format the line
-                $addbr = true;
-                if (strpos($line, '*') > -1) {
-                    $line = $this->replaceMarkers("/([*])([^*]+)([*])/", LSSNames::STRUCTURE_STRONG, '$2', $line, "");
-                }
-                if (strpos($line, '^') > -1) {
-                    $line = $this->replaceMarkers("/([\^])([^\^]+)([\^])/", LSSNames::STRUCTURE_ACCENT, '$2', $line, "");
-                }
-                if (strpos($line, '_') > -1) {
-                    $line = $this->replaceMarkers("/([_])([^_]+)([_])/", LSSNames::STRUCTURE_ITALIC, '$2', $line, "");
-                }
-                if (strpos($line, '[') > -1) {
-                    $line = $this->replaceMarkers("/([\[])([0-9]+)([\|])/", LSSNames::STRUCTURE_INTERNAL_LINK_START, '$2', $line, "");
-                    $line = $this->replaceMarkers("/([\|][\|])([^\]^\[^\|]+)([\]])/", LSSNames::STRUCTURE_INTERNAL_LINK_END, '$2', $line, "");
-                }
-                if (strpos($line, '[') > -1) {
-                    $line = $this->replaceMarkers("/([\[])([^\|^\[^\]]+)([\|])/", LSSNames::STRUCTURE_EXTERNAL_LINK_START, '$2', $line, "");
-                    $line = $this->replaceMarkers("/([\|][\|])([^\]^\[^\|]+)([\]])/", LSSNames::STRUCTURE_EXTERNAL_LINK_END, '$2', $line, "");
-                }
-                if (preg_match('/(^\-)(.+)/', $line) > 0) {
-                    $line = $this->replaceMarkers('/(^\-)(.+)/', LSSNames::STRUCTURE_LIST_ITEM, '$2', $line, "");
-                    $addbr = false;
-                    if (!$ulon) {
-                        $line =  $this->getStructureBodyByName(LSSNames::STRUCTURE_LIST_START) . $line;
-                        $ulon = true;
+                if ($this->getContentItem()->getInputType() <> PositionContentItem::INPUTTYPE_UPLOADEDFILE) {
+                    // format the line
+                    $addbr = true;
+                    if (strpos($line, '*') > -1) {
+                        $line = $this->replaceMarkers("/([*])([^*]+)([*])/", LSSNames::STRUCTURE_STRONG, '$2', $line, "");
                     }
-                } else {
-                    if ($ulon) {
-                        $ulon = false;
-                        $line = $this->getStructureBodyByName(LSSNames::STRUCTURE_LIST_END) . $line;
+                    if (strpos($line, '^') > -1) {
+                        $line = $this->replaceMarkers("/([\^])([^\^]+)([\^])/", LSSNames::STRUCTURE_ACCENT, '$2', $line, "");
+                    }
+                    if (strpos($line, '_') > -1) {
+                        $line = $this->replaceMarkers("/([_])([^_]+)([_])/", LSSNames::STRUCTURE_ITALIC, '$2', $line, "");
+                    }
+                    if (strpos($line, '[') > -1) {
+                        $line = $this->replaceMarkers("/([\[])([0-9]+)([\|])/", LSSNames::STRUCTURE_INTERNAL_LINK_START, '$2', $line, "");
+                        $line = $this->replaceMarkers("/([\|][\|])([^\]^\[^\|]+)([\]])/", LSSNames::STRUCTURE_INTERNAL_LINK_END, '$2', $line, "");
+                    }
+                    if (strpos($line, '[') > -1) {
+                        $line = $this->replaceMarkers("/([\[])([^\|^\[^\]]+)([\|])/", LSSNames::STRUCTURE_EXTERNAL_LINK_START, '$2', $line, "");
+                        $line = $this->replaceMarkers("/([\|][\|])([^\]^\[^\|]+)([\]])/", LSSNames::STRUCTURE_EXTERNAL_LINK_END, '$2', $line, "");
+                    }
+                    if (preg_match('/(^\-)(.+)/', $line) > 0) {
+                        $line = $this->replaceMarkers('/(^\-)(.+)/', LSSNames::STRUCTURE_LIST_ITEM, '$2', $line, "");
                         $addbr = false;
+                        if (!$ulon) {
+                            $line =  $this->getStructureBodyByName(LSSNames::STRUCTURE_LIST_START) . $line;
+                            $ulon = true;
+                        }
+                    } else {
+                        if ($ulon) {
+                            $ulon = false;
+                            $line = $this->getStructureBodyByName(LSSNames::STRUCTURE_LIST_END) . $line;
+                            $addbr = false;
+                        }
                     }
-                }
-                if ($firstline) {
-                    $firstline = false;
-                } else {
-                    if ($addbr) {
-                        $line = $this->getStructureBodyByName(LSSNames::STRUCTURE_NEW_LINE) . $line;
+                    if ($firstline) {
+                        $firstline = false;
+                    } else {
+                        if ($addbr) {
+                            $line = $this->getStructureBodyByName(LSSNames::STRUCTURE_NEW_LINE) . $line;
+                        }
                     }
                 }
                 $returnvalue .= $line;

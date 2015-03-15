@@ -384,6 +384,14 @@ class PositionFactory extends Factory {
             // cached. Deep link commands can change when other objects change
             $this->cacheable = false;
         }
+        if ($this->hasTerm(Terms::POSITION_DEEP_LINK_OBJECT_URL_NAME)) {
+            if ($this->getPosition()->getPositionContent()->getType()==PositionContent::POSITIONTYPE_OBJECT) {
+                $deeplinkobject = $this->getPosition()->getPositionContent()->getObject();
+                $this->replaceTerm(Terms::POSITION_DEEP_LINK_OBJECT_URL_NAME, '-' . $deeplinkobject->getId() . '/' . $deeplinkobject->getURLName());
+            } else {
+                $this->replaceTerm(Terms::POSITION_DEEP_LINK_OBJECT_URL_NAME, '');
+            }
+        }
         // add the site root url
         if ($this->hasTerm(Terms::POSITION_SITE_ROOT)) {
             $this->replaceTerm(Terms::POSITION_SITE_ROOT, Settings::getSetting(Setting::SITE_ROOT)->getValue(), $this->getContent());

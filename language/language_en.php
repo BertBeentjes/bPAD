@@ -322,6 +322,21 @@ $lang[LSSNames::LAYOUT_TEXT] = 'Text';
 $lang[LSSNames::LAYOUT_LINE] = 'Line';
 $lang[LSSNames::LAYOUT_TITLE] = 'Title';
 $lang[LSSNames::LAYOUT_WHITESPACE] = 'Whitespace';
+$lang[LSSNames::LAYOUT_FORM] = 'Form';
+$lang[LSSNames::LAYOUT_FORM_EMAIL] = 'Form field email';
+$lang[LSSNames::LAYOUT_FORM_EMAIL_REQUIRED] = 'Form field email required';
+$lang[LSSNames::LAYOUT_FORM_TEXT] = 'Form field text';
+$lang[LSSNames::LAYOUT_FORM_TEXT_REQUIRED] = 'Form field text required';
+$lang[LSSNames::LAYOUT_FORM_PASSWORD] = 'Form field password';
+$lang[LSSNames::LAYOUT_FORM_PASSWORD_REQUIRED] = 'Form field password required';
+$lang[LSSNames::LAYOUT_FORM_CHECKBOX] = 'Form field checkbox';
+$lang[LSSNames::LAYOUT_FORM_DATE] = 'Form field date';
+$lang[LSSNames::LAYOUT_FORM_DATE_REQUIRED] = 'Form field date required';
+$lang[LSSNames::LAYOUT_FORM_NUMBER] = 'Form field number';
+$lang[LSSNames::LAYOUT_FORM_NUMBER_REQUIRED] = 'Form field number required';
+$lang[LSSNames::LAYOUT_FORM_URL] = 'Form field URL';
+$lang[LSSNames::LAYOUT_FORM_URL_REQUIRED] = 'Form field URL required';
+$lang[LSSNames::LAYOUT_FORM_SUBMIT] = 'Form submit';
 
 $lang[LSSNames::STYLE_ACTION_BUTTON] = 'Action button';
 $lang[LSSNames::STYLE_AD_HORIZONTAL] = 'Ad horizontal';
@@ -399,6 +414,7 @@ $lang[LSSNames::STYLE_TITLE_MARGIN] = 'Title large margins';
 $lang[LSSNames::STYLE_TITLE_RIGHT] = 'Title right';
 $lang[LSSNames::STYLE_WHITESPACE] = 'Whitespace';
 $lang[LSSNames::STYLE_WHITESPACE_LARGE] = 'Whitespace large';
+$lang[LSSNames::STYLE_FORM] = 'Form';
 
 $lang[LSSNames::SET_AD] = 'Ad';
 $lang[LSSNames::SET_ARTICLE_TITLE_IMG_TEXT] = 'Article title - image - text';
@@ -429,6 +445,8 @@ $lang[LSSNames::SET_LINE] = 'Line';
 $lang[LSSNames::SET_TITLE] = 'Title';
 $lang[LSSNames::SET_WHITESPACE] = 'Whitespace';
 $lang[LSSNames::SET_DEFAULT] = '_default';
+$lang[LSSNames::SET_FORM] = 'Form';
+$lang[LSSNames::SET_FORM_FIELD] = 'Form field';
 
 $lang[LSSNames::TEMPLATE_AD] = 'Ad';
 $lang[LSSNames::TEMPLATE_ACTION_BUTTON] = 'Action button';
@@ -463,6 +481,8 @@ $lang[LSSNames::TEMPLATE_LINE] = 'Line';
 $lang[LSSNames::TEMPLATE_WHITESPACE] = 'Whitespace';
 $lang[LSSNames::TEMPLATE_DEFAULT] = 'No template';
 $lang[LSSNames::TEMPLATE_KEYWORD] = 'Keyword';
+$lang[LSSNames::TEMPLATE_FORM] = 'Form';
+$lang[LSSNames::TEMPLATE_FORM_FIELD] = 'Form field';
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Name';
 $lang[AdminLabels::ADMIN_OBJECT_TEMPLATE_NAME] = 'Based upon template';

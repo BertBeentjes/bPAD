@@ -387,6 +387,15 @@ class Store {
     }
 
     /**
+     * return the table name for form handlers
+     * 
+     * @return string table name
+     */
+    public static function getTableFormHandlers() {
+        return 'fileincludes';
+    }
+
+    /**
      * return the table name for snippets
      * 
      * @return string table name
@@ -1098,6 +1107,15 @@ class Store {
     }
 
     /**
+     * get the form handlers
+     * 
+     * @return resultset id
+     */
+    public static function getFormHandlers () {
+        return self::selectQuery("SELECT formhandlers.id, formhandlers.name FROM formhandlers ORDER BY formhandlers.name");
+    }
+
+    /**
      * get the snippets
      * 
      * @return resultset id
@@ -1564,6 +1582,26 @@ class Store {
     }
 
     /**
+     * get the basic attributes for a form handler
+     * 
+     * @param int the id of the row 
+     * @return resultset name, emailto, emailfrom, emailreplyto, emailbcc, emailsubject, emailtext, createdate, createuserid, changedate, changeuserid
+     */
+    public static function getFormHandler($id) {
+        return self::selectQuery("SELECT name, emailto, emailfrom, emailreplyto, emailbcc, emailsubject, emailtext, exiturl, createdate, fk_createuser_id createuserid, changedate, fk_changeuser_id changeuserid FROM formhandlers WHERE id=" . $id);
+    }
+
+    /**
+     * get the basic attributes for a form storage
+     * 
+     * @param int the id of the row 
+     * @return resultset form, formhandlerid
+     */
+    public static function getFormStorage($id) {
+        return self::selectQuery("SELECT form, fk_formhandler_id formhandlerid FROM formstorage WHERE id=" . $id);
+    }
+
+    /**
      * get the basic attributes for a snippet
      * 
      * @param int the id of the row 
@@ -1716,6 +1754,16 @@ class Store {
      */
     public static function getFileIncludeIdByName($name) {
         return self::selectQuery("SELECT id FROM fileincludes WHERE name='" . $name . "'");
+    }
+
+    /**
+     * get a form handler id for the form handler name
+     * 
+     * @param string $name, the name to look for
+     * @return resultset id
+     */
+    public static function getFormHandlerIdByName($name) {
+        return self::selectQuery("SELECT id FROM formhandlers WHERE name='" . $name . "'");
     }
 
     /**
@@ -3563,6 +3611,141 @@ class Store {
     }
 
     /**
+     * set form handler emailto
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for emailto
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormHandlerEmailTo($id, $newemailto) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formhandlers SET emailto=? WHERE id=?")) {
+            $stmt->bind_param("si", $newemailto, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set form handler email from
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for email from
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormHandlerEmailFrom($id, $newemailfrom) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formhandlers SET emailfrom=? WHERE id=?")) {
+            $stmt->bind_param("si", $newemailfrom, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set form handler email reply to
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for email reply to
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormHandlerEmailReplyTo($id, $newemailreplyto) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formhandlers SET emailreplyto=? WHERE id=?")) {
+            $stmt->bind_param("si", $newemailreplyto, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set form handler emailbcc
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for emailbcc
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormHandlerEmailBCC($id, $newemailbcc) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formhandlers SET emailbcc=? WHERE id=?")) {
+            $stmt->bind_param("si", $newemailbcc, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set form handler emailtext
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for emailtext
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormHandlerEmailText($id, $newemailtext) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formhandlers SET emailtext=? WHERE id=?")) {
+            $stmt->bind_param("si", $newemailtext, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set form handler email subject
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for email subject
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormHandlerEmailSubject($id, $newemailsubject) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formhandlers SET emailsubject=? WHERE id=?")) {
+            $stmt->bind_param("si", $newemailsubject, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set form handler exit url
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for exit url
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormHandlerExitURL($id, $newexiturl) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formhandlers SET exiturl=? WHERE id=?")) {
+            $stmt->bind_param("si", $newexiturl, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set form storage form
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for form
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormStorageForm($id, $newform) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formstorage SET form=? WHERE id=?")) {
+            $stmt->bind_param("si", $newform, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set form storage form handler id
+     * 
+     * @param int $id the id of the row to update
+     * @param int $newformhandlerid the new value for form
+     * @return boolean true if action query succeeds
+     */
+    public static function setFormStorageFormHandlerId($id, $newformhandlerid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE formstorage SET fk_formhandler_id=? WHERE id=?")) {
+            $stmt->bind_param("ii", $newformhandlerid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
      * set snippet context group
      * 
      * @param int the id of the row to update
@@ -4869,6 +5052,61 @@ class Store {
         if ($stmt->prepare("INSERT INTO fileincludeversions (fk_fileinclude_id, fk_mode_id, createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (?, ?, NOW(), ?, NOW(), ?)")) {
             $stmt->bind_param("iiii", $fileincludeid, $modeid, Authentication::getUser()->getId(), Authentication::getUser()->getId());
             return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new form handler into the Store
+     * 
+     * @return int the new id
+     */
+    public static function insertFormHandler() {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO formhandlers (createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("ii", Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new form storage into the Store
+     * 
+     * @param int $formhandlerid the id of the form handler this form uses
+     * @return int the new id
+     */
+    public static function insertFormStorage($formhandlerid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO formstorage (fk_formhandler_id) VALUES (?)")) {
+            $stmt->bind_param("i", $formhandlerid);
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * delete a form handler from the Store
+     * 
+     * @param int $formhandlerid the form handler to delete
+     * @return boolean true if success
+     */
+    public static function deleteFormHandler($formhandlerid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM formhandlers WHERE id=?")) {
+            $stmt->bind_param("i", $formhandlerid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * delete a form storage from the Store
+     * 
+     * @param int $formstorageid the form storage to delete
+     * @return boolean true if success
+     */
+    public static function deleteFormStorage($formstorageid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM formstorage WHERE id=?")) {
+            $stmt->bind_param("i", $formstorageid);
+            return self::actionQuery($stmt);
         }
     }
 

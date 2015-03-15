@@ -75,6 +75,9 @@ try {
         CASE Request::FILE: // requests a file stored on the server (uploaded by a user), call the file handler
             $handler = new File(); 
             break;
+        CASE Request::FORM: // post a form
+            $handler = new Form(); 
+            break;
         CASE Request::INCLUDEFILE: // requests a file include to load in a page, call the file include handler
             $handler = new IncludeFile(); 
             break;

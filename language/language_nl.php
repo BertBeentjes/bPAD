@@ -321,6 +321,21 @@ $lang[LSSNames::LAYOUT_TEXT] = 'Tekst';
 $lang[LSSNames::LAYOUT_LINE] = 'Tekstregel';
 $lang[LSSNames::LAYOUT_TITLE] = 'Titel';
 $lang[LSSNames::LAYOUT_WHITESPACE] = 'Witruimte';
+$lang[LSSNames::LAYOUT_FORM] = 'Formulier';
+$lang[LSSNames::LAYOUT_FORM_EMAIL] = 'Formulierveld e-mail';
+$lang[LSSNames::LAYOUT_FORM_EMAIL_REQUIRED] = 'Formulierveld e-mail verplicht';
+$lang[LSSNames::LAYOUT_FORM_TEXT] = 'Formulierveld tekst';
+$lang[LSSNames::LAYOUT_FORM_TEXT_REQUIRED] = 'Formulierveld tekst verplicht';
+$lang[LSSNames::LAYOUT_FORM_PASSWORD] = 'Formulierveld wachtwoord';
+$lang[LSSNames::LAYOUT_FORM_PASSWORD_REQUIRED] = 'Formulierveld wachtwoord verplicht';
+$lang[LSSNames::LAYOUT_FORM_CHECKBOX] = 'Formulierveld vinkvak';
+$lang[LSSNames::LAYOUT_FORM_DATE] = 'Formulierveld datum';
+$lang[LSSNames::LAYOUT_FORM_DATE_REQUIRED] = 'Formulierveld datum verplicht';
+$lang[LSSNames::LAYOUT_FORM_NUMBER] = 'Formulierveld nummer';
+$lang[LSSNames::LAYOUT_FORM_NUMBER_REQUIRED] = 'Formulierveld nummer verplicht';
+$lang[LSSNames::LAYOUT_FORM_URL] = 'Formulierveld URL';
+$lang[LSSNames::LAYOUT_FORM_URL_REQUIRED] = 'Formulierveld URL verplicht';
+$lang[LSSNames::LAYOUT_FORM_SUBMIT] = 'Formulier verzenden';
 
 $lang[LSSNames::STYLE_ACTION_BUTTON] = 'Actieknop';
 $lang[LSSNames::STYLE_AD_HORIZONTAL] = 'Advertentie horizontaal';
@@ -398,6 +413,7 @@ $lang[LSSNames::STYLE_TITLE_MARGIN] = 'Titel marge';
 $lang[LSSNames::STYLE_TITLE_RIGHT] = 'Titel rechts';
 $lang[LSSNames::STYLE_WHITESPACE] = 'Witruimte';
 $lang[LSSNames::STYLE_WHITESPACE_LARGE] = 'Witruimte groot';
+$lang[LSSNames::STYLE_FORM] = 'Formulier';
 
 $lang[LSSNames::SET_AD] = 'Advertentie';
 $lang[LSSNames::SET_ARTICLE_TITLE_IMG_TEXT] = 'Artikel titel - beeld - tekst';
@@ -428,6 +444,8 @@ $lang[LSSNames::SET_LINE] = 'Tekstregel';
 $lang[LSSNames::SET_TITLE] = 'Titel';
 $lang[LSSNames::SET_WHITESPACE] = 'Witruimte';
 $lang[LSSNames::SET_DEFAULT] = '_default';
+$lang[LSSNames::SET_FORM] = 'Formulier';
+$lang[LSSNames::SET_FORM_FIELD] = 'Formulierveld';
 
 $lang[LSSNames::TEMPLATE_AD] = 'Advertentie';
 $lang[LSSNames::TEMPLATE_ACTION_BUTTON] = 'Actieknop';
@@ -462,6 +480,8 @@ $lang[LSSNames::TEMPLATE_LINE] = 'Tekstregel';
 $lang[LSSNames::TEMPLATE_WHITESPACE] = 'Witruimte';
 $lang[LSSNames::TEMPLATE_DEFAULT] = 'Geen template';
 $lang[LSSNames::TEMPLATE_KEYWORD] = 'Keyword';
+$lang[LSSNames::TEMPLATE_FORM] = 'Formulier';
+$lang[LSSNames::TEMPLATE_FORM_FIELD] = 'Formulierveld';
 
 $lang[AdminLabels::ADMIN_OBJECT_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_OBJECT_TEMPLATE_NAME] = 'Gebaseerd op sjabloon';

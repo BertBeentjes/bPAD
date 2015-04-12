@@ -1216,6 +1216,16 @@ class Store {
     }
 
     /**
+     * get a contextgroup by name
+     * 
+     * @param string the context group name
+     * @return resultset id
+     */
+    public static function getContextGroupByName($name) {
+        return self::selectQuery("SELECT id FROM contextgroups WHERE name='" . $name . "'");
+    }
+
+    /**
      * get a session by the identifier
      * 
      * @param int the session identifier
@@ -1744,6 +1754,16 @@ class Store {
      */
     public static function getStructureIdByName($name) {
         return self::selectQuery("SELECT id FROM structures WHERE name='" . $name . "'");
+    }
+
+    /**
+     * get a styleparam id for the styleparam name
+     * 
+     * @param string $name, the name to look for
+     * @return resultset id
+     */
+    public static function getStyleParamIdByName($name) {
+        return self::selectQuery("SELECT id FROM styleparams WHERE name='" . $name . "'");
     }
 
     /**

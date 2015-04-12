@@ -49,6 +49,19 @@ class ContextGroups {
     }
 
     /**
+     * Get a context group by name
+     * 
+     * @param string $name
+     */
+    public static function getContextGroupByName($name) {
+        if ($result = Store::getContextGroupByName($name)) {
+            if ($row = $result->fetchObject()) {
+                return self::getContextGroup($row->id);
+            }
+        }
+    }
+
+    /**
      * get all context groups for use in a listbox
      * 
      * @return resultset

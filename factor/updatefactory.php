@@ -40,6 +40,7 @@ class UpdateFactory extends Factory {
         $content .= $this->updateLayouts();
         $content .= $this->updateStyles();
         $content .= $this->updateStructures();
+        $content .= $this->updateStyleParams();
         // put all json in a record
         $this->setContent($this->jsonObject($content));  
     }
@@ -250,7 +251,65 @@ class UpdateFactory extends Factory {
         return $versionobject;
     }    
     
+      /**
+     * create the json for the style parameters
+     * 
+     * @return string
+     */
+    private function updateStyleParams() {
+        $content = '';
+        $styleparams = StyleParams::getStyleParams();
+        $styleparamobjects = '';
+        // get all style params
+        foreach ($styleparams as $thisstyleparam) {
+            $styleparamobject = '';
+            $styleparamobject .= $this->jsonAVPair('name', $thisstyleparam->getCanonicalName());
+            $styleparamobject .= $this->jsonNewLine();
+            // get the version for each context
+            $contexts = Contexts::getContexts();
+            $versionobjects = '';
+            // loop over all contexts and add the versions
+            while ($contextrow = $contexts->fetchObject()) {
+                $context = Contexts::getContext($contextrow->id);
+                $versionobject = $this->updateStyleParamVersion($thisstyleparam, $context);
+                if (!empty($versionobject)) {
+                    if (!empty($versionobjects)) {
+                        $versionobjects .= $this->jsonNewLine();
+                    }                
+                    $versionobjects .= $versionobject;
+                }
+            }
+            $styleparamobject .= $this->jsonAVPair("styleparamversions", $this->jsonArray($versionobjects), false);
+            if (!empty($styleparamobjects)) {
+                $styleparamobjects .= $this->jsonNewLine();
+            }
+            $styleparamobjects .= $this->jsonObject($styleparamobject);
+        }
+        $content = $this->jsonNewLineAVPair('styleparams', $this->jsonArray($styleparamobjects), false);
+        return $content;
+    }    
+
     /**
+     * create the json for a styleparam version
+     * 
+     * @param styleparam $styleparam
+     * @param context $context
+     * @return string
+     */
+    private function updateStyleParamVersion ($styleparam, $context) {
+        $versionobject = '';
+        $styleparamversion = $styleparam->getVersion(Modes::getMode(Mode::VIEWMODE), $context);
+        // only add original versions (other versions inherite from the originals)
+        if ($styleparamversion->getOriginal()) {
+            $versionobject .= $this->jsonAVPair('body', $styleparamversion->getBody());
+            $versionobject .= $this->jsonNewLineAVPair('contextgroup', $styleparamversion->getContext()->getContextGroup()->getCanonicalName());
+            $versionobject .= $this->jsonNewLineAVPair('context', $styleparamversion->getContext()->getCanonicalName());
+            $versionobject = $this->jsonObject($versionobject);
+        }
+        return $versionobject;
+    }    
+    
+  /**
      * Create a json object
      * 
      * @param string $object the object to add

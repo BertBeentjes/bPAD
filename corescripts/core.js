@@ -542,14 +542,14 @@ function addEvents(divid) {
     // custom events
     customevents.forEach(function(element) {
         if ($.isFunction(element)) {
-                element;
+                element();
             }
         }
     );
 }
 
 /**
- *  add a custom event to the custom even queue
+ *  add a custom event to the custom event queue
  */
 function addCustomEvent(customevent) {
     if ($.isFunction(customevent)) {

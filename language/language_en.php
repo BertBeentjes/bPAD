@@ -81,6 +81,7 @@ $lang['SETTINGS_CONTENT_SHOWLIGHTBOXOBJECTNAME'] = 'Show the object name in fron
 $lang['SETTINGS_CONTENT_USECONTENTDIVADMINCLASS'] = 'Use the content div admin class';
 $lang['SETTINGS_CONTENT_PRELOADINSTANCES'] = 'The number of search results to load immediately';
 $lang['SETTINGS_CONTENT_PRELOADPNOBJECTS'] = 'The number of objects in a #pn# layout to load immediately';
+$lang['SETTINGS_CONTENT_DATEFORMAT'] = 'Date format';
 
 $lang['SETTINGS_CONTEXT_DEFAULTMINWIDTH'] = 'Minimum screen width for default context';
 $lang['SETTINGS_CONTEXT_DEFAULTMINHEIGHT'] = 'Minimum screen height for default context';
@@ -327,6 +328,8 @@ $lang[LSSNames::LAYOUT_FORM_EMAIL] = 'Form field email';
 $lang[LSSNames::LAYOUT_FORM_EMAIL_REQUIRED] = 'Form field email required';
 $lang[LSSNames::LAYOUT_FORM_TEXT] = 'Form field text';
 $lang[LSSNames::LAYOUT_FORM_TEXT_REQUIRED] = 'Form field text required';
+$lang[LSSNames::LAYOUT_FORM_TEXTAREA] = 'Form field text area';
+$lang[LSSNames::LAYOUT_FORM_TEXTAREA_REQUIRED] = 'Form field text area required';
 $lang[LSSNames::LAYOUT_FORM_PASSWORD] = 'Form field password';
 $lang[LSSNames::LAYOUT_FORM_PASSWORD_REQUIRED] = 'Form field password required';
 $lang[LSSNames::LAYOUT_FORM_CHECKBOX] = 'Form field checkbox';
@@ -337,6 +340,9 @@ $lang[LSSNames::LAYOUT_FORM_NUMBER_REQUIRED] = 'Form field number required';
 $lang[LSSNames::LAYOUT_FORM_URL] = 'Form field URL';
 $lang[LSSNames::LAYOUT_FORM_URL_REQUIRED] = 'Form field URL required';
 $lang[LSSNames::LAYOUT_FORM_SUBMIT] = 'Form submit';
+$lang[LSSNames::LAYOUT_FORM_SELECT] = 'Form select';
+$lang[LSSNames::LAYOUT_FORM_SELECT_OPTION] = 'Form select option';
+$lang[LSSNames::LAYOUT_FORM_SELECT_OPTION_SELECTED] = 'Form select option selected';
 
 $lang[LSSNames::STYLE_ACTION_BUTTON] = 'Action button';
 $lang[LSSNames::STYLE_AD_HORIZONTAL] = 'Ad horizontal';
@@ -447,6 +453,8 @@ $lang[LSSNames::SET_WHITESPACE] = 'Whitespace';
 $lang[LSSNames::SET_DEFAULT] = '_default';
 $lang[LSSNames::SET_FORM] = 'Form';
 $lang[LSSNames::SET_FORM_FIELD] = 'Form field';
+$lang[LSSNames::SET_FORM_FIELD_SELECT] = 'Form field select';
+$lang[LSSNames::SET_FORM_FIELD_SELECT_OPTION] = 'Form field select option';
 
 $lang[LSSNames::TEMPLATE_AD] = 'Ad';
 $lang[LSSNames::TEMPLATE_ACTION_BUTTON] = 'Action button';

@@ -77,18 +77,26 @@ class Form extends Respond {
     protected function sendEmail() {        
         $text = $this->formhandler->getEmailText();
         $subject = $this->formhandler->getEmailSubject();
+        $to = $this->formhandler->getEmailTo();
+        $from = $this->formhandler->getEmailFrom();
+        $replyto = $this->formhandler->getEmailReplyTo();
+        $bcc = $this->formhandler->getEmailBCC();
         
         // replace #tags# in text and subject with the appropriate texts
         foreach ($_POST as $key => $value) {
             $text = str_replace('#' . $key . '#', $value, $text);
             $subject = str_replace('#' . $key . '#', $value, $subject);
+            $to = str_replace('#' . $key . '#', $value, $to);
+            $from = str_replace('#' . $key . '#', $value, $from);
+            $replyto = str_replace('#' . $key . '#', $value, $replyto);
+            $bcc = str_replace('#' . $key . '#', $value, $bcc);
         }
         
-        $headers = "From: " . $this->formhandler->getEmailFrom() . PHP_EOL;
-        $headers .= "Reply-To: " . $this->formhandler->getEmailReplyTo() . PHP_EOL;
-        $headers .= "Bcc: " . $this->formhandler->getEmailBCC() . PHP_EOL;
+        $headers = "From: " . $from . PHP_EOL;
+        $headers .= "Reply-To: " . $replyto . PHP_EOL;
+        $headers .= "Bcc: " . $bcc . PHP_EOL;
         
-        mail($this->formhandler->getEmailTo(), $subject, $text, $headers);
+        mail($to, $subject, $text, $headers);
     }
     
 }

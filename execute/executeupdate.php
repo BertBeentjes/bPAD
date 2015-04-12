@@ -61,6 +61,9 @@ class ExecuteUpdate {
                 if (is_array($update->structures)) {
                     $success = $success && $this->updateStructures($update->structures);
                 }
+                if (is_array($update->styleparams)) {
+                    $success = $success && $this->updateStyleParams($update->styleparams);
+                }
                 return $success;
             }
             echo 'json error';
@@ -352,6 +355,50 @@ class ExecuteUpdate {
                     // do nothing
                 }
             }
+        }
+        return true;
+    }
+
+    /**
+     * Process the new styleparams
+     * 
+     * @param json $styleparams
+     * @return boolean
+     */
+    private function updateStyleParams($styleparams) {
+        // loop through the styleparams
+        foreach ($styleparams as $newstyleparam) {
+            $styleparam = StyleParams::getStyleParamByName($newstyleparam->name);
+            // if no styleparam has been found, create it, otherwise, do nothing
+            if (!is_object($styleparam)) {
+                // create styleparam
+                $styleparam = StyleParams::newStyleParam();
+                $styleparam->setName($newstyleparam->name);
+                // create the styleparam versions
+                $this->createStyleParamVersions($styleparam, $newstyleparam->styleparamversions);
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Process the new styleparam versions
+     * 
+     * @param styleparam $styleparam
+     * @param json $styleparamversions
+     * @return boolean
+     */
+    private function createStyleParamVersions($styleparam, $styleparamversions) {
+        // loop through the new styleparam versions to find the new styleparam version
+        foreach ($styleparamversions as $newstyleparamversion) {
+            // get the context
+            $context = Contexts::getContextByGroupAndName(ContextGroups::getContextGroupByName($newstyleparamversion->contextgroup), $newstyleparamversion->context);
+            // create a new version and update the body
+            $styleparam->newVersion($context);
+            $styleparamversion = $styleparam->getVersion(Modes::getMode(Mode::EDITMODE), $context);
+            $styleparamversion->setBody($newstyleparamversion->body);
+            // publish the update
+            $styleparam->publishVersion($context);
         }
         return true;
     }

@@ -77,12 +77,11 @@ class Helper {
 
     /**
      * format string to format a date time
-     * TODO: localize the formatting
      * 
      * @return string the format for the date and time string
      */
     public static function getDateTimeFormat() {
-        return 'Y-m-d H:i:s';
+        return Settings::getSetting(Setting::CONTENT_DATEFORMAT)->getValue();
     }
     
     /**

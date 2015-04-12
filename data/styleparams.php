@@ -30,6 +30,7 @@ class StyleParams {
 
     private static $styleparams = array();
     private static $styleparamsloaded = false;
+    private static $styleparamidsbyname = array();
 
     /**
      * get a styleparam by id, checks whether the styleparam is loaded,
@@ -50,6 +51,28 @@ class StyleParams {
     }
 
     /**
+     * Get a styleparam by styleparam name, store in cache for later use, 
+     * styleparams can be called quite often while formatting content items
+     * 
+     * @param string $name
+     * @return styleparam
+     */
+    public static function getStyleParamByName($name) {
+        if (array_key_exists($name, self::$styleparamidsbyname)) {
+            return self::getStyleParam(self::$styleparamidsbyname[$name]);
+        } else {
+            if ($result = Store::getStyleParamIdByName($name)) {
+                if (is_object($result)) {
+                    if ($row = $result->fetchObject()) {
+                        self::$styleparamidsbyname[$name] = $row->id;
+                        return self::getStyleParam($row->id);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * get all style params ordered by name for use in a list box
      * 
      * @return StyleParam[]
@@ -59,9 +82,7 @@ class StyleParams {
     }
 
     /**
-     * get a styleparam by id, checks whether the styleparam is loaded,
-     * loads the styleparam if necessary and fills it on demand with
-     * further information
+     * get all style params, returns array of style param objects
      * 
      * @return StyleParam[]
      */
@@ -97,7 +118,7 @@ class StyleParams {
         Store::insertStyleParamVersion($styleparamid, Mode::VIEWMODE, $context->getId());
         Store::insertStyleParamVersion($styleparamid, Mode::EDITMODE, $context->getId());
         CacheStyles::outdateStyleCache();
-        return true;
+        return StyleParams::getStyleParam($styleparamid);
     }
 
     /**

@@ -80,6 +80,7 @@ $lang['SETTINGS_CONTENT_SHOWLIGHTBOXOBJECTNAME'] = 'Toon de objectnaam in de edi
 $lang['SETTINGS_CONTENT_USECONTENTDIVADMINCLASS'] = 'Gebruik de admin class voor de content div';
 $lang['SETTINGS_CONTENT_PRELOADINSTANCES'] = 'Het aantal zoekresultaten dat direct geladen wordt';
 $lang['SETTINGS_CONTENT_PRELOADPNOBJECTS'] = 'Het aantal objecten in een #pn# indeling dat direct geladen wordt';
+$lang['SETTINGS_CONTENT_DATEFORMAT'] = 'Datumschrijfwijze';
 
 $lang['SETTINGS_CONTEXT_DEFAULTMINWIDTH'] = 'Minimale schermbreedte voor de standaard context';
 $lang['SETTINGS_CONTEXT_DEFAULTMINHEIGHT'] = 'Minimale schermhoogte voor de standaard context';
@@ -326,6 +327,8 @@ $lang[LSSNames::LAYOUT_FORM_EMAIL] = 'Formulierveld e-mail';
 $lang[LSSNames::LAYOUT_FORM_EMAIL_REQUIRED] = 'Formulierveld e-mail verplicht';
 $lang[LSSNames::LAYOUT_FORM_TEXT] = 'Formulierveld tekst';
 $lang[LSSNames::LAYOUT_FORM_TEXT_REQUIRED] = 'Formulierveld tekst verplicht';
+$lang[LSSNames::LAYOUT_FORM_TEXTAREA] = 'Formulierveld memotekst';
+$lang[LSSNames::LAYOUT_FORM_TEXTAREA_REQUIRED] = 'Formulierveld memotekst verplicht';
 $lang[LSSNames::LAYOUT_FORM_PASSWORD] = 'Formulierveld wachtwoord';
 $lang[LSSNames::LAYOUT_FORM_PASSWORD_REQUIRED] = 'Formulierveld wachtwoord verplicht';
 $lang[LSSNames::LAYOUT_FORM_CHECKBOX] = 'Formulierveld vinkvak';
@@ -336,6 +339,9 @@ $lang[LSSNames::LAYOUT_FORM_NUMBER_REQUIRED] = 'Formulierveld nummer verplicht';
 $lang[LSSNames::LAYOUT_FORM_URL] = 'Formulierveld URL';
 $lang[LSSNames::LAYOUT_FORM_URL_REQUIRED] = 'Formulierveld URL verplicht';
 $lang[LSSNames::LAYOUT_FORM_SUBMIT] = 'Formulier verzenden';
+$lang[LSSNames::LAYOUT_FORM_SELECT] = 'Formulier keuzeveld';
+$lang[LSSNames::LAYOUT_FORM_SELECT_OPTION] = 'Formulier keuzeveldoptie';
+$lang[LSSNames::LAYOUT_FORM_SELECT_OPTION_SELECTED] = 'Formulier keuzeveldoptie geselecteerd';
 
 $lang[LSSNames::STYLE_ACTION_BUTTON] = 'Actieknop';
 $lang[LSSNames::STYLE_AD_HORIZONTAL] = 'Advertentie horizontaal';
@@ -446,6 +452,8 @@ $lang[LSSNames::SET_WHITESPACE] = 'Witruimte';
 $lang[LSSNames::SET_DEFAULT] = '_default';
 $lang[LSSNames::SET_FORM] = 'Formulier';
 $lang[LSSNames::SET_FORM_FIELD] = 'Formulierveld';
+$lang[LSSNames::SET_FORM_FIELD_SELECT] = 'Formulier keuzeveld';
+$lang[LSSNames::SET_FORM_FIELD_SELECT_OPTION] = 'Formulier keuzeveld optie';
 
 $lang[LSSNames::TEMPLATE_AD] = 'Advertentie';
 $lang[LSSNames::TEMPLATE_ACTION_BUTTON] = 'Actieknop';

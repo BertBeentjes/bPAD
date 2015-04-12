@@ -1009,7 +1009,7 @@ class Execute {
                 case 'styleparamadd':
                     // store the success value in the command
                     // add a new style
-                    Request::getCommand()->setOldValue(StyleParams::newStyleParam());
+                    Request::getCommand()->setOldValue(is_object(StyleParams::newStyleParam()));
                     break;
                 case 'styleparamremove':
                     // store the success value in the command

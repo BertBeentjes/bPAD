@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -81,6 +81,22 @@ class Change extends Respond {
                         $addressparts = Request::getCommand()->getItemAddressParts();
                         $position = Objects::getObject($addressparts[0])->getVersion(Request::getCommand()->getMode())->getPosition($addressparts[1]);
                         Execute::changePosition($position);
+                        break;
+                    case 'form':
+                        $form = FormStorages::getFormStorage(Request::getCommand()->getItemAddress());
+                        Execute::changeForm($form);
+                        break;
+                    case 'formhandler':
+                        $formhandler = FormHandlers::getFormHandler(Request::getCommand()->getItemAddress());
+                        Execute::changeFormHandler($formhandler);
+                        break;
+                    case 'product':
+                        $product = Products::getProduct(Request::getCommand()->getItemAddress());
+                        Execute::changeProduct($product);
+                        break;
+                    case 'order':
+                        $order = Orders::getOrder(Request::getCommand()->getItemAddress());
+                        Execute::changeOrder($order);
                         break;
                     case 'layout':
                         $layout = Layouts::getLayout(Request::getCommand()->getItemAddress());

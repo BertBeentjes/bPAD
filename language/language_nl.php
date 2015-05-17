@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -562,6 +562,12 @@ $lang[AdminLabels::ADMIN_BUTTON_CONFIG_SETTINGS] = 'Instellingen';
 $lang[AdminLabels::ADMIN_BUTTON_CONFIG_INCLUDE_FILES] = 'Invoegbestanden';
 $lang[AdminLabels::ADMIN_BUTTON_CONFIG_SNIPPETS] = 'Basisfragmenten';
 $lang[AdminLabels::ADMIN_BUTTON_CONFIG_UPDATES] = 'Updates';
+$lang[AdminLabels::ADMIN_BUTTON_CONFIG_FORMS] = 'Formulieren';
+$lang[AdminLabels::ADMIN_BUTTON_CONFIG_FORM_HANDLERS] = 'Formulierafhandelingen';
+$lang[AdminLabels::ADMIN_BUTTON_CONFIG_PRODUCTS] = 'Producten';
+$lang[AdminLabels::ADMIN_BUTTON_CONFIG_ORDERS] = 'Orders';
+$lang[AdminLabels::ADMIN_BUTTON_ADD_FORM_HANDLER] = 'Nieuwe formulierafhandeling';
+$lang[AdminLabels::ADMIN_BUTTON_ADD_PRODUCT] = 'Nieuw product';
 $lang[AdminLabels::ADMIN_LAYOUT_VERSION_BODY] = 'Indeling';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_LAYOUT] = 'Nieuwe indeling';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_LAYOUTVERSION] = 'Nieuwe versie';
@@ -579,6 +585,10 @@ $lang[AdminLabels::ADMIN_BUTTON_ADD_STYLE_PARAM] = 'Nieuwe stijlinstelling';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_STYLEVERSION] = 'Nieuwe versie';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_STYLEPARAMVERSION] = 'Nieuwe versie';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_TEMPLATE] = 'Nieuw sjabloon';
+$lang[AdminLabels::ADMIN_BUTTON_REMOVE_FORM] = 'Verwijder formulier';
+$lang[AdminLabels::ADMIN_BUTTON_REMOVE_FORM_HANDLER] = 'Verwijder formulierafhandeling';
+$lang[AdminLabels::ADMIN_BUTTON_REMOVE_PRODUCT] = 'Verwijder product';
+$lang[AdminLabels::ADMIN_BUTTON_REMOVE_ORDER] = 'Verwijder order';
 $lang[AdminLabels::ADMIN_BUTTON_REMOVE_LAYOUT] = 'Verwijder indeling';
 $lang[AdminLabels::ADMIN_BUTTON_REMOVE_LAYOUTVERSION] = 'Verwijder versie';
 $lang[AdminLabels::ADMIN_BUTTON_REMOVE_SET] = 'Verwijder set';
@@ -612,6 +622,42 @@ $lang[AdminLabels::ADMIN_UPDATE_STATUS] = 'Status';
 $lang[AdminLabels::ADMIN_UPDATE_STATUS_WAITING] = 'wachten op updatebestand';
 $lang[AdminLabels::ADMIN_UPDATE_STATUS_FAILED] = 'update mislukt';
 $lang[AdminLabels::ADMIN_UPDATE_STATUS_SUCCESS] = 'update verwerkt';
+$lang[AdminLabels::ADMIN_CONFIG_FORMS] = 'Formulieren';
+$lang[AdminLabels::ADMIN_FORM_NAME] = 'Naam';
+$lang[AdminLabels::ADMIN_FORM_FORM] = 'Formuliergegevens';
+$lang[AdminLabels::ADMIN_FORM_FORM_HANDLER] = 'Formulierafhandeling';
+$lang[AdminLabels::ADMIN_CONFIG_FORM_HANDLERS] = 'Formulierafhandelingen';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_NAME] = 'Naam';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_TO] = 'E=-mail naar';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_BCC] = 'E-mail bcc';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_TEXT] = 'E-mailtekst';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EXIT_URL] = 'Exit URL';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_FROM] = 'E-mail van';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_REPLY_TO] = 'E-mail antwoord naar';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_SUBJECT] = 'E-mail onderwerp';
+$lang[AdminLabels::ADMIN_CONFIG_PRODUCTS] = 'Producten';
+$lang[AdminLabels::ADMIN_PRODUCT_NAME] = 'Naam';
+$lang[AdminLabels::ADMIN_PRODUCT_DESCRIPTION] = 'Productbeschrijving';
+$lang[AdminLabels::ADMIN_PRODUCT_CONFIRMATION_EMAIL] = 'Bevestigingsmail';
+$lang[AdminLabels::ADMIN_PRODUCT_INVOICE] = 'Factuur';
+$lang[AdminLabels::ADMIN_PRODUCT_ORDER_EXIT_URL] = 'Order exitpagina';
+$lang[AdminLabels::ADMIN_PRODUCT_PRODUCT_PRICE] = 'Productprijs (incl. BTW)';
+$lang[AdminLabels::ADMIN_PRODUCT_VAT] = 'BTW';
+$lang[AdminLabels::ADMIN_PRODUCT_COST_SHIPPING] = 'Verzendkosten';
+$lang[AdminLabels::ADMIN_PRODUCT_COST_PACKAGING] = 'Verpakkingskosten';
+$lang[AdminLabels::ADMIN_PRODUCT_VAT_SHIPPING_PACKAGING] = 'BTW voor verzenden en verpakken';
+$lang[AdminLabels::ADMIN_PRODUCT_TOTAL_PRICE] = 'Totaalprijs (incl. BTW)';
+$lang[AdminLabels::ADMIN_CONFIG_ORDERS] = 'Orders';
+$lang[AdminLabels::ADMIN_ORDER_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_ORDER_PRODUCT] = 'Product';
+$lang[AdminLabels::ADMIN_ORDER_FORM_STORAGE] = 'Formulier';
+$lang[AdminLabels::ADMIN_ORDER_INVOICE_DATE] = 'Factuurdatum';
+$lang[AdminLabels::ADMIN_ORDER_INVOICE_YEAR] = 'Factuurjaar';
+$lang[AdminLabels::ADMIN_ORDER_INVOICE_NUMBER] = 'Factuurnummer';
+$lang[AdminLabels::ADMIN_ORDER_UNIQUE_CODE] = 'Unieke code';
+$lang[AdminLabels::ADMIN_ORDER_PAYMENT_TYPE] = 'Betaalmiddel';
+$lang[AdminLabels::ADMIN_ORDER_TRANSACTION] = 'Transactie';
+$lang[AdminLabels::ADMIN_ORDER_STATUS] = 'Status';
 $lang[AdminLabels::ADMIN_CONFIG_LAYOUTS] = 'Indelingen';
 $lang[AdminLabels::ADMIN_LAYOUT_NAME] = 'Naam';
 $lang[AdminLabels::ADMIN_LAYOUT_SET] = 'Set';

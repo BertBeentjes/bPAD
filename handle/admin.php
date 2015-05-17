@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -111,6 +111,66 @@ class Admin extends Respond {
             // create the content for the config panel, there are two versions of the command:
             // one general, that loads all layouts, styles, etc
             // one specific, that loads a specific layout, style, etc
+            case 'configforms':
+            case 'configform':
+                if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigFormAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    // show the layouts in edit mode
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configformhandlers':
+            case 'configformhandler':
+                if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigFormHandlerAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    // show the layouts in edit mode
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configproducts':
+            case 'configproduct':
+                if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigProductAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    // show the layouts in edit mode
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
+            case 'configorders':
+            case 'configorder':
+                if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+                    // create the config panel
+                    $configadminfactory = new ConfigOrderAdminFactory();
+                    // initialize the admin factory
+                    $configadminfactory->setContext(Request::getCommand()->getContext());
+                    // show the layouts in edit mode
+                    $configadminfactory->setMode(Modes::getMode(Mode::EDITMODE));
+                    // factor the config panel
+                    $configadminfactory->factor();
+                    // get the factored item
+                    $this->getResponse()->setContent($configadminfactory->getContent());
+                }
+                break;
             case 'configlayouts':
             case 'configlayout':
                 if (Authorization::getPagePermission(Authorization::LAYOUT_MANAGE)) {

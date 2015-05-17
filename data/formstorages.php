@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -27,26 +27,27 @@
  * @since 0.4.0
  */
 class FormStorages {
-    private static $formstorages = array();
     
     /*
-     * get a form storage by id, checks whether the form storage is loaded,
-     * loads the form storage if necessary and fills it on demand with
-     * further information
-     * 
-     * @param formstorageid the id of the form storage to get
+     * get a form storage by id
+     *  
+     * @param int $formstorageid the id of the form storage to get
      * @return formstorage
      */
     public static function getFormStorage ($formstorageid) {
-        // return an formstorage
-        if (isset(self::$formstorages[$formstorageid])) {
-            return self::$formstorages[$formstorageid];
-        } else {
-            self::$formstorages[$formstorageid] = new FormStorage($formstorageid);
-            return self::$formstorages[$formstorageid];
-        }
+        return new FormStorage($formstorageid);
     }
     
+    /**
+     * Get all stored forms
+     * 
+     * @return resultset
+     */
+    public static function getFormStorages() {
+        $result = Store::getFormStorages();
+        return $result;
+    }
+
     /**
      * Create a new form storage
      * 
@@ -55,7 +56,6 @@ class FormStorages {
      */
     public static function newFormStorage($formhandlerid) {
         $formstorageid = Store::insertFormStorage($formhandlerid);
-
         return self::getFormStorage($formstorageid);
     }
 
@@ -67,7 +67,6 @@ class FormStorages {
      */
     public static function removeFormStorage($formstorage) {
         Store::deleteFormStorage($formstorage->getId());
-        unset(self::$formstorages[$formstorage->getId()]);
         return true;
     }
 

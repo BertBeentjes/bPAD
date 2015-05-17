@@ -3,7 +3,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -178,12 +178,12 @@ class AdminFactory extends Factory {
         $options = '';
         if (is_a($listoptions, 'resultset')) {
             while ($listoption = $listoptions->fetchObject()) {
-                $options .= $this->factorListBoxOption($listoption->id, $listoption->name, $value);
+                $options .= $this->factorListBoxOption(htmlspecialchars($listoption->id), htmlspecialchars($listoption->name), $value);
             }
         }
         if (is_array($listoptions)) {
             foreach ($listoptions as $listoption) {
-                $options .= $this->factorListBoxOption($listoption[0], $listoption[1], $value);
+                $options .= $this->factorListBoxOption(htmlspecialchars($listoption[0]), htmlspecialchars($listoption[1]), $value);
             }
         }
         $admin = str_replace(Terms::ADMIN_OPTIONS, $options, $admin);

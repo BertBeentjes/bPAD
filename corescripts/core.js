@@ -1,7 +1,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -311,7 +311,8 @@ function addEvents(divid) {
                             doCommand('object,' + value.substring(1, value.length - 5) + ',content.fetch', false, '');
                             return false;
                         } else {
-                            window.location = url; // redirect
+                            window.open(value,'_blank');
+                            // window.location = value; // redirect
                             return false;
                         }
                     });
@@ -480,6 +481,15 @@ function addEvents(divid) {
         if ($('#' + replace).length) {
             $('#' + replace).replaceWith(this);
             $(this).removeAttr('data-bpad-replace');
+        }
+    });
+    // add a background image to a div
+    $(selector + '[data-bpad-bg-image]').each(function() {
+        var image = $(this).attr('data-bpad-bg-image');
+        if (image.length) {            
+            $(this).css("background-image", "url('"+image+"')");
+            $(this).css("background-size", "cover");
+            $(this).removeAttr('data-bpad-bg-image');
         }
     });
     // after move/replace, add an index number to numbered items (e.g. used in carousel)
@@ -740,8 +750,24 @@ function checkCommand(thiscommand, thisvalue) {
         this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
     }
     // if it's a admin.config... command, check where to load the config content
-    if (this.parsedcommand.commandgroup == 'admin' && (this.parsedcommand.commandmember == 'configlayouts' || this.parsedcommand.commandmember == 'configstructures' || this.parsedcommand.commandmember == 'configstyles' || this.parsedcommand.commandmember == 'configstyleparams' || this.parsedcommand.commandmember == 'configsets' || this.parsedcommand.commandmember == 'configusers' ||  this.parsedcommand.commandmember == 'configusergroups' || this.parsedcommand.commandmember == 'configroles' || this.parsedcommand.commandmember == 'configsettings' || this.parsedcommand.commandmember == 'configincludefiles' || this.parsedcommand.commandmember == 'configsnippets' || this.parsedcommand.commandmember == 'configtemplates' || this.parsedcommand.commandmember == 'configupdate')) {
+    if (this.parsedcommand.commandgroup == 'admin' && (this.parsedcommand.commandmember == 'configforms' || this.parsedcommand.commandmember == 'configformhandlers' || this.parsedcommand.commandmember == 'configproducts' || this.parsedcommand.commandmember == 'configorders' || this.parsedcommand.commandmember == 'configlayouts' || this.parsedcommand.commandmember == 'configstructures' || this.parsedcommand.commandmember == 'configstyles' || this.parsedcommand.commandmember == 'configstyleparams' || this.parsedcommand.commandmember == 'configsets' || this.parsedcommand.commandmember == 'configusers' ||  this.parsedcommand.commandmember == 'configusergroups' || this.parsedcommand.commandmember == 'configroles' || this.parsedcommand.commandmember == 'configsettings' || this.parsedcommand.commandmember == 'configincludefiles' || this.parsedcommand.commandmember == 'configsnippets' || this.parsedcommand.commandmember == 'configtemplates' || this.parsedcommand.commandmember == 'configupdate')) {
         this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configform') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_formlist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configformhandler') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_formhandlerlist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configproduct') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_productlist').val();
+    }
+    if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configorder') {
+        this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);
+        this.value = $('#' + 'CP' + this.parsedcommand.itemaddress + '_orderlist').val();
     }
     if (this.parsedcommand.commandgroup == 'admin' && this.parsedcommand.commandmember == 'configlayout') {
         this.container = checkAdminContainer('CP' + this.parsedcommand.itemaddress);

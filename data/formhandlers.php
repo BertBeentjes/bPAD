@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -78,7 +78,6 @@ class FormHandlers {
      */
     public static function newFormHandler() {
         $formhandlerid = Store::insertFormHandler();
-
         return true;
     }
 
@@ -89,9 +88,12 @@ class FormHandlers {
      * @return type
      */
     public static function removeFormHandler($formhandler) {
-        Store::deleteFormHandler($formhandler->getId());
-        unset(self::$formhandlers[$formhandler->getId()]);
-        return true;
+        if ($formhandler->isRemovable()) {
+            Store::deleteFormHandler($formhandler->getId());
+            unset(self::$formhandlers[$formhandler->getId()]);
+            return true;
+        }
+        return false;
     }
 
 }

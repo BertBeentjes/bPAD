@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -75,6 +75,22 @@ class ConfigAdminFactory extends AdminFactory {
     protected function factorMainOptions($baseid) {
         $configitem = Structures::getStructureByName(LSSNames::STRUCTURE_ADMIN_MENU_ITEM)->getVersion($this->getMode(), $this->getContext())->getBody();
         $section = '';
+        // add form handlers button (check authorization)
+        if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configFormHandlers($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_FORM_HANDLERS));
+        }
+        // add form handlers button (check authorization)
+        if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configForms($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_FORMS));
+        }
+        // add form handlers button (check authorization)
+        if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configProducts($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_PRODUCTS));
+        }
+        // add form handlers button (check authorization)
+        if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+            $section .= $this->factorMenuItem(CommandFactory::configOrders($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_ORDERS));
+        }
         // add layout button (check authorization)
         if (Authorization::getPagePermission(Authorization::LAYOUT_MANAGE)) {
             $section .= $this->factorMenuItem(CommandFactory::configLayouts($this->getObject(), $this->getMode(), $this->getContext()), Helper::getLang(AdminLabels::ADMIN_BUTTON_CONFIG_LAYOUTS));

@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -22,13 +22,13 @@
  */
 
 /**
- * Code snippets or css snippets to include in the page as a file
+ * A form handler contains information on what to do after a form has been submitted
  *
- * @since 0.4.0
+ * @since 0.4.4
  */
 class FormHandler extends NamedEntity {
 
-    const DEFAULT_FILE_INCLUDE = 1;
+    const DEFAULT_FORM_HANDLER = 1;
 
     private $emailto; // where to send a confirmation email
     private $emailfrom; // where to send a confirmation email from
@@ -255,6 +255,38 @@ class FormHandler extends NamedEntity {
         } else {
             throw new Exception (Helper::getLang(Errors::ERROR_ATTRIBUTE_UPDATE_FAILED) . ' @ ' . __METHOD__);
         }
+    }
+        
+    /**
+     * Is the form handler used somewhere?
+     * 
+     * @return boolean true if used
+     */
+    public function isUsed() {
+        if ($result = Store::getFormHandlerUsed($this->getId())) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Is the form handler removable?
+     * 
+     * @return boolean true if removable
+     */
+    public function isRemovable() {
+        return (!$this->isUsed() && !($this->getId() == self::DEFAULT_FORM_HANDLER));
+    }
+
+    /**
+     * remove a form handler
+     * 
+     * @param formhandler $formhandler
+     * @return boolean true if success
+     */
+    public static function removeFormHandler($formhandler) {
+        Store::deleteFormHandler($form->getId());
+        return true;
     }
         
 }

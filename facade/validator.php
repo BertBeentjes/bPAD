@@ -3,7 +3,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -236,10 +236,74 @@ Class Validator {
     }
 
     /**
+     * validate the form id
+     * 
+     * @param int formid the id to validate
+     * @return boolean true if valid
+     * @throws exception when store not available
+     */
+    public static function validForm($formid) {
+        if (self::isNumeric($formid)) {
+            if ($result = Store::getFormStorage($formid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * validate the form handler id
+     * 
+     * @param int formhandlerid the id to validate
+     * @return boolean true if valid
+     * @throws exception when store not available
+     */
+    public static function validFormHandler($formhandlerid) {
+        if (self::isNumeric($formhandlerid)) {
+            if ($result = Store::getFormHandler($formhandlerid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * validate the product id
+     * 
+     * @param int productid the id to validate
+     * @return boolean true if valid
+     * @throws exception when store not available
+     */
+    public static function validProduct($productid) {
+        if (self::isNumeric($productid)) {
+            if ($result = Store::getProduct($productid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
+     * validate the order id
+     * 
+     * @param int orderid the id to validate
+     * @return boolean true if valid
+     * @throws exception when store not available
+     */
+    public static function validOrder($orderid) {
+        if (self::isNumeric($orderid)) {
+            if ($result = Store::getOrder($orderid)) {
+                return true;
+            }
+        }
+        throw new Exception(Helper::getLang(Errors::ERROR_VALIDATION_FAILED) . ' @ ' . __METHOD__);
+    }
+
+    /**
      * validate the layout id
      * 
      * @param int layoutid the id to validate
-     * @param int setid the id of the set the style must be in
+     * @param int setid the id of the set the layout must be in
      * @return boolean true if valid
      * @throws exception when store not available
      */

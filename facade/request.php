@@ -3,7 +3,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -148,7 +148,7 @@ class Request {
                 case self::SITEMAP:
                     self::$type = self::PAGE;
                     // only a filename is request
-                    unset($urlparts);
+                    $urlparts = array();
                     break;
                 default:
                     self::$type = self::PAGE;

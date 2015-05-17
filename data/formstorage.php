@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -22,13 +22,11 @@
  */
 
 /**
- * Code snippets or css snippets to include in the page as a file
+ * Storage of submitted forms
  *
- * @since 0.4.0
+ * @since 0.4.4
  */
 class FormStorage {
-
-    const DEFAULT_FILE_INCLUDE = 1;
 
     private $id; // the id
     private $form; // json representation of the form data
@@ -69,6 +67,24 @@ class FormStorage {
         $this->form = $attr->form;
         $this->formhandler = FormHandlers::getFormHandler($attr->formhandlerid);
         return true;
+    }
+    
+    /**
+     * Get the form id
+     * 
+     * @return int 
+     */
+    public function getId() {
+        return $this->id;
+    }
+    
+    /**
+     * Get the form name
+     * 
+     * @return int 
+     */
+    public function getName() {
+        return htmlspecialchars(substr($this->getForm(),0,45));
     }
     
     /**
@@ -121,5 +137,4 @@ class FormStorage {
         }
     }
         
-        
-}
+ }

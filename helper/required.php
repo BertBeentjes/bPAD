@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -68,7 +68,9 @@ class Required {
             case 'Layouts': require ('data/layouts.php'); break; // loads layout -> getVersion($mode, $context) -> ContextedVersion
             case 'Modes': require ('data/modes.php'); break; // loads mode
             case 'Objects': require ('data/objects.php'); break; // loads object -> getVersion($mode) -> getPositions()/getPositionNumber($number) -> Position -> PositionObject/PositionInstance/PositionContentItem/PositionReferral
+            case 'Orders': require ('data/orders.php'); break;
             case 'Permissions': require ('data/permissions.php'); break; // loads permissions
+            case 'Products': require ('data/products.php'); break;
             case 'Roles': require ('data/roles.php'); break; // loads role
             case 'Sessions': require ('data/sessions.php'); break; // loads session
             case 'Sets': require ('data/sets.php'); break; // loads set
@@ -101,6 +103,7 @@ class Required {
             case 'ObjectCache': require ('data/objectcache.php'); break;
             case 'ObjectUserGroupRole': require ('data/objectusergrouprole.php'); break;
             case 'ObjectVersion': require ('data/objectversion.php'); break;
+            case 'Order': require ('data/order.php'); break;
             case 'Permission': require ('data/permission.php'); break;
             case 'Position': require ('data/position.php'); break;
             case 'PositionContentItem': require ('data/positioncontentitem.php'); break;
@@ -108,6 +111,7 @@ class Required {
             case 'PositionObject': require ('data/positionobject.php'); break;
             case 'PositionReferral': require ('data/positionreferral.php'); break;
             case 'PositionEmpty': require ('data/positionempty.php'); break;
+            case 'Product': require ('data/product.php'); break;
             case 'Role': require ('data/role.php'); break;
             case 'Session': require ('data/session.php'); break;
             case 'Set': require ('data/set.php'); break;
@@ -131,6 +135,10 @@ class Required {
             case 'AddAdminFactory': require ('factor/addadminfactory.php'); break;
             case 'EditAdminFactory': require ('factor/editadminfactory.php'); break;
             case 'ConfigAdminFactory': require ('factor/configadminfactory.php'); break;
+            case 'ConfigFormAdminFactory': require ('factor/configformadminfactory.php'); break;
+            case 'ConfigFormHandlerAdminFactory': require ('factor/configformhandleradminfactory.php'); break;
+            case 'ConfigProductAdminFactory': require ('factor/configproductadminfactory.php'); break;
+            case 'ConfigOrderAdminFactory': require ('factor/configorderadminfactory.php'); break;
             case 'ConfigLayoutAdminFactory': require ('factor/configlayoutadminfactory.php'); break;
             case 'ConfigStructureAdminFactory': require ('factor/configstructureadminfactory.php'); break;
             case 'ConfigStyleAdminFactory': require ('factor/configstyleadminfactory.php'); break;

@@ -3,7 +3,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -695,6 +695,102 @@ class CommandFactory {
     }
 
     /**
+     * Compose the command to load the form handlers configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configFormHandlers($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configformhandlers' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the form handler configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configFormHandler($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configformhandler' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the form configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configForms($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configforms' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the form configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configForm($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configform' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the product configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configProducts($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configproducts' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the product configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configProduct($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configproduct' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the order configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configOrders($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configorders' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
+     * Compose the command to load the order configurator in the config panel
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function configOrder($object, $mode, $context) {
+        return 'object,' . $object->getId() . ',admin.configorder' . '.' . $mode->getId() . '.' . $context->getId();
+    }
+
+    /**
      * Compose the command to load the layout configurator in the config panel
      * 
      * @param object $object
@@ -1004,6 +1100,285 @@ class CommandFactory {
         return 'object,' . $object->getId() . ',change.cancelconfig';
     }
 
+    /**
+     * Compose the command to remove a form 
+     * 
+     * @param object $object
+     * @param formstorage $form
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeForm($object, $form, $mode, $context) {
+        return 'form,' . $form->getId() . ',change.formremove' . '|' . self::configForms($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to remove a form handler 
+     * 
+     * @param object $object
+     * @param formhandler $formhandler
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeFormHandler($object, $formhandler, $mode, $context) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandlerremove' . '|' . self::configFormHandlers($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to edit the form handler name
+     * 
+     * @param formhandler $formhandler
+     * @return string
+     */
+    public static function editFormHandlerName($formhandler) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandlername';
+    }
+
+    /**
+     * Compose the command to edit the form handler email to
+     * 
+     * @param formhandler $formhandler
+     * @return string
+     */
+    public static function editFormHandlerEmailTo($formhandler) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandleremailto';
+    }
+
+    /**
+     * Compose the command to edit the form handler email bcc
+     * 
+     * @param formhandler $formhandler
+     * @return string
+     */
+    public static function editFormHandlerEmailBCC($formhandler) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandleremailbcc';
+    }
+
+    /**
+     * Compose the command to edit the form handler email text
+     * 
+     * @param formhandler $formhandler
+     * @return string
+     */
+    public static function editFormHandlerEmailText($formhandler) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandleremailtext';
+    }
+
+    /**
+     * Compose the command to edit the form handler exit url
+     * 
+     * @param formhandler $formhandler
+     * @return string
+     */
+    public static function editFormHandlerExitURL($formhandler) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandlerexiturl';
+    }
+
+    /**
+     * Compose the command to edit the form handler email from
+     * 
+     * @param formhandler $formhandler
+     * @return string
+     */
+    public static function editFormHandlerEmailFrom($formhandler) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandleremailfrom';
+    }
+
+    /**
+     * Compose the command to edit the form handler email reply to
+     * 
+     * @param formhandler $formhandler
+     * @return string
+     */
+    public static function editFormHandlerEmailReplyTo($formhandler) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandleremailreplyto';
+    }
+
+    /**
+     * Compose the command to edit the form handler email subject
+     * 
+     * @param formhandler $formhandler
+     * @return string
+     */
+    public static function editFormHandlerEmailSubject($formhandler) {
+        return 'formhandler,' . $formhandler->getId() . ',change.formhandleremailsubject';
+    }
+
+    /**
+     * Compose the command to add a form handler 
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addFormHandler($object, $mode, $context) {
+        return 'formhandler,' . FormHandler::DEFAULT_FORM_HANDLER . ',change.formhandleradd' . '|' . self::configFormHandlers($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to edit the product name
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductName($product) {
+        return 'product,' . $product->getId() . ',change.productname';
+    }
+
+    /**
+     * Compose the command to edit the product description
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductDescription($product) {
+        return 'product,' . $product->getId() . ',change.productdescription';
+    }
+
+    /**
+     * Compose the command to edit the product confirmation email
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductConfirmationEmail($product) {
+        return 'product,' . $product->getId() . ',change.productconfirmationemail';
+    }
+
+    /**
+     * Compose the command to edit the product invoice
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductInvoice($product) {
+        return 'product,' . $product->getId() . ',change.productinvoice';
+    }
+
+    /**
+     * Compose the command to edit the product order exit url
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductOrderExitURL($product) {
+        return 'product,' . $product->getId() . ',change.productorderexiturl';
+    }
+
+    /**
+     * Compose the command to edit the product product price
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductProductPrice($product) {
+        return 'product,' . $product->getId() . ',change.productproductprice';
+    }
+
+    /**
+     * Compose the command to edit the product vat
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductVAT($product) {
+        return 'product,' . $product->getId() . ',change.productvat';
+    }
+
+    /**
+     * Compose the command to edit the product shipping cost
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductCostShipping($product) {
+        return 'product,' . $product->getId() . ',change.productcostshipping';
+    }
+
+    /**
+     * Compose the command to edit the product packaging cost
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductCostPackaging($product) {
+        return 'product,' . $product->getId() . ',change.productcostpackaging';
+    }
+
+    /**
+     * Compose the command to edit the product vatshippingpackaging
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductVATShippingPackaging($product) {
+        return 'product,' . $product->getId() . ',change.productvatshippingpackaging';
+    }
+
+    /**
+     * Compose the command to edit the product total price
+     * 
+     * @param product $product
+     * @return string
+     */
+    public static function editProductTotalPrice($product) {
+        return 'product,' . $product->getId() . ',change.producttotalprice';
+    }
+
+    /**
+     * Compose the command to remove a product
+     * 
+     * @param object $object
+     * @param product $product
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeProduct($object, $product, $mode, $context) {
+        return 'product,' . $product->getId() . ',change.productremove' . '|' . self::configProducts($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add a product 
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addProduct($object, $mode, $context) {
+        return 'product,' . PRODUCT::DEFAULT_PRODUCT . ',change.productadd' . '|' . self::configProducts($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to add an order
+     * 
+     * @param object $object
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function addOrder($object, $mode, $context) {
+        return 'order,' . Order::DEFAULT_ORDER . ',change.orderadd' . '|' . self::configOrders($object, $mode, $context);
+    }
+
+    /**
+     * Compose the command to remove an order 
+     * 
+     * @param object $object
+     * @param order $order
+     * @param mode $mode
+     * @param context $context
+     * @return string
+     */
+    public static function removeOrder($object, $order, $mode, $context) {
+        return 'order,' . $order->getId() . ',change.orderremove' . '|' . self::configOrders($object, $mode, $context);
+    }
+
+    
     /**
      * Compose the command to edit the layout name
      * 

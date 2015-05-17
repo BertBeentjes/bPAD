@@ -3,7 +3,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -119,7 +119,7 @@ class Store {
      */
     private static function selectQuery($query) {
         if ($result = self::$connection->query($query)) {
-            if ($result->num_rows > 0) {
+            if ($result->num_rows > 0) {                
                 return new ResultSet($result);
             }
         }
@@ -392,7 +392,16 @@ class Store {
      * @return string table name
      */
     public static function getTableFormHandlers() {
-        return 'fileincludes';
+        return 'formhandlers';
+    }
+
+    /**
+     * return the table name for products
+     * 
+     * @return string table name
+     */
+    public static function getTableProducts() {
+        return 'products';
     }
 
     /**
@@ -1116,6 +1125,24 @@ class Store {
     }
 
     /**
+     * get the products
+     * 
+     * @return resultset id
+     */
+    public static function getProducts () {
+        return self::selectQuery("SELECT products.id, products.name FROM products ORDER BY products.name");
+    }
+
+    /**
+     * get the orders
+     * 
+     * @return resultset id
+     */
+    public static function getOrders () {
+        return self::selectQuery("SELECT orders.id, CONCAT(orders.invoiceyear, '-', orders.invoicedate, '-', orders.invoicenumber, ' ', products.name) name FROM orders inner join products ON orders.fk_product_id = products.id ORDER BY orders.id desc");
+    }
+
+    /**
      * get the snippets
      * 
      * @return resultset id
@@ -1612,6 +1639,36 @@ class Store {
     }
 
     /**
+     * get all stored forms 
+     * 
+     * @param int the id of the row 
+     * @return resultset id, name
+     */
+    public static function getFormStorages() {
+        return self::selectQuery("SELECT id, left(form, 45) as name FROM formstorage ORDER BY id desc");
+    }
+
+    /**
+     * get the basic attributes for a product
+     * 
+     * @param int the id of the row 
+     * @return resultset name, description, confirmationemail, invoice, orderexiturl, productprice, vat, costshipping, costpackaging, vatshippingpackaging, totalprice, createuserid, createdate, changeuserid, changedate
+     */
+    public static function getProduct($id) {
+        return self::selectQuery("SELECT name, description, confirmationemail, invoice, orderexiturl, productprice, vat, costshipping, costpackaging, vatshippingpackaging, totalprice, fk_createuser_id createuserid, createdate, fk_changeuser_id changeuserid, changedate FROM products WHERE id=" . $id);
+    }
+
+    /**
+     * get the basic attributes for an order
+     * 
+     * @param int the id of the row 
+     * @return resultset productid, formstorageid, invoicedate, invoiceyear, invoicenumber, uniquecode, paymenttype, transaction, status
+     */
+    public static function getOrder($id) {
+        return self::selectQuery("SELECT fk_product_id productid, fk_formstorage_id formstorageid, invoicedate, invoiceyear, invoicenumber, uniquecode, paymenttype, transaction, status FROM orders WHERE id=" . $id);
+    }
+
+    /**
      * get the basic attributes for a snippet
      * 
      * @param int the id of the row 
@@ -1784,6 +1841,16 @@ class Store {
      */
     public static function getFormHandlerIdByName($name) {
         return self::selectQuery("SELECT id FROM formhandlers WHERE name='" . $name . "'");
+    }
+
+    /**
+     * get a product id for the product name
+     * 
+     * @param string $name, the name to look for
+     * @return resultset id
+     */
+    public static function getProductIdByName($name) {
+        return self::selectQuery("SELECT id FROM products WHERE name='" . $name . "'");
     }
 
     /**
@@ -3766,6 +3833,291 @@ class Store {
     }
 
     /**
+     * set product description
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for description
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductDescription($id, $newdescription) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET description=? WHERE id=?")) {
+            $stmt->bind_param("si", $newdescription, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product confirmationemail
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for confirmationemail
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductConfirmationEmail($id, $newconfirmationemail) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET confirmationemail=? WHERE id=?")) {
+            $stmt->bind_param("si", $newconfirmationemail, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product invoice
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for invoice
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductInvoice($id, $newinvoice) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET invoice=? WHERE id=?")) {
+            $stmt->bind_param("si", $newinvoice, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product orderexiturl
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for orderexiturl
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductOrderExitURL($id, $neworderexiturl) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET orderexiturl=? WHERE id=?")) {
+            $stmt->bind_param("si", $neworderexiturl, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product productprice
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for productprice
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductProductPrice($id, $newproductprice) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET productprice=? WHERE id=?")) {
+            $stmt->bind_param("si", $newproductprice, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product vat
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for vat
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductVAT($id, $newvat) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET vat=? WHERE id=?")) {
+            $stmt->bind_param("si", $newvat, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product costshipping
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for costshipping
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductCostShipping($id, $newcostshipping) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET costshipping=? WHERE id=?")) {
+            $stmt->bind_param("si", $newcostshipping, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product costpackaging
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for costpackaging
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductCostPackaging($id, $newcostpackaging) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET costpackaging=? WHERE id=?")) {
+            $stmt->bind_param("si", $newcostpackaging, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product vatshippingpackaging
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for vatshippingpackaging
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductVATShippingPackaging($id, $newvatshippingpackaging) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET vatshippingpackaging=? WHERE id=?")) {
+            $stmt->bind_param("si", $newvatshippingpackaging, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set product totalprice
+     * 
+     * @param int the id of the row to update
+     * @param string the new value for totalprice
+     * @return boolean true if action query succeeds
+     */
+    public static function setProductTotalPrice($id, $newtotalprice) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE products SET totalprice=? WHERE id=?")) {
+            $stmt->bind_param("si", $newtotalprice, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order product
+     * 
+     * @param int the id of the row to update
+     * @param int the new product id
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderProduct($id, $newproductid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET fk_product_id=? WHERE id=?")) {
+            $stmt->bind_param("ii", $newproductid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order form storage
+     * 
+     * @param int the id of the row to update
+     * @param int the new form storage id
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderFormStorage($id, $newformstorageid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET fk_formstorage_id=? WHERE id=?")) {
+            $stmt->bind_param("ii", $newformstorageid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order invoice date
+     * 
+     * @param int the id of the row to update
+     * @param string the new invoicedate
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderInvoiceDate($id, $newinvoicedateid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET invoicedate=? WHERE id=?")) {
+            $stmt->bind_param("si", $newinvoicedateid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order invoice year
+     * 
+     * @param int the id of the row to update
+     * @param string the new invoiceyear
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderInvoiceYear($id, $newinvoiceyearid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET invoiceyear=? WHERE id=?")) {
+            $stmt->bind_param("si", $newinvoiceyearid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order invoice number
+     * 
+     * @param int the id of the row to update
+     * @param string the new invoicenumber
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderInvoiceNumber($id, $newinvoicenumberid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET invoicenumber=? WHERE id=?")) {
+            $stmt->bind_param("si", $newinvoicenumberid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order unique code
+     * 
+     * @param int the id of the row to update
+     * @param string the new uniquecode
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderUniqueCode($id, $newuniquecodeid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET uniquecode=? WHERE id=?")) {
+            $stmt->bind_param("si", $newuniquecodeid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order payment type
+     * 
+     * @param int the id of the row to update
+     * @param string the new paymenttype
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderPaymentType($id, $newpaymenttypeid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET paymenttype=? WHERE id=?")) {
+            $stmt->bind_param("si", $newpaymenttypeid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order transaction
+     * 
+     * @param int the id of the row to update
+     * @param string the new transaction
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderTransaction($id, $newtransactionid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET transaction=? WHERE id=?")) {
+            $stmt->bind_param("si", $newtransactionid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * set order status
+     * 
+     * @param int the id of the row to update
+     * @param string the new status
+     * @return boolean true if action query succeeds
+     */
+    public static function setOrderStatus($id, $newstatusid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("UPDATE orders SET status=? WHERE id=?")) {
+            $stmt->bind_param("si", $newstatusid, $id);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
      * set snippet context group
      * 
      * @param int the id of the row to update
@@ -4407,6 +4759,26 @@ class Store {
     }
 
     /**
+     * get a record where the product is used
+     * 
+     * @param int $id
+     * @return resultset id
+     */
+    public static function getProductUsed($productid) {
+        return self::selectQuery("SELECT id FROM orders WHERE fk_product_id=" . $productid . " LIMIT 0,1");
+    }
+
+    /**
+     * get a record where the form handler is used
+     * 
+     * @param int $id
+     * @return resultset id
+     */
+    public static function getFormHandlerUsed($formhandlerid) {
+        return self::selectQuery("SELECT id FROM formstorage WHERE fk_formhandler_id=" . $formhandlerid . " LIMIT 0,1");
+    }
+
+    /**
      * get a record where the layout is used
      * 
      * @param int $id
@@ -4474,6 +4846,48 @@ class Store {
      */
     public static function getTemplateUsed($templateid) {
         return self::selectQuery("SELECT id FROM objects WHERE fk_template_id=" . $templateid . " LIMIT 0,1 UNION SELECT id FROM objectversions WHERE fk_template_id=" . $templateid . " LIMIT 0,1");
+    }
+
+    /**
+     * delete a form handler from the Store
+     * 
+     * @param int $formhandlerid the form handler to delete
+     * @return boolean true if success
+     */
+    public static function deleteFormHandler($formhandlerid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM formhandlers WHERE id=?")) {
+            $stmt->bind_param("i", $formhandlerid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * delete a product from the Store
+     * 
+     * @param int $productid the product to delete
+     * @return boolean true if success
+     */
+    public static function deleteProduct($productid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM products WHERE id=?")) {
+            $stmt->bind_param("i", $productid);
+            return self::actionQuery($stmt);
+        }
+    }
+
+    /**
+     * delete an order from the Store
+     * 
+     * @param int $orderid the order to delete
+     * @return boolean true if success
+     */
+    public static function deleteOrder($orderid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("DELETE FROM orders WHERE id=?")) {
+            $stmt->bind_param("i", $orderid);
+            return self::actionQuery($stmt);
+        }
     }
 
     /**
@@ -5089,6 +5503,33 @@ class Store {
     }
 
     /**
+     * insert a new product into the Store
+     * 
+     * @return int the new id
+     */
+    public static function insertProduct() {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO products (createdate, fk_createuser_id, changedate, fk_changeuser_id) VALUES (NOW(), ?, NOW(), ?)")) {
+            $stmt->bind_param("ii", Authentication::getUser()->getId(), Authentication::getUser()->getId());
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
+     * insert a new order into the Store
+     * 
+     * @param int $formid the form information belonging to the order
+     * @return int the new id
+     */
+    public static function insertOrder($formid) {
+        $stmt = self::$connection->stmt_init();
+        if ($stmt->prepare("INSERT INTO orders (fk_formstorage_id) VALUES (?)")) {
+            $stmt->bind_param("i", $formid);
+            return self::insertQuery($stmt);
+        }
+    }
+
+    /**
      * insert a new form storage into the Store
      * 
      * @param int $formhandlerid the id of the form handler this form uses
@@ -5099,20 +5540,6 @@ class Store {
         if ($stmt->prepare("INSERT INTO formstorage (fk_formhandler_id) VALUES (?)")) {
             $stmt->bind_param("i", $formhandlerid);
             return self::insertQuery($stmt);
-        }
-    }
-
-    /**
-     * delete a form handler from the Store
-     * 
-     * @param int $formhandlerid the form handler to delete
-     * @return boolean true if success
-     */
-    public static function deleteFormHandler($formhandlerid) {
-        $stmt = self::$connection->stmt_init();
-        if ($stmt->prepare("DELETE FROM formhandlers WHERE id=?")) {
-            $stmt->bind_param("i", $formhandlerid);
-            return self::actionQuery($stmt);
         }
     }
 

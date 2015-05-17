@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -37,7 +37,7 @@ class Authorization {
     const OBJECT_FRONTEND_ADD = 7; // add from a selection of templates
     const OBJECT_FRONTEND_EDIT = 8; // edit content
     const OBJECT_FRONTEND_DEACTIVATE = 9; // deactivate content
-    const OBJECT_MANAGE = 10; // manage objects, combination of all of the above and more, like changing layouts/styles/structures
+    const OBJECT_MANAGE = 10; // manage objects, combination of all of the above and more, like changing layouts/styles/structures, forms, products, orders
     const LAYOUT_MANAGE = 11; // create and edit layouts
     const STYLE_MANAGE = 12; // create and edit styles
     const STRUCTURE_MANAGE = 13; // create and edit structures

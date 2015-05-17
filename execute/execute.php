@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -631,6 +631,247 @@ class Execute {
                     } else {
                         Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
                     }
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
+     * Execute a change in a form
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param formstorage $form
+     */
+    public static function changeForm($form) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'formremove':
+                    // store the success value in the command
+                    // remove the specified form
+                    Request::getCommand()->setOldValue(FormStorages::removeFormStorage($form));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
+     * Execute a change in a form handler
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param formhandler $formhandler
+     */
+    public static function changeFormHandler($formhandler) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'formhandlername':
+                    // validate
+                    if (Validator::isName(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($formhandler->getName());
+                        // set the new value
+                        $formhandler->setName(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'formhandleremailto':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($formhandler->getEmailTo());
+                    // set the new value
+                    $formhandler->setEmailTo(Request::getCommand()->getValue());
+                    break;
+                case 'formhandleremailbcc':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($formhandler->getEmailBCC());
+                    // set the new value
+                    $formhandler->setEmailBCC(Request::getCommand()->getValue());
+                    break;
+                case 'formhandleremailtext':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($formhandler->getEmailText());
+                    // set the new value
+                    $formhandler->setEmailText(Request::getCommand()->getValue());
+                    break;
+                case 'formhandlerexiturl':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($formhandler->getExitURL());
+                    // set the new value
+                    $formhandler->setExitURL(Request::getCommand()->getValue());
+                    break;
+                case 'formhandleremailfrom':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($formhandler->getEmailFrom());
+                    // set the new value
+                    $formhandler->setEmailFrom(Request::getCommand()->getValue());
+                    break;
+                case 'formhandleremailreplyto':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($formhandler->getEmailReplyTo());
+                    // set the new value
+                    $formhandler->setEmailReplyTo(Request::getCommand()->getValue());
+                    break;
+                case 'formhandleremailsubject':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($formhandler->getEmailSubject());
+                    // set the new value
+                    $formhandler->setEmailSubject(Request::getCommand()->getValue());
+                    break;
+                case 'formhandleradd':
+                    // store the success value in the command
+                    Request::getCommand()->setOldValue(FormHandlers::newFormHandler());
+                    break;
+                case 'formhandlerremove':
+                    // store the success value in the command
+                    // remove the specified form
+                    Request::getCommand()->setOldValue(FormHandlers::removeFormHandler($formhandler));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
+     * Execute a change in an order
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param order $order
+     */
+    public static function changeOrder($order) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'orderremove':
+                    // store the success value in the command
+                    // remove the specified form
+                    Request::getCommand()->setOldValue(Orders::removeOrder($order));
+                    break;
+                default:
+                    Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));
+                    break;
+            }
+            // TODO: create events based upon what happened
+        } else {
+            Messages::Add(Helper::getLang(Errors::MESSAGE_NOT_AUTHORIZED));
+        }
+    }
+
+    /**
+     * Execute a change in a product
+     * Check for authorization
+     * Validate the value if necessary
+     * 
+     * @param product $product
+     */
+    public static function changeProduct($product) {
+        // first check authorization
+        if (Authorization::getPagePermission(Authorization::OBJECT_MANAGE)) {
+            // then validate (if necessary) and execute
+            switch (Request::getCommand()->getCommandMember()) {
+                case 'productname':
+                    // validate
+                    if (Validator::isName(Request::getCommand()->getValue())) {
+                        // store the old value in the command
+                        Request::getCommand()->setOldValue($product->getName());
+                        // set the new value
+                        $product->setName(Request::getCommand()->getValue());
+                    } else {
+                        Messages::Add(Helper::getLang(Errors::MESSAGE_VALUE_NOT_ALLOWED));
+                    }
+                    break;
+                case 'productdescription':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getDescription());
+                    // set the new value
+                    $product->setDescription(Request::getCommand()->getValue());
+                    break;
+                case 'productconfirmationemail':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getConfirmationEmail());
+                    // set the new value
+                    $product->setConfirmationEmail(Request::getCommand()->getValue());
+                    break;
+                case 'productinvoice':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getInvoice());
+                    // set the new value
+                    $product->setInvoice(Request::getCommand()->getValue());
+                    break;
+                case 'productorderexiturl':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getOrderExitURL());
+                    // set the new value
+                    $product->setOrderExitURL(Request::getCommand()->getValue());
+                    break;
+                case 'productproductprice':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getProductPrice());
+                    // set the new value
+                    $product->setProductPrice(Request::getCommand()->getValue());
+                    break;
+                case 'productvat':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getVAT());
+                    // set the new value
+                    $product->setVAT(Request::getCommand()->getValue());
+                    break;
+                case 'productcostshipping':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getCostShipping());
+                    // set the new value
+                    $product->setCostShipping(Request::getCommand()->getValue());
+                    break;
+                case 'productcostpackaging':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getCostPackaging());
+                    // set the new value
+                    $product->setCostPackaging(Request::getCommand()->getValue());
+                    break;
+                case 'productvatshippingpackaging':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getVATShippingPackaging());
+                    // set the new value
+                    $product->setVATShippingPackaging(Request::getCommand()->getValue());
+                    break;
+                case 'producttotalprice':
+                    // store the old value in the command
+                    Request::getCommand()->setOldValue($product->getTotalPrice());
+                    // set the new value
+                    $product->setTotalPrice(Request::getCommand()->getValue());
+                    break;
+                case 'productadd':
+                    // store the success value in the command
+                    // remove the specified form
+                    Request::getCommand()->setOldValue(Products::newProduct());
+                    break;
+                case 'productremove':
+                    // store the success value in the command
+                    // remove the specified form
+                    Request::getCommand()->setOldValue(Products::removeProduct($product));
                     break;
                 default:
                     Messages::Add(Helper::getLang(Errors::MESSAGE_INVALID_COMMAND));

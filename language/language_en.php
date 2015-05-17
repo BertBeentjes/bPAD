@@ -2,7 +2,7 @@
 /**
  * Application: bPAD
  * Author: Bert Beentjes
- * Copyright: Copyright Bert Beentjes 2010-2014
+ * Copyright: Copyright Bert Beentjes 2010-2015
  * http://www.bertbeentjes.nl, http://www.bpadcms.nl
  * 
  * This file is part of the bPAD content management system.
@@ -563,6 +563,12 @@ $lang[AdminLabels::ADMIN_BUTTON_CONFIG_SETTINGS] = 'Settings';
 $lang[AdminLabels::ADMIN_BUTTON_CONFIG_INCLUDE_FILES] = 'Include files';
 $lang[AdminLabels::ADMIN_BUTTON_CONFIG_SNIPPETS] = 'Snippets';
 $lang[AdminLabels::ADMIN_BUTTON_CONFIG_UPDATES] = 'Updates';
+$lang[AdminLabels::ADMIN_BUTTON_CONFIG_FORMS] = 'Forms';
+$lang[AdminLabels::ADMIN_BUTTON_CONFIG_FORM_HANDLERS] = 'Form handlers';
+$lang[AdminLabels::ADMIN_BUTTON_CONFIG_PRODUCTS] = 'Products';
+$lang[AdminLabels::ADMIN_BUTTON_CONFIG_ORDERS] = 'Orders';
+$lang[AdminLabels::ADMIN_BUTTON_ADD_FORM_HANDLER] = 'Add form handler';
+$lang[AdminLabels::ADMIN_BUTTON_ADD_PRODUCT] = 'Add product';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_LAYOUT] = 'Add layout';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_LAYOUTVERSION] = 'Add version';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_SET] = 'Add set';
@@ -579,6 +585,10 @@ $lang[AdminLabels::ADMIN_BUTTON_ADD_STYLE_PARAM] = 'Add style parameter';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_STYLEVERSION] = 'Add version';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_STYLEPARAMVERSION] = 'Add version';
 $lang[AdminLabels::ADMIN_BUTTON_ADD_TEMPLATE] = 'Add template';
+$lang[AdminLabels::ADMIN_BUTTON_REMOVE_FORM] = 'Remove form';
+$lang[AdminLabels::ADMIN_BUTTON_REMOVE_FORM_HANDLER] = 'Remove form handler';
+$lang[AdminLabels::ADMIN_BUTTON_REMOVE_PRODUCT] = 'Remove product';
+$lang[AdminLabels::ADMIN_BUTTON_REMOVE_ORDER] = 'Remove order';
 $lang[AdminLabels::ADMIN_BUTTON_REMOVE_LAYOUT] = 'Remove layout';
 $lang[AdminLabels::ADMIN_BUTTON_REMOVE_LAYOUTVERSION] = 'Remove version';
 $lang[AdminLabels::ADMIN_BUTTON_REMOVE_SET] = 'Remove set';
@@ -612,6 +622,42 @@ $lang[AdminLabels::ADMIN_UPDATE_STATUS] = 'Status';
 $lang[AdminLabels::ADMIN_UPDATE_STATUS_WAITING] = 'waiting for update file';
 $lang[AdminLabels::ADMIN_UPDATE_STATUS_FAILED] = 'update failed';
 $lang[AdminLabels::ADMIN_UPDATE_STATUS_SUCCESS] = 'update installed';
+$lang[AdminLabels::ADMIN_CONFIG_FORMS] = 'Forms';
+$lang[AdminLabels::ADMIN_FORM_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_FORM_FORM] = 'Form data';
+$lang[AdminLabels::ADMIN_FORM_FORM_HANDLER] = 'Form handler';
+$lang[AdminLabels::ADMIN_CONFIG_FORM_HANDLERS] = 'Form handlers';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_TO] = 'E=-mail to';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_BCC] = 'E-mail bcc';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_TEXT] = 'E-mail text';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EXIT_URL] = 'Exit URL';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_FROM] = 'E-mail from';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_REPLY_TO] = 'E-mail reply to';
+$lang[AdminLabels::ADMIN_FORM_HANDLER_EMAIL_SUBJECT] = 'E-mail subject';
+$lang[AdminLabels::ADMIN_CONFIG_PRODUCTS] = 'Products';
+$lang[AdminLabels::ADMIN_PRODUCT_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_PRODUCT_DESCRIPTION] = 'Description';
+$lang[AdminLabels::ADMIN_PRODUCT_CONFIRMATION_EMAIL] = 'Confirmation e-mail';
+$lang[AdminLabels::ADMIN_PRODUCT_INVOICE] = 'Invoice';
+$lang[AdminLabels::ADMIN_PRODUCT_ORDER_EXIT_URL] = 'Order exit url';
+$lang[AdminLabels::ADMIN_PRODUCT_PRODUCT_PRICE] = 'Product price (incl. VAT)';
+$lang[AdminLabels::ADMIN_PRODUCT_VAT] = 'VAT';
+$lang[AdminLabels::ADMIN_PRODUCT_COST_SHIPPING] = 'Cost shipping';
+$lang[AdminLabels::ADMIN_PRODUCT_COST_PACKAGING] = 'Cost packaging';
+$lang[AdminLabels::ADMIN_PRODUCT_VAT_SHIPPING_PACKAGING] = 'VAT shipping and packaging';
+$lang[AdminLabels::ADMIN_PRODUCT_TOTAL_PRICE] = 'Total price (incl. VAT)';
+$lang[AdminLabels::ADMIN_CONFIG_ORDERS] = 'Orders';
+$lang[AdminLabels::ADMIN_ORDER_NAME] = 'Name';
+$lang[AdminLabels::ADMIN_ORDER_PRODUCT] = 'Product';
+$lang[AdminLabels::ADMIN_ORDER_FORM_STORAGE] = 'Form storage';
+$lang[AdminLabels::ADMIN_ORDER_INVOICE_DATE] = 'Invoice date';
+$lang[AdminLabels::ADMIN_ORDER_INVOICE_YEAR] = 'Invoice year';
+$lang[AdminLabels::ADMIN_ORDER_INVOICE_NUMBER] = 'Invoice number';
+$lang[AdminLabels::ADMIN_ORDER_UNIQUE_CODE] = 'Unique code';
+$lang[AdminLabels::ADMIN_ORDER_PAYMENT_TYPE] = 'Payment type';
+$lang[AdminLabels::ADMIN_ORDER_TRANSACTION] = 'Transaction';
+$lang[AdminLabels::ADMIN_ORDER_STATUS] = 'Status';
 $lang[AdminLabels::ADMIN_CONFIG_LAYOUTS] = 'Layouts';
 $lang[AdminLabels::ADMIN_LAYOUT_NAME] = 'Name';
 $lang[AdminLabels::ADMIN_LAYOUT_SET] = 'Set';
